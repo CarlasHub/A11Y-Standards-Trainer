@@ -117,6 +117,65 @@ const COURSE_LIBRARY = [
   }
 ];
 
+const DEQUE_COURSE_PATHS = [
+  {
+    title: "IAAP CPACC Certification Preparation 3.0",
+    purpose: "Build the disability, accessibility law, standards, and inclusive-design foundation before moving into technical WCAG testing.",
+    courses: [
+      { title: "IAAP Certification Quick Guide", status: 85, href: "https://dequeuniversity.com/class/iaap-certification-quick-guide/?lang=en" },
+      { title: "IAAP CPACC Certification Preparation 3.0 (2026)", status: 0, href: "https://dequeuniversity.com/class/iaap-cpacc-3.0/?lang=en" }
+    ]
+  },
+  {
+    title: "Web Accessibility Deep Dive & IAAP WAS Certification Preparation 2.2",
+    purpose: "Turn WCAG into practical product testing skill: semantics, visual design, input methods, forms, media, SPAs, ARIA, testing tools, screen readers, and usability.",
+    courses: [
+      { title: "IAAP Certification Quick Guide", status: 85, href: "https://dequeuniversity.com/class/iaap-certification-quick-guide/?lang=en" },
+      { title: "Accessibility Fundamentals - Disabilities, Guidelines, and Laws", status: 100, href: "https://dequeuniversity.com/class/fundamentals/?lang=en" },
+      { title: "Designing an Accessible User Experience", status: 100, href: "https://dequeuniversity.com/class/ux/?lang=en" },
+      { title: "Semantic Structure and Navigation (with WCAG 2.2 updates)", status: 50, href: "https://dequeuniversity.com/class/semantic-structure-wcag-2.2/?lang=en" },
+      { title: "Visual Design and Colors (with WCAG 2.2 updates)", status: 100, href: "https://dequeuniversity.com/class/visual-design-wcag-2.2/?lang=en" },
+      { title: "Device-Independent Input Methods (with WCAG 2.2 updates)", status: 8, href: "https://dequeuniversity.com/class/input-methods-wcag-2.2/?lang=en" },
+      { title: "Form Labels, Instructions, and Validation (with WCAG 2.2 updates)", status: 4, href: "https://dequeuniversity.com/class/forms-wcag-2.2/?lang=en" },
+      { title: "Images, SVG, and Canvas", status: 26, href: "https://dequeuniversity.com/class/images/?lang=en" },
+      { title: "Responsive Design and Zoom", status: 3, href: "https://dequeuniversity.com/class/responsive-zoom/?lang=en" },
+      { title: "Multimedia, Animations, and Motion: The Basics", status: 0, href: "https://dequeuniversity.com/class/multimedia-part-1/?lang=en" },
+      { title: "Multimedia, Animations, and Motion: Advanced", status: 0, href: "https://dequeuniversity.com/class/multimedia-part-2/?lang=en" },
+      { title: "Dynamic Updates, AJAX, and Single-Page Apps", status: 5, href: "https://dequeuniversity.com/class/dynamic-updates/?lang=en" },
+      { title: "Custom ARIA/JavaScript Components", status: 1, href: "https://dequeuniversity.com/class/custom-components/?lang=en" },
+      { title: "Web Accessibility Testing: Basic Methods and Tools", status: 1, href: "https://dequeuniversity.com/class/testing/?lang=en" },
+      { title: "Web Accessibility Testing: Screen Readers", status: 1, href: "https://dequeuniversity.com/class/screenreaders/?lang=en" },
+      { title: "Usability Testing for Accessibility", status: 12, href: "https://dequeuniversity.com/class/usability/?lang=en" },
+      { title: "Angular Accessibility", status: 4, href: "https://dequeuniversity.com/class/angular/?lang=en" }
+    ]
+  },
+  {
+    title: "Developer and QA Fast Tracks",
+    purpose: "Practice implementation and testing workflows until accessibility evidence can be written clearly and reproduced.",
+    courses: [
+      { title: "Semantic Structure and Navigation (WCAG 2.1)", status: 1, href: "https://dequeuniversity.com/class/semantic-structure/?lang=en" },
+      { title: "Visual Design and Colors (WCAG 2.1)", status: 2, href: "https://dequeuniversity.com/class/visual-design/?lang=en" },
+      { title: "Device-Independent Input Methods (WCAG 2.1)", status: 2, href: "https://dequeuniversity.com/class/input-methods/?lang=en" },
+      { title: "Form Labels, Instructions, and Validation (WCAG 2.1)", status: 2, href: "https://dequeuniversity.com/class/forms/?lang=en" },
+      { title: "Custom JavaScript/ARIA Widgets (2025)", status: 1, href: "https://dequeuniversity.com/class/custom-widgets/?lang=en" },
+      { title: "Fast Track to Accessibility for Web Developers, Part 1: Core Techniques", status: 100, href: "https://dequeuniversity.com/class/fast-track-for-web-developers-core-concepts/?lang=en" },
+      { title: "Fast Track to Accessibility for Web Developers, Part 2: Advanced Techniques", status: 100, href: "https://dequeuniversity.com/class/fast-track-for-web-developers-advanced/?lang=en" },
+      { title: "IAAP CPACC Certification Preparation (2024)", status: 24, href: "https://dequeuniversity.com/class/iaap-cpacc-2.0/?lang=en" },
+      { title: "Fast Track to Accessibility for QA Testers 1.0", status: 10, href: "https://dequeuniversity.com/class/fast-track-for-qa-testers/?lang=en" },
+      { title: "Fast Track to Accessibility for QA Testers 2.0", status: 4, href: "https://dequeuniversity.com/class/fast-track-for-qa-testers-2.0/?lang=en" }
+    ]
+  }
+];
+
+const PEDAGOGY_STEPS = [
+  "Preview the purpose: know the barrier, the affected user, and the WCAG principle before reading details.",
+  "Study one small concept: keep the chunk narrow enough to explain without jargon.",
+  "Look at a real interface state: normal, error, hover, focus, mobile, zoom, and dynamic update states count.",
+  "Write the evidence: state the user impact, the failing condition, the exact criterion, and a reproducible step.",
+  "Quiz with close distractors: choose by protected user outcome, not by familiar keywords.",
+  "Teach it back: explain the rule in one sentence, one example, and one common trap."
+];
+
 const MINI_TUTORIALS = [
   {
     id: "alt-text-purpose",
@@ -804,25 +863,97 @@ function renderLesson(id) {
   `);
 }
 
+function coursePathProgress(path) {
+  const total = path.courses.length || 1;
+  const completed = path.courses.filter((course) => course.status >= 100).length;
+  const average = Math.round(path.courses.reduce((sum, course) => sum + course.status, 0) / total);
+  return { total, completed, average };
+}
+
+function courseTopicHint(title) {
+  const lower = title.toLowerCase();
+  if (lower.includes("fundamentals") || lower.includes("cpacc")) return "Start with people, disability models, laws, accessibility terms, and why standards exist.";
+  if (lower.includes("ux")) return "Focus on plain flows, error prevention, cognitive load, and inclusive product decisions.";
+  if (lower.includes("semantic")) return "Connect headings, landmarks, tables, lists, page titles, and navigation to screen reader structure.";
+  if (lower.includes("visual")) return "Practise contrast, color-only meaning, focus visibility, spacing, reflow, and non-text contrast.";
+  if (lower.includes("input")) return "Practise keyboard, pointer, touch, dragging, target size, shortcuts, and focus movement.";
+  if (lower.includes("form")) return "Practise labels, instructions, required fields, error messages, suggestions, and authentication.";
+  if (lower.includes("image") || lower.includes("svg") || lower.includes("canvas")) return "Classify images by purpose, then choose decorative, informative, functional, complex, or fallback text patterns.";
+  if (lower.includes("responsive") || lower.includes("zoom")) return "Test 320px, 400 percent zoom, orientation, text resize, and whether content still reads without sideways scrolling.";
+  if (lower.includes("multimedia") || lower.includes("motion")) return "Separate audio, visual, caption, transcript, description, flashing, pause, and motion-sensitive requirements.";
+  if (lower.includes("dynamic") || lower.includes("ajax") || lower.includes("single-page")) return "Practise route changes, focus management, live regions, status messages, loading states, and announcements.";
+  if (lower.includes("aria") || lower.includes("widget") || lower.includes("component")) return "Use native HTML first, then verify name, role, value, state, keyboard behavior, and focus return.";
+  if (lower.includes("testing") || lower.includes("qa")) return "Build repeatable evidence: automated scan, keyboard path, screen reader spot check, zoom check, and bug report.";
+  if (lower.includes("angular") || lower.includes("developer")) return "Convert accessibility into component contracts, lintable patterns, route behavior, and CI checks.";
+  return "Study the course as a compact concept, then connect it to a WCAG criterion, a real example, and a quiz question.";
+}
+
+function renderCourseProgress(path) {
+  const progress = coursePathProgress(path);
+  return `
+    <article class="course-path-card panel">
+      <div class="course-path-head">
+        <div>
+          <span class="badge">${progress.completed} of ${progress.total} complete</span>
+          <h2>${esc(path.title)}</h2>
+          <p>${esc(path.purpose)}</p>
+        </div>
+        <strong class="course-percent">${progress.average}%</strong>
+      </div>
+      <div class="progress course-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${progress.average}" aria-label="${esc(path.title)} average progress ${progress.average}%"><span style="width:${progress.average}%"></span></div>
+      <div class="course-list" aria-label="${esc(path.title)} courses">
+        ${path.courses.map((course) => `
+          <a class="course-row" href="${course.href}" target="_blank" rel="noopener noreferrer">
+            <span>
+              <strong>${esc(course.title)}</strong>
+              <small>${esc(courseTopicHint(course.title))}</small>
+            </span>
+            <span class="course-status">
+              <span>${course.status ? `${course.status}%` : "not started"}</span>
+              <span class="course-mini-progress" aria-hidden="true"><span style="width:${course.status}%"></span></span>
+            </span>
+          </a>
+        `).join("")}
+      </div>
+    </article>
+  `;
+}
+
 function renderCourse() {
   return layout(`
-    ${pageTitle("Study map", "Accessibility study roadmap", "A standards-first path through the skills needed for practical accessibility work, from human context to conformance evidence.")}
-    <section class="grid two">
-      ${COURSE_METHODS.map((topic, index) => `
-        <article class="card">
-          <span class="badge">Module ${index + 1}</span>
-          <h2>${esc(topic.split(":")[0])}</h2>
-          <p>${esc(topic)}</p>
+    ${pageTitle("Study map", "Deque-aligned accessibility learning path", "A structured map from your Deque course list into original trainer modules, practice routines, WCAG references, and quiz review.")}
+    <section class="panel">
+      <h2>How this map works</h2>
+      <p>This page records the course structure and progress visible in your Deque member area, then turns each topic into original study guidance inside this trainer. It is a learning map, not a copy of Deque lesson text.</p>
+      <ol>${PEDAGOGY_STEPS.map((step) => `<li>${esc(step)}</li>`).join("")}</ol>
+    </section>
+    <section class="course-paths" aria-label="Deque course progress map">
+      ${DEQUE_COURSE_PATHS.map(renderCourseProgress).join("")}
+    </section>
+    <section class="grid two" aria-label="Original trainer modules">
+      ${COURSE_LIBRARY.map((course, index) => `
+        <article class="card module-card">
+          <span class="badge">Trainer module ${index + 1}</span>
+          <h2>${esc(course.title)}</h2>
+          <p>${esc(course.takeaway)}</p>
+          <dl class="tutorial-meta">
+            <div><dt>Study focus</dt><dd>${esc(course.topics.slice(0, 4).join(", "))}</dd></div>
+            <div><dt>Practice routine</dt><dd>Read one lesson, test one real interface state, write one evidence note, then answer close-distractor questions.</dd></div>
+          </dl>
+          <div class="actions">
+            <a class="button primary" href="#bank">Find related standards</a>
+            <a class="button" href="#quiz">Practise quiz</a>
+          </div>
         </article>
       `).join("")}
     </section>
     <section class="panel">
-      <h2>How to use this map</h2>
+      <h2>How to study without getting lost</h2>
       <ol>
-        <li>Study the plain-language lesson for the criterion.</li>
-        <li>Read the official WCAG wording and Understanding page.</li>
-        <li>Test a real interface state, not only a perfect demo state.</li>
-        <li>Take the difficult quiz until close distractors stop fooling you.</li>
+        <li>Use Deque for the formal course sequence and certificates.</li>
+        <li>Use this trainer for repetition, plain-English review, and practical WCAG recall.</li>
+        <li>Do not study a whole course at once. Pick one topic, one criterion, one example, and one quiz session.</li>
+        <li>When a topic feels technical, translate it into: user need, barrier, evidence, fix, retest.</li>
       </ol>
     </section>
   `);
