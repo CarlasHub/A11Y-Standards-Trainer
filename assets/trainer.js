@@ -434,6 +434,7 @@ const navRoutes = [
   ["bank", "Standards"],
   ["quiz", "Quiz"],
   ["exam", "Exam"],
+  ["glossary", "Glossary"],
   ["docs", "Docs"]
 ];
 
@@ -1161,7 +1162,8 @@ function makeQuestion(sc, index = 0) {
 }
 
 function startQuiz(targetId = null, count = 10) {
-  const pool = targetId ? [getCriterion(targetId)] : criteria();
+  const filteredPool = criteria();
+  const pool = targetId ? [getCriterion(targetId)] : filteredPool.length ? filteredPool : successCriteria;
   const expanded = [];
   for (let i = 0; i < count; i += 1) {
     expanded.push(makeQuestion(pool[i % pool.length], i));
