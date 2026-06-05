@@ -253,6 +253,34 @@ const INTEGRATION_STRATEGY = [
   }
 ];
 
+const QA_TESTER_TRACK = [
+  {
+    title: "1. Page risk map",
+    outcome: "Identify what matters before tools run: regions, forms, custom widgets, dialogs, media, dynamic updates, and risky states.",
+    tutorialId: "qa-bird-eye"
+  },
+  {
+    title: "2. Manual interaction checks",
+    outcome: "Use keyboard, mouse, touch expectations, zoom, contrast, and focus visibility to find barriers that scanners miss.",
+    tutorialId: "keyboard-map"
+  },
+  {
+    title: "3. Screen reader confirmation",
+    outcome: "Confirm headings, landmarks, field names, roles, states, error messages, and live updates with a screen reader.",
+    tutorialId: "qa-nvda-setup"
+  },
+  {
+    title: "4. Tools and evidence",
+    outcome: "Run scanner and bookmarklet checks, verify findings manually, then write clear user-impact evidence.",
+    tutorialId: "qa-tools-evidence"
+  },
+  {
+    title: "5. Regression loop",
+    outcome: "Retest the exact failing path and nearby states so accessibility fixes stay fixed.",
+    tutorialId: "qa-regression-loop"
+  }
+];
+
 const MINI_TUTORIALS = [
   {
     id: "alt-text-purpose",
@@ -349,6 +377,70 @@ const MINI_TUTORIALS = [
     example: "A checkout repeats the shipping address automatically instead of forcing the user to retype it for billing.",
     practice: "Rewrite one confusing error, one instruction, and one help page in plain language.",
     check: "Could someone with fatigue, memory difficulty, dyslexia, or anxiety still finish the task?"
+  },
+  {
+    id: "qa-bird-eye",
+    title: "QA first pass: build a page risk map",
+    level: "QA foundation",
+    related: ["1.3.1", "1.4.3", "2.4.2", "2.4.6", "3.3.2"],
+    teach: [
+      "Start with the visible page before running tools.",
+      "List the main regions, forms, controls, media, tables, dialogs, and dynamic areas.",
+      "Mark anything that depends on color, hover, dragging, timing, or a custom widget.",
+      "Choose the first test path by user risk, not by what is easiest to inspect.",
+      "Record what you tested so the same state can be retested later."
+    ],
+    example: "A checkout page risk map includes cart table, coupon form, shipping fields, payment iframe, error summary, modal terms, and order confirmation status.",
+    practice: "Open one page and write a five-line risk map before touching an automated scanner.",
+    check: "Could another tester understand what matters on this page in under one minute?"
+  },
+  {
+    id: "qa-nvda-setup",
+    title: "Screen reader QA: test meaning, not every command",
+    level: "QA practical",
+    related: ["1.3.1", "2.4.1", "2.4.6", "3.3.1", "4.1.2", "4.1.3"],
+    teach: [
+      "Use headings and landmarks to understand page structure.",
+      "Tab through interactive controls and listen for name, role, state, and value.",
+      "Check that form errors are announced near the field or in a useful summary.",
+      "After dynamic updates, confirm the screen reader receives the result.",
+      "Stop when you have enough evidence for the user task; do not turn testing into command memorization."
+    ],
+    example: "A filter button that only says 'button collapsed' fails the task because the user does not know which filter it controls.",
+    practice: "Test a form with NVDA or another screen reader and write what each field is called, what role it has, and what error is announced.",
+    check: "If the visual label disappeared, would the spoken name still tell the user what to do?"
+  },
+  {
+    id: "qa-tools-evidence",
+    title: "QA tools: turn scanner output into useful evidence",
+    level: "QA practical",
+    related: ["1.1.1", "1.4.3", "1.4.11", "2.1.1", "4.1.2"],
+    teach: [
+      "Run automated tools after the page state is ready.",
+      "Treat tool output as a lead, not a final conclusion.",
+      "Verify the issue manually in the browser state where it appears.",
+      "Write evidence with selector, visible behavior, assistive technology impact, criterion, and expected result.",
+      "Retest the fixed state, not just the initial page load."
+    ],
+    example: "A contrast tool reports a failing border; the useful bug explains that the selected tab border is the only selected-state indicator and is too low contrast.",
+    practice: "Take one automated finding and rewrite it as a complete bug report with user impact and retest steps.",
+    check: "Would a developer know exactly what to fix and how you will verify it?"
+  },
+  {
+    id: "qa-regression-loop",
+    title: "QA regression loop: prove the fix stayed fixed",
+    level: "QA advanced",
+    related: ["2.1.1", "2.4.3", "2.4.7", "3.3.1", "4.1.3"],
+    teach: [
+      "Save the failing state before the fix: viewport, browser, login state, data, and steps.",
+      "Retest the exact path with keyboard, zoom, and the relevant assistive technology.",
+      "Check nearby states that often break with the same code change.",
+      "Update the evidence when the fix changes behavior in a different way.",
+      "Add the stable check to the team's regression list."
+    ],
+    example: "After a modal focus fix, retest opening, tab order, Escape, close button, click outside behavior, and focus return.",
+    practice: "Choose one fixed accessibility bug and build a six-step regression checklist for the component.",
+    check: "Can the team repeat this test next month without asking you what you meant?"
   }
 ];
 
@@ -394,6 +486,34 @@ const TUTORIAL_METADATA = {
     difficulty: "Core",
     description: "Reduce memory work, keep help consistent, and support review, correction, and recovery.",
     tags: ["cognitive accessibility", "memory", "help", "redundant entry", "authentication"]
+  },
+  "qa-bird-eye": {
+    category: "QA testing",
+    topic: "Risk mapping",
+    difficulty: "Foundation",
+    description: "Learn the first-pass QA routine: identify page regions, risky components, interaction states, and the first user path to test.",
+    tags: ["qa", "risk map", "manual testing", "inspection", "page states"]
+  },
+  "qa-nvda-setup": {
+    category: "QA testing",
+    topic: "Screen reader checks",
+    difficulty: "Practical",
+    description: "Use screen reader testing to confirm structure, control names, form errors, and dynamic updates without getting lost in commands.",
+    tags: ["qa", "nvda", "screen reader", "name role value", "forms", "status messages"]
+  },
+  "qa-tools-evidence": {
+    category: "QA testing",
+    topic: "Tool output and bug reports",
+    difficulty: "Practical",
+    description: "Convert automated scanner findings into verified evidence that developers can reproduce and fix.",
+    tags: ["qa", "axe", "bookmarklets", "automated testing", "bug reports", "evidence"]
+  },
+  "qa-regression-loop": {
+    category: "QA testing",
+    topic: "Regression testing",
+    difficulty: "Advanced",
+    description: "Retest accessibility fixes with the exact state, nearby states, and a reusable regression checklist.",
+    tags: ["qa", "regression", "retest", "keyboard", "focus", "component testing"]
   }
 };
 
@@ -1032,6 +1152,16 @@ function renderCoverageCard(course) {
   `;
 }
 
+function renderQaTrackStep(step) {
+  return `
+    <article class="qa-track-card">
+      <h3>${esc(step.title)}</h3>
+      <p>${esc(step.outcome)}</p>
+      <a class="button" href="#tutorial/${esc(step.tutorialId)}">Open tutorial</a>
+    </article>
+  `;
+}
+
 function renderCourse() {
   const uniqueCourses = DEQUE_TOC_COVERAGE.length;
   const tocPages = DEQUE_TOC_COVERAGE.reduce((sum, course) => sum + course.pages, 0);
@@ -1059,6 +1189,18 @@ function renderCourse() {
     </section>
     <section class="course-paths" aria-label="Deque course progress map">
       ${DEQUE_COURSE_PATHS.map(renderCourseProgress).join("")}
+    </section>
+    <section class="panel qa-track-panel">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Course integration</p>
+          <h2>Fast Track to Accessibility for QA Testers 2.0</h2>
+        </div>
+        <p>This is the first detailed rewrite track from the newly indexed course pages. It turns the QA course structure into original trainer routines a tester can actually follow.</p>
+      </div>
+      <div class="qa-track-grid">
+        ${QA_TESTER_TRACK.map(renderQaTrackStep).join("")}
+      </div>
     </section>
     <section class="toc-coverage" aria-label="Indexed course page coverage">
       <div class="section-heading">
