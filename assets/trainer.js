@@ -199,6 +199,60 @@ const PEDAGOGY_STEPS = [
   "Teach it back: explain the rule in one sentence, one example, and one common trap."
 ];
 
+const DEQUE_TOC_COVERAGE = [
+  { title: "IAAP Certification Quick Guide", pages: 6, lane: "Certification orientation", sample: ["Introduction", "CPACC Certification Exam Guide", "WAS Certification Exam Guide", "ADS Certification Exam Guide"] },
+  { title: "IAAP CPACC Certification Preparation 3.0 (2026)", pages: 170, lane: "CPACC foundation", sample: ["About CPACC Certification", "Why Certify?", "Who Should Certify?", "Exam Topics - CPACC Content Outline"] },
+  { title: "Accessibility Fundamentals - Disabilities, Guidelines, and Laws", pages: 34, lane: "People and policy", sample: ["Types of Disabilities: Personas", "Blind", "Low Vision", "Motor Disabilities"] },
+  { title: "Designing an Accessible User Experience", pages: 46, lane: "Inclusive UX", sample: ["Accessibility and Inclusive Design", "7 Principles of Universal Design", "Avoid Exclusive Design Patterns", "Examine Assumptions"] },
+  { title: "Semantic Structure and Navigation (WCAG 2.2)", pages: 94, lane: "Structure and navigation", sample: ["Page Title", "Meaningful Page Title", "Language", "Navigation"] },
+  { title: "Visual Design and Colors (WCAG 2.2)", pages: 38, lane: "Visual accessibility", sample: ["Color that Conveys Meaning", "Color to Distinguish Links from Text", "Contrast", "Focus Visibility"] },
+  { title: "Device-Independent Input Methods (WCAG 2.2)", pages: 36, lane: "Input methods", sample: ["Click Target Size", "Pointer Cancellation", "Keyboard Input", "Keyboard Shortcuts"] },
+  { title: "Form Labels, Instructions, and Validation (WCAG 2.2)", pages: 44, lane: "Forms and errors", sample: ["Semantic Labels", "Meaningful Label Text", "Placeholder Text as Labels", "Error Identification"] },
+  { title: "Images, SVG, and Canvas", pages: 53, lane: "Text alternatives", sample: ["Informative Images", "Decorative or Redundant Images", "Actionable Images", "Canvas"] },
+  { title: "Responsive Design and Zoom", pages: 26, lane: "Zoom and reflow", sample: ["Responsive Design is Low Vision Design", "CSS Media Queries", "Responsive Forms", "Zoom"] },
+  { title: "Multimedia, Animations, and Motion: The Basics", pages: 30, lane: "Media basics", sample: ["Multimedia Accessibility Decision Matrix", "Captions", "Live Events", "Audio Description"] },
+  { title: "Multimedia, Animations, and Motion: Advanced", pages: 30, lane: "Media advanced", sample: ["Media Player Accessibility", "Keyboard Accessibility", "Customizability", "Advanced Transcripts"] },
+  { title: "Dynamic Updates, AJAX, and Single-Page Apps", pages: 20, lane: "SPA behavior", sample: ["Notifying Users of Changes", "Move the Focus", "ARIA Live", "Time Limits"] },
+  { title: "Custom ARIA/JavaScript Components", pages: 62, lane: "ARIA components", sample: ["ARIA Concepts", "Name", "Role", "Component Roles"] },
+  { title: "Web Accessibility Testing: Basic Methods and Tools", pages: 57, lane: "Testing workflow", sample: ["Accountability for Testing", "Checklists", "Automated Tools", "Bug Reports"] },
+  { title: "Web Accessibility Testing: Screen Readers", pages: 75, lane: "Screen reader testing", sample: ["Screen Reader Basics", "Why Test with Screen Readers?", "NVDA", "Forms"] },
+  { title: "Usability Testing for Accessibility", pages: 8, lane: "User research", sample: ["Plan the Test", "Develop the Test", "Conduct A Moderated Test", "Analyze Test Results"] },
+  { title: "Angular Accessibility", pages: 21, lane: "Framework accessibility", sample: ["Page View/Titles", "Keyboard Navigation", "Focus Management", "Live Regions and Alerts"] },
+  { title: "WCAG 2.0 & 2.1 Conformance Testing, Detailed Methodology", pages: 190, lane: "Conformance method", sample: ["Required Tools", "Interpreting the Guidelines", "Level A", "SC 1.1.1 Non-text Content"] },
+  { title: "WCAG 2.2 Conformance Testing, Detailed Methodology", pages: 195, lane: "WCAG 2.2 audit method", sample: ["Getting Started", "Test Platforms", "Understanding WCAG Normative", "Third Party Content and Sites"] },
+  { title: "EN 301-549 (v. 3.2.1) Conformance Testing, Detailed Methodology", pages: 176, lane: "EN 301 549 audit method", sample: ["Background", "Testing Tools", "Scoping Considerations", "Clause 5 Generic Requirements"] },
+  { title: "Section 508 (2017) Conformance Testing, Detailed Methodology", pages: 157, lane: "Section 508 audit method", sample: ["Background", "Required Tools", "Scoping Considerations", "Chapter 3 Functional Performance Criteria"] },
+  { title: "Semantic Structure and Navigation (WCAG 2.1)", pages: 94, lane: "Legacy WCAG 2.1 structure", sample: ["Page Title", "Language", "Headings", "Landmarks"] },
+  { title: "Visual Design and Colors (WCAG 2.1)", pages: 38, lane: "Legacy visual design", sample: ["Color", "Contrast", "Images of Text", "Resize Text"] },
+  { title: "Device-Independent Input Methods (WCAG 2.1)", pages: 36, lane: "Legacy input methods", sample: ["Mouse Input", "Keyboard Input", "Focus Order", "Keyboard Trap"] },
+  { title: "Form Labels, Instructions, and Validation (WCAG 2.1)", pages: 42, lane: "Legacy forms", sample: ["Labels", "Instructions", "Required Fields", "Validation"] },
+  { title: "Custom JavaScript/ARIA Widgets (2025)", pages: 58, lane: "Advanced widgets", sample: ["Native vs Custom Components", "Roles", "Names or Labels", "States and Properties"] },
+  { title: "Fast Track to Accessibility for Web Developers, Part 1: Core Techniques", pages: 25, lane: "Developer core", sample: ["The Big Concepts in Web Accessibility", "Keyboard Accessibility", "Testing with NVDA", "Semantic HTML"] },
+  { title: "Fast Track to Accessibility for Web Developers, Part 2: Advanced Techniques", pages: 19, lane: "Developer advanced", sample: ["The Accessibility Tree", "The Purpose of ARIA", "ARIA Components and Patterns", "Native vs. Custom Components"] },
+  { title: "IAAP CPACC Certification Preparation (2024)", pages: 173, lane: "CPACC legacy review", sample: ["About CPACC Certification", "Disability Types", "Accessibility Laws", "Universal Design"] },
+  { title: "Fast Track to Accessibility for QA Testers 1.0", pages: 20, lane: "QA testing core", sample: ["Bird's Eye View of the Page", "Mouse Functionality", "Keyboard Functionality", "Color Contrast"] },
+  { title: "Fast Track to Accessibility for QA Testers 2.0", pages: 24, lane: "QA testing updated", sample: ["Course Overview", "Customizing NVDA", "Downloading Bookmarklets", "Automated Testing"] }
+];
+
+const INTEGRATION_STRATEGY = [
+  {
+    title: "1. Inventory",
+    detail: "Use the Deque member course list and each course TOC as a coverage checklist. Store titles, counts, and learning lanes only."
+  },
+  {
+    title: "2. Rewrite",
+    detail: "Turn each cluster into original plain-language lessons: user need, barrier, rule, example, fix, and retest."
+  },
+  {
+    title: "3. Connect",
+    detail: "Map every lesson to WCAG criteria, practical testing steps, references, and related study paths."
+  },
+  {
+    title: "4. Drill",
+    detail: "Create close-distractor quizzes that test reasoning, not keyword memory, then send learners back to weak areas."
+  }
+];
+
 const MINI_TUTORIALS = [
   {
     id: "alt-text-purpose",
@@ -954,7 +1008,35 @@ function renderCourseProgress(path) {
   `;
 }
 
+function renderIntegrationStep(step) {
+  return `
+    <article class="strategy-card">
+      <h3>${esc(step.title)}</h3>
+      <p>${esc(step.detail)}</p>
+    </article>
+  `;
+}
+
+function renderCoverageCard(course) {
+  return `
+    <article class="toc-card">
+      <div class="toc-card-head">
+        <span class="badge">${esc(course.lane)}</span>
+        <strong>${course.pages} pages</strong>
+      </div>
+      <h3>${esc(course.title)}</h3>
+      <ul>
+        ${course.sample.map((item) => `<li>${esc(item)}</li>`).join("")}
+      </ul>
+    </article>
+  `;
+}
+
 function renderCourse() {
+  const uniqueCourses = DEQUE_TOC_COVERAGE.length;
+  const tocPages = DEQUE_TOC_COVERAGE.reduce((sum, course) => sum + course.pages, 0);
+  const visibleCourseRows = DEQUE_COURSE_PATHS.reduce((sum, path) => sum + path.courses.length, 0);
+  const assessmentRows = DEQUE_COURSE_PATHS.reduce((sum, path) => sum + (path.assessments?.length || 0), 0);
   return layout(`
     ${pageTitle("Study map", "Deque-aligned accessibility learning path", "A structured map from your Deque course list into original trainer modules, practice routines, WCAG references, and quiz review.")}
     <section class="panel">
@@ -962,8 +1044,33 @@ function renderCourse() {
       <p>This page records the course structure and progress visible in your Deque member area, then turns each topic into original study guidance inside this trainer. It is a learning map, not a copy of Deque lesson text.</p>
       <ol>${PEDAGOGY_STEPS.map((step) => `<li>${esc(step)}</li>`).join("")}</ol>
     </section>
+    <section class="panel">
+      <h2>Deque course page coverage</h2>
+      <p>The available member courses were crawled by course table of contents. The trainer uses that structure as a coverage checklist, then rewrites the learning material into original, accessible study modules.</p>
+      <div class="coverage-stats" aria-label="Deque coverage summary">
+        <div><strong>${visibleCourseRows}</strong><span>course rows from member page</span></div>
+        <div><strong>${uniqueCourses}</strong><span>unique course TOCs indexed</span></div>
+        <div><strong>${tocPages.toLocaleString("en-US")}</strong><span>TOC pages mapped</span></div>
+        <div><strong>${assessmentRows}</strong><span>assessment actions tracked</span></div>
+      </div>
+    </section>
+    <section class="strategy-grid" aria-label="Integration strategy">
+      ${INTEGRATION_STRATEGY.map(renderIntegrationStep).join("")}
+    </section>
     <section class="course-paths" aria-label="Deque course progress map">
       ${DEQUE_COURSE_PATHS.map(renderCourseProgress).join("")}
+    </section>
+    <section class="toc-coverage" aria-label="Indexed course page coverage">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Coverage inventory</p>
+          <h2>Every available course TOC is represented</h2>
+        </div>
+        <p>Each card shows the integration lane, number of crawled TOC pages, and representative topics used to build original tutorials and quiz coverage.</p>
+      </div>
+      <div class="toc-coverage-grid">
+        ${DEQUE_TOC_COVERAGE.map(renderCoverageCard).join("")}
+      </div>
     </section>
     <section class="grid two" aria-label="Original trainer modules">
       ${COURSE_LIBRARY.map((course, index) => `
