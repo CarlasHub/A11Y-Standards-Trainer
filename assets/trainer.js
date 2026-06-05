@@ -513,7 +513,7 @@ function renderHome() {
           <li>Exam: build confidence under pressure.</li>
         </ol>
         <h3>Progress</h3>
-        <div class="progress" aria-label="${studied} of ${successCriteria.length} criteria studied"><span style="width:${Math.round((studied / successCriteria.length) * 100)}%"></span></div>
+        <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="${successCriteria.length}" aria-valuenow="${studied}" aria-label="${studied} of ${successCriteria.length} criteria studied"><span style="width:${Math.round((studied / successCriteria.length) * 100)}%"></span></div>
         <p><strong>${studied}</strong> of <strong>${successCriteria.length}</strong> criteria marked studied.</p>
       </div>
     </section>
@@ -526,7 +526,7 @@ function renderHome() {
     <section class="grid two">
       <article class="panel">
         <h2>Built for cognitive accessibility</h2>
-        <p>The lessons use small chunks, plain words, concrete examples, repeated patterns, memory hooks, and active recall. This helps learners who struggle with technical language, memory, attention, fatigue, brain injury, dyslexia, anxiety, or exam pressure.</p>
+        <p>The lessons use small chunks, plain words, concrete examples, repeated patterns, memory hooks, and active recall. This helps learners who struggle with technical language, memory, attention, fatigue, acquired brain injury, dyslexia, anxiety, or exam pressure.</p>
         <div class="actions"><a class="button primary" href="#tutorials">Open mini tutorials</a></div>
       </article>
       <article class="panel">
@@ -616,7 +616,7 @@ function renderLesson(id) {
           <p>Open any real page and find one place this criterion could matter. Say out loud: <strong>the user needs...</strong> Then finish the sentence before looking at the WCAG wording.</p>
         </div>
         <div class="actions">
-          <button class="button primary" data-mark="${esc(sc.id)}">Mark studied</button>
+          <button type="button" class="button primary" data-mark="${esc(sc.id)}">Mark studied</button>
           <a class="button" href="#quiz/${sc.id}">Quiz this criterion</a>
           <a class="button" href="#lessons">Back to lessons</a>
         </div>
@@ -715,17 +715,17 @@ function renderGuided() {
   const relatedCriterion = getCriterion(step.related[0]);
   const percent = Math.round(((index + 1) / GUIDED_STEPS.length) * 100);
   return layout(`
-    ${pageTitle("Guided mode", "One idea at a time", "This mode is for tired brains, anxious learners, beginners, and anyone who learns better with one small step at a time.")}
+    ${pageTitle("Guided mode", "One idea at a time", "This mode is for learners who need calm pacing, plain language, repetition, or one small step at a time. There is no timer.")}
     <section class="guided-wrap">
-      <article class="guided-card panel" aria-labelledby="guided-title">
-        <div class="toolbar guided-toolbar">
-          <span class="badge">Step ${esc(guidedProgressLabel())}</span>
-          <span class="badge">${esc(step.kind)}</span>
+      <article class="guided-card panel" aria-labelledby="guided-title" aria-describedby="guided-help guided-body">
+        <div class="guided-toolbar" aria-label="Guided learning status">
+          <span class="meta-tag">Step ${esc(guidedProgressLabel())}</span>
+          <span class="meta-tag">${esc(step.kind)}</span>
         </div>
-        <div class="progress" aria-label="Guided progress ${percent}%"><span style="width:${percent}%"></span></div>
+        <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="${GUIDED_STEPS.length}" aria-valuenow="${index + 1}" aria-label="Guided progress ${percent}%"><span style="width:${percent}%"></span></div>
         <p class="eyebrow">${esc(step.prompt)}</p>
         <h2 id="guided-title">${esc(step.title)}</h2>
-        <p class="guided-big">${esc(step.body)}</p>
+        <p id="guided-body" class="guided-big">${esc(step.body)}</p>
         ${state.guidedExampleOpen ? `
           <div class="example-box">
             <h3>Another example</h3>
@@ -737,14 +737,14 @@ function renderGuided() {
           <p>${esc(step.check)}</p>
         </div>
         <div class="actions">
-          <button class="button primary" data-guided-next>I understand</button>
-          <button class="button" data-guided-example>${state.guidedExampleOpen ? "Hide example" : "Show another example"}</button>
+          <button type="button" class="button primary" data-guided-next>I understand</button>
+          <button type="button" class="button" data-guided-example aria-expanded="${state.guidedExampleOpen ? "true" : "false"}">${state.guidedExampleOpen ? "Hide example" : "Show another example"}</button>
           <a class="button" href="#quiz/${relatedCriterion.id}">Quiz me</a>
           <a class="button" href="#lesson/${relatedCriterion.id}">Open full lesson</a>
         </div>
         <p class="muted">Related criteria: ${step.related.map((num) => `<a href="#lesson/${getCriterion(num).id}">${esc(num)}</a>`).join(", ")}</p>
       </article>
-      <aside class="source-panel">
+      <aside class="source-panel" id="guided-help">
         <h2>How to use this mode</h2>
         <ol>
           <li>Read only the card in front of you.</li>
@@ -752,7 +752,7 @@ function renderGuided() {
           <li>Open the example only if you need it.</li>
           <li>Use Quiz me when the idea feels familiar.</li>
         </ol>
-        <button class="button" data-guided-reset>Restart guided mode</button>
+        <button type="button" class="button" data-guided-reset>Restart guided mode</button>
       </aside>
     </section>
   `);
@@ -833,7 +833,7 @@ function renderQuiz(targetId = null, exam = false) {
       <section class="panel">
         <p>You scored <strong>${quiz.score}</strong> out of <strong>${quiz.questions.length}</strong>.</p>
         <div class="actions">
-          <button class="button primary" data-restart="${exam ? "exam" : "quiz"}">Try again</button>
+          <button type="button" class="button primary" data-restart="${exam ? "exam" : "quiz"}">Try again</button>
           <a class="button" href="#lessons">Study lessons</a>
         </div>
       </section>
@@ -859,7 +859,7 @@ function renderQuiz(targetId = null, exam = false) {
         ${question.choices.map((choice) => {
           const answered = state.selected;
           const klass = answered && choice.id === question.answer ? "correct" : answered === choice.id ? "wrong" : "";
-          return `<button class="option ${klass}" data-answer="${esc(choice.id)}" ${answered ? "disabled" : ""}>
+          return `<button type="button" class="option ${klass}" data-answer="${esc(choice.id)}" ${answered ? "disabled" : ""}>
             <strong>${esc(choice.num)} ${esc(choice.title)}</strong>
             <span class="muted"> ${esc(choice.principle)} / Level ${esc(choice.level)}</span>
           </button>`;
@@ -867,7 +867,7 @@ function renderQuiz(targetId = null, exam = false) {
       </div>
       ${state.selected ? `<div class="feedback"><strong>${state.selected === question.answer ? "Correct." : "Not quite."}</strong> ${esc(question.explanation)}</div>` : ""}
       <div class="actions">
-        ${state.selected ? `<button class="button primary" data-next-question>Next question</button>` : ""}
+        ${state.selected ? `<button type="button" class="button primary" data-next-question>Next question</button>` : ""}
         <a class="button" href="#lesson/${question.sc.id}">Study this criterion</a>
       </div>
     </section>
