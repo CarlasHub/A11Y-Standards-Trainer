@@ -2759,6 +2759,60 @@ details.card summary strong {
   }
 }
 
+/* Refined dark surfaces: avoid large accidental-looking outline boxes. */
+:root {
+  --shadow: 0 12px 28px rgb(0 0 0 / 18%);
+}
+
+.topbar {
+  box-shadow: 0 10px 24px rgb(0 0 0 / 18%);
+}
+
+.hero > div,
+.panel,
+.card,
+.question,
+.source-panel,
+.lesson-row,
+.tutorial-result,
+.standard-card,
+.stat,
+.mini,
+details.card,
+details.panel,
+.table-wrap {
+  box-shadow: 0 1px 0 rgb(255 255 255 / 3%);
+}
+
+.card:hover,
+.tutorial-result:hover,
+.standard-card:hover,
+.lesson-row:hover {
+  box-shadow: 0 12px 28px rgb(0 0 0 / 18%);
+}
+
+.card:focus-within,
+.tutorial-result:focus-within,
+.standard-card:focus-within,
+.lesson-row:focus-within,
+.question:focus-within,
+.panel:focus-within {
+  border-color: var(--line);
+  box-shadow: 0 1px 0 rgb(255 255 255 / 3%);
+}
+
+.button:focus-visible,
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible,
+.option:focus-visible,
+.pagination-page:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
 .page-title h1,
 .page-title h2,
 .page-title h3 {
