@@ -150,6 +150,9 @@ const DEQUE_COURSE_PATHS = [
       { title: "Web Accessibility Testing: Screen Readers", status: 1, href: "https://dequeuniversity.com/class/screenreaders/?lang=en" },
       { title: "Usability Testing for Accessibility", status: 12, href: "https://dequeuniversity.com/class/usability/?lang=en" },
       { title: "Angular Accessibility", status: 4, href: "https://dequeuniversity.com/class/angular/?lang=en" }
+    ],
+    assessments: [
+      { title: "Take graded exam now", status: 75 }
     ]
   },
   {
