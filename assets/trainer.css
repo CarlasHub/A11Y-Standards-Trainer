@@ -4019,7 +4019,7 @@ select:focus-visible {
 
 .course-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(8rem, 0.25fr);
+  grid-template-columns: minmax(0, 1fr) minmax(8rem, 0.22fr) max-content;
   gap: 1rem;
   align-items: center;
   border: 1px solid var(--line-soft);
@@ -4031,7 +4031,7 @@ select:focus-visible {
 }
 
 .course-row:hover {
-  border-color: rgb(56 189 248 / 60%);
+  border-color: rgb(125 211 199 / 60%);
   background: var(--card-hover);
 }
 
