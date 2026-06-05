@@ -619,6 +619,104 @@ const OFFICIAL_DOCS = [
     title: "ARIA Authoring Practices Guide",
     url: "https://www.w3.org/WAI/ARIA/apg/",
     use: "Keyboard interaction and semantic patterns for custom widgets."
+  },
+  {
+    title: "W3C Web Accessibility Evaluation Tools List",
+    url: "https://www.w3.org/WAI/test-evaluate/tools/list/",
+    use: "Public W3C list for finding evaluation tools by guideline, language, and platform."
+  },
+  {
+    title: "Chrome DevTools Accessibility Reference",
+    url: "https://developer.chrome.com/docs/devtools/accessibility/reference/",
+    use: "Inspect the accessibility tree, names, roles, contrast, and computed accessibility properties."
+  },
+  {
+    title: "Lighthouse Accessibility Audits",
+    url: "https://developer.chrome.com/docs/lighthouse/accessibility/",
+    use: "Run automated browser audits and learn what each audit can and cannot prove."
+  },
+  {
+    title: "WAVE Web Accessibility Evaluation Tool",
+    url: "https://wave.webaim.org/",
+    use: "Visual inspection aid for headings, labels, alt text, contrast, structure, and ARIA warnings."
+  },
+  {
+    title: "Accessibility Insights for Web",
+    url: "https://accessibilityinsights.io/docs/web/overview/",
+    use: "FastPass, assessment workflows, tab stops, and guided manual checks for web apps."
+  },
+  {
+    title: "NVDA Screen Reader",
+    url: "https://www.nvaccess.org/download/",
+    use: "Free Windows screen reader for checking spoken names, roles, states, form errors, headings, and live updates."
+  },
+  {
+    title: "Apple VoiceOver User Guide",
+    url: "https://support.apple.com/guide/voiceover/welcome/mac",
+    use: "Official VoiceOver guidance for testing on macOS and Safari."
+  }
+];
+
+const TOOL_REFERENCES = [
+  {
+    title: "W3C Quick Reference",
+    url: "https://www.w3.org/WAI/WCAG22/quickref/",
+    use: "Filter WCAG 2.2 criteria by level, topic, and technology before writing pass/fail evidence.",
+    tags: ["all", "wcag", "conformance"]
+  },
+  {
+    title: "Understanding WCAG 2.2",
+    url: "https://www.w3.org/WAI/WCAG22/Understanding/",
+    use: "Read the intent, user benefits, examples, failures, and techniques for the exact criterion.",
+    tags: ["all", "wcag", "criteria"]
+  },
+  {
+    title: "Chrome DevTools Accessibility Reference",
+    url: "https://developer.chrome.com/docs/devtools/accessibility/reference/",
+    use: "Inspect accessible names, roles, computed properties, contrast, and the accessibility tree.",
+    tags: ["all", "names", "roles", "forms", "aria", "contrast", "devtools"]
+  },
+  {
+    title: "Lighthouse Accessibility Audits",
+    url: "https://developer.chrome.com/docs/lighthouse/accessibility/",
+    use: "Run automated checks for common failures. Treat results as leads, then verify manually.",
+    tags: ["all", "automation", "qa", "contrast", "forms", "images"]
+  },
+  {
+    title: "WAVE",
+    url: "https://wave.webaim.org/",
+    use: "Visualize headings, landmarks, labels, alt text, contrast, ARIA, and structural warnings.",
+    tags: ["all", "headings", "forms", "images", "contrast", "labels"]
+  },
+  {
+    title: "Accessibility Insights for Web",
+    url: "https://accessibilityinsights.io/docs/web/overview/",
+    use: "Use FastPass, tab stops, and guided assessments for repeatable manual testing.",
+    tags: ["all", "qa", "keyboard", "focus", "regression", "assessment"]
+  },
+  {
+    title: "NVDA",
+    url: "https://www.nvaccess.org/download/",
+    use: "Confirm headings, landmarks, form names, role/state/value, errors, and live updates on Windows.",
+    tags: ["screen reader", "nvda", "names", "forms", "aria", "status", "headings"]
+  },
+  {
+    title: "Apple VoiceOver User Guide",
+    url: "https://support.apple.com/guide/voiceover/welcome/mac",
+    use: "Confirm Safari/macOS screen reader behavior, rotor navigation, forms, headings, and announcements.",
+    tags: ["screen reader", "voiceover", "names", "forms", "aria", "status", "headings"]
+  },
+  {
+    title: "ARIA Authoring Practices Guide",
+    url: "https://www.w3.org/WAI/ARIA/apg/",
+    use: "Check expected roles, states, properties, focus movement, and keyboard patterns for custom widgets.",
+    tags: ["aria", "keyboard", "focus", "widgets", "components"]
+  },
+  {
+    title: "WAI Evaluation Tools List",
+    url: "https://www.w3.org/WAI/test-evaluate/tools/list/",
+    use: "Find additional public evaluation tools when a project needs platform-specific checks.",
+    tags: ["tools", "qa", "automation", "conformance"]
   }
 ];
 
@@ -875,6 +973,135 @@ function testSteps(sc) {
   ];
 }
 
+function technicalChecks(sc) {
+  const text = `${sc.num} ${sc.title} ${sc.guidelineTitle} ${sc.contentText}`.toLowerCase();
+  if (text.includes("non-text") || text.includes("image") || text.includes("text alternative")) {
+    return [
+      "Inspect the DOM for a useful accessible name: `alt`, visible text, `aria-label`, `aria-labelledby`, SVG `<title>`, or a nearby text alternative.",
+      "Classify the asset by purpose: decorative, informative, functional, complex, CAPTCHA, or media alternative.",
+      "For functional images, test the control name in the accessibility tree, not only the visible icon.",
+      "For complex images, provide the short label near the image and the full explanation in adjacent text, a table, or a linked long description."
+    ];
+  }
+  if (text.includes("caption") || text.includes("audio") || text.includes("video") || text.includes("media")) {
+    return [
+      "Identify whether the media is audio-only, video-only, synchronized media, live, or prerecorded.",
+      "Check that captions include meaningful speech, speaker changes, and important sound effects.",
+      "Check transcripts for audio-only content and audio description or media alternatives for important visual-only information.",
+      "Verify custom media controls with keyboard, visible focus, accessible names, and screen reader announcements."
+    ];
+  }
+  if (text.includes("keyboard") || text.includes("focus") || text.includes("pointer") || text.includes("drag") || text.includes("target")) {
+    return [
+      "Test without a mouse: Tab, Shift+Tab, Enter, Space, Escape, and arrow keys where the pattern expects them.",
+      "Record focus order and compare it with the visual reading/task order.",
+      "Check that focus is visible, not obscured, and returns to the trigger after dialogs, menus, or route changes.",
+      "For pointer gestures, confirm there is a simple alternative input path and that cancellation/recovery works."
+    ];
+  }
+  if (text.includes("contrast") || text.includes("color") || text.includes("resize") || text.includes("reflow") || text.includes("spacing")) {
+    return [
+      "Test text, icons, borders, focus indicators, selected states, charts, and form boundaries, not only paragraph text.",
+      "Check 200% text resize, 320 CSS px width, and 400% browser zoom where relevant.",
+      "Confirm information is not conveyed by color alone; add text, icons with labels, patterns, or semantic state.",
+      "Use browser zoom and text spacing overrides to confirm content does not overlap, clip, or require two-dimensional scrolling."
+    ];
+  }
+  if (text.includes("error") || text.includes("label") || text.includes("input") || text.includes("form") || text.includes("authentication")) {
+    return [
+      "Verify every input has a persistent programmatic label and any instructions are available before the user submits.",
+      "Submit empty, invalid, and corrected values; confirm errors identify the field, problem, and recovery step.",
+      "Inspect `for`/`id`, `fieldset`/`legend`, `aria-describedby`, `autocomplete`, and error-summary links where relevant.",
+      "Check that users are not forced to memorize, retype, or solve unnecessary cognitive puzzles to authenticate."
+    ];
+  }
+  if (text.includes("status") || text.includes("name") || text.includes("role") || text.includes("value") || text.includes("aria") || text.includes("parsing")) {
+    return [
+      "Inspect the accessibility tree for the expected name, role, state, value, description, and relationship.",
+      "Prefer native HTML controls before ARIA; if ARIA is used, verify the keyboard behavior matches the announced role.",
+      "For dynamic updates, confirm the message is announced without moving focus unless focus movement is the user-friendly action.",
+      "Check custom components in default, hover, focus, selected, expanded, disabled, loading, error, and mobile states."
+    ];
+  }
+  return [
+    "Identify the user task protected by the criterion before testing implementation details.",
+    "Check the default state, keyboard state, zoomed state, error state, and dynamic state if the page has one.",
+    "Use the browser accessibility tree to compare visible meaning with programmatic meaning.",
+    "Write evidence with the page/state, exact steps, expected result, actual result, user impact, and criterion reference."
+  ];
+}
+
+function implementationExample(sc) {
+  const text = `${sc.num} ${sc.title} ${sc.guidelineTitle}`.toLowerCase();
+  if (text.includes("non-text") || text.includes("image")) {
+    return {
+      failure: "Icon-only search button has no text alternative, so a screen reader announces only 'button'.",
+      better: "Button has visible or programmatic name 'Search', and decorative SVG is hidden from assistive technology."
+    };
+  }
+  if (text.includes("keyboard") || text.includes("focus")) {
+    return {
+      failure: "A modal opens, but focus stays behind it and keyboard users can tab into the page underneath.",
+      better: "Focus moves to the dialog heading or first useful control, stays inside while open, Escape closes it, and focus returns to the trigger."
+    };
+  }
+  if (text.includes("contrast") || text.includes("color")) {
+    return {
+      failure: "Required fields are shown only with red labels and the selected tab is only a faint colored border.",
+      better: "Required fields include text or semantic indication, and selected/focus states have sufficient non-text contrast."
+    };
+  }
+  if (text.includes("error") || text.includes("label") || text.includes("form")) {
+    return {
+      failure: "The form says 'Invalid value' at the top but does not identify which field failed.",
+      better: "The error summary links to the field, the field references the error text, and the message explains how to correct it."
+    };
+  }
+  if (text.includes("status") || text.includes("aria") || text.includes("name") || text.includes("role")) {
+    return {
+      failure: "A custom dropdown visually opens but still exposes a generic `div` with no expanded state.",
+      better: "The control exposes a clear name, expected role, expanded state, selected option, and matching keyboard behavior."
+    };
+  }
+  return {
+    failure: "The interface appears understandable visually but the same meaning is missing in code, keyboard behavior, or assistive technology output.",
+    better: "Visible design, semantic HTML, keyboard behavior, and assistive technology output all communicate the same task and state."
+  };
+}
+
+function toolTagsForCriterion(sc) {
+  const text = `${sc.title} ${sc.guidelineTitle} ${sc.contentText}`.toLowerCase();
+  const tags = new Set(["all", "wcag"]);
+  if (text.includes("image") || text.includes("non-text")) ["images"].forEach((tag) => tags.add(tag));
+  if (text.includes("label") || text.includes("input") || text.includes("error") || text.includes("form")) ["forms", "labels"].forEach((tag) => tags.add(tag));
+  if (text.includes("keyboard") || text.includes("focus") || text.includes("pointer")) ["keyboard", "focus"].forEach((tag) => tags.add(tag));
+  if (text.includes("contrast") || text.includes("color") || text.includes("resize")) ["contrast"].forEach((tag) => tags.add(tag));
+  if (text.includes("status") || text.includes("aria") || text.includes("role") || text.includes("name")) ["aria", "names", "status"].forEach((tag) => tags.add(tag));
+  if (text.includes("heading") || text.includes("language") || text.includes("navigation")) ["headings"].forEach((tag) => tags.add(tag));
+  return [...tags];
+}
+
+function toolLinks(tags, limit = 5) {
+  const tagSet = new Set(tags.map((tag) => tag.toLowerCase()));
+  return TOOL_REFERENCES
+    .filter((tool) => tool.tags.some((tag) => tagSet.has(tag.toLowerCase())))
+    .slice(0, limit);
+}
+
+function renderToolLinks(tags, limit = 5) {
+  const tools = toolLinks(tags, limit);
+  return `
+    <div class="tool-links">
+      ${tools.map((tool) => `
+        <a href="${tool.url}" target="_blank" rel="noopener noreferrer">
+          <strong>${esc(tool.title)}</strong>
+          <span>${esc(tool.use)}</span>
+        </a>
+      `).join("")}
+    </div>
+  `;
+}
+
 function officialLinks(sc) {
   return [
     ["WCAG 2.2 specification", `https://www.w3.org/TR/WCAG22/#${sc.id}`],
@@ -1041,6 +1268,8 @@ function renderLessons() {
 
 function renderLesson(id) {
   const sc = getCriterion(id);
+  const example = implementationExample(sc);
+  const criterionToolTags = toolTagsForCriterion(sc);
   return layout(`
     ${pageTitle(`${sc.principle} / Level ${sc.level}`, `${sc.num} ${sc.title}`, `${sc.guidelineTitle}: ${sc.contentText.slice(0, 220)}${sc.contentText.length > 220 ? "..." : ""}`)}
     <div class="lesson-layout">
@@ -1065,6 +1294,22 @@ function renderLesson(id) {
           <h2>Exam trap</h2>
           <p>${esc(commonTrap(sc))}</p>
         </div>
+        <div class="plain-box">
+          <h2>Technical details to check</h2>
+          <ul>${technicalChecks(sc).map((item) => `<li>${esc(item)}</li>`).join("")}</ul>
+        </div>
+        <div class="example-box">
+          <h2>Implementation example</h2>
+          <dl class="comparison-list">
+            <div><dt>Failure pattern</dt><dd>${esc(example.failure)}</dd></div>
+            <div><dt>Better pattern</dt><dd>${esc(example.better)}</dd></div>
+          </dl>
+        </div>
+        <div class="plain-box">
+          <h2>Tools to use</h2>
+          <p>Use tools to collect evidence, then verify manually. Automated tools cannot prove every WCAG requirement.</p>
+          ${renderToolLinks(criterionToolTags)}
+        </div>
         <h2>How to test it</h2>
         <ol>${testSteps(sc).map((step) => `<li>${esc(step)}</li>`).join("")}</ol>
         <h2>Memory hook</h2>
@@ -1083,6 +1328,8 @@ function renderLesson(id) {
         <h2>Sources and references</h2>
         <p class="muted">Use these for exact wording and technique detail.</p>
         ${officialLinks(sc).map(([label, href]) => `<a href="${href}" target="_blank" rel="noopener noreferrer">${esc(label)}</a>`).join("")}
+        <h3>Useful tools</h3>
+        ${renderToolLinks(criterionToolTags, 4)}
       </aside>
     </div>
   `);
@@ -1367,6 +1614,7 @@ function tutorialPagination(total) {
 }
 
 function renderTutorialCard(tutorial) {
+  const tutorialTags = [...tutorial.tags, tutorial.category, tutorial.topic, tutorial.title, ...tutorial.wcagRefs].map((item) => String(item).toLowerCase());
   return `
     <article class="tutorial-result card">
       <div class="tutorial-card-head">
@@ -1386,9 +1634,16 @@ function renderTutorialCard(tutorial) {
         <summary>View study steps</summary>
         <h3>Learn it</h3>
         <ol>${tutorial.teach.map((step) => `<li>${esc(step)}</li>`).join("")}</ol>
+        <h3>Technical checks</h3>
+        <ul>${tutorial.wcagRefs.flatMap((num) => technicalChecks(getCriterion(num)).slice(0, 2)).slice(0, 5).map((step) => `<li>${esc(step)}</li>`).join("")}</ul>
         <div class="example-box"><h3>Example</h3><p>${esc(tutorial.example)}</p></div>
         <div class="plain-box"><h3>Practice</h3><p>${esc(tutorial.practice)}</p></div>
         <div class="trap-box"><h3>Review prompt</h3><p>${esc(tutorial.check)}</p></div>
+        <div class="plain-box">
+          <h3>Tools and official sources</h3>
+          <p>Use the tools below when the tutorial involves implementation or testing. Always confirm with the official WCAG wording before writing final evidence.</p>
+          ${renderToolLinks(tutorialTags, 5)}
+        </div>
       </details>
       <div class="actions">
         <a class="button primary" href="#guided">Start guided review</a>

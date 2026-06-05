@@ -2754,9 +2754,45 @@ details.card summary strong {
     display: grid;
   }
 
-  .footer-links {
-    justify-content: flex-start;
-  }
+.footer-links {
+  justify-content: flex-start;
+}
+}
+
+.tool-links,
+.comparison-list {
+  display: grid;
+  gap: 0.65rem;
+  margin: 0.85rem 0 0;
+}
+
+.tool-links a,
+.comparison-list div {
+  display: grid;
+  gap: 0.2rem;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius);
+  background: var(--surface-3);
+  padding: 0.75rem 0.85rem;
+  text-decoration: none;
+}
+
+.tool-links a:hover,
+.tool-links a:focus-visible {
+  border-color: var(--brand);
+  background: var(--card-hover);
+}
+
+.tool-links strong,
+.comparison-list dt {
+  color: var(--text);
+  font-weight: 650;
+}
+
+.tool-links span,
+.comparison-list dd {
+  margin: 0;
+  color: var(--muted);
 }
 
 /* Rendered final: match the GH-600 study-site structure with a teal accent. */
