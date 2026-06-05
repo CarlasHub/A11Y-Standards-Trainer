@@ -216,6 +216,66 @@ const MINI_TUTORIALS = [
   }
 ];
 
+const TUTORIAL_METADATA = {
+  "alt-text-purpose": {
+    category: "Text alternatives",
+    topic: "Images and controls",
+    difficulty: "Foundation",
+    description: "Choose the right text alternative by identifying the purpose of an image, icon, chart, or control.",
+    tags: ["alt text", "images", "icons", "controls", "non-text content"]
+  },
+  "keyboard-map": {
+    category: "Keyboard and focus",
+    topic: "Manual testing",
+    difficulty: "Foundation to practice",
+    description: "Build a keyboard testing path that checks focus order, operation, escape routes, and visible focus.",
+    tags: ["keyboard", "focus", "manual testing", "dialogs", "menus"]
+  },
+  "forms-helper": {
+    category: "Forms",
+    topic: "Labels and errors",
+    difficulty: "Foundation to exam",
+    description: "Review how labels, instructions, required fields, validation, and recovery work together.",
+    tags: ["forms", "labels", "errors", "instructions", "authentication"]
+  },
+  "contrast-real-world": {
+    category: "Visual design",
+    topic: "Contrast and states",
+    difficulty: "Practice",
+    description: "Test text, icons, borders, focus indicators, selected states, and hover/focus content.",
+    tags: ["contrast", "color", "focus visible", "states", "visual design"]
+  },
+  "spa-announcements": {
+    category: "Dynamic interfaces",
+    topic: "Status and route updates",
+    difficulty: "Intermediate",
+    description: "Make route changes, loading states, save messages, and filtered results understandable to assistive technology.",
+    tags: ["spa", "status messages", "live regions", "focus management", "dynamic updates"]
+  },
+  "cognitive-load": {
+    category: "Cognitive accessibility",
+    topic: "Memory and task support",
+    difficulty: "Core",
+    description: "Reduce memory work, keep help consistent, and support review, correction, and recovery.",
+    tags: ["cognitive accessibility", "memory", "help", "redundant entry", "authentication"]
+  }
+};
+
+const TUTORIAL_PAGE_SIZE = 3;
+
+const TUTORIAL_RECORDS = MINI_TUTORIALS.map((tutorial) => {
+  const meta = TUTORIAL_METADATA[tutorial.id] || {};
+  return {
+    ...tutorial,
+    category: meta.category || "General",
+    topic: meta.topic || tutorial.title,
+    difficulty: meta.difficulty || tutorial.level,
+    description: meta.description || tutorial.example,
+    tags: meta.tags || [],
+    wcagRefs: tutorial.related
+  };
+});
+
 const PRINCIPLE_SUMMARIES = {
   Perceivable: "People must be able to notice the information. If they cannot see it, hear it, or interpret it in their assistive technology, it may as well not exist.",
   Operable: "People must be able to use the interface. Keyboard, touch, mouse, switch devices, voice control, and time limits all count.",
@@ -339,6 +399,9 @@ const state = {
   query: "",
   level: "all",
   principle: "all",
+  tutorialQuery: "",
+  tutorialCategory: "all",
+  tutorialPage: 1,
   quiz: null,
   selected: null,
   guidedIndex: Number(localStorage.getItem("a11yGuidedIndex") || "0"),
@@ -755,36 +818,145 @@ function renderLibrary() {
   `);
 }
 
+function tutorialCategories() {
+  return ["all", ...new Set(TUTORIAL_RECORDS.map((tutorial) => tutorial.category))];
+}
+
+function tutorialSearchText(tutorial) {
+  return [
+    tutorial.title,
+    tutorial.description,
+    tutorial.category,
+    tutorial.topic,
+    tutorial.difficulty,
+    tutorial.level,
+    tutorial.example,
+    tutorial.practice,
+    tutorial.check,
+    ...tutorial.tags,
+    ...tutorial.wcagRefs,
+    ...tutorial.teach
+  ].join(" ").toLowerCase();
+}
+
+function filteredTutorials() {
+  const query = state.tutorialQuery.trim().toLowerCase();
+  return TUTORIAL_RECORDS.filter((tutorial) => {
+    const categoryMatch = state.tutorialCategory === "all" || tutorial.category === state.tutorialCategory;
+    const queryMatch = !query || tutorialSearchText(tutorial).includes(query);
+    return categoryMatch && queryMatch;
+  });
+}
+
+function tutorialPagination(total) {
+  const pageCount = Math.max(1, Math.ceil(total / TUTORIAL_PAGE_SIZE));
+  const currentPage = Math.min(Math.max(1, state.tutorialPage), pageCount);
+  state.tutorialPage = currentPage;
+  const start = (currentPage - 1) * TUTORIAL_PAGE_SIZE;
+  return {
+    pageCount,
+    currentPage,
+    start,
+    end: Math.min(start + TUTORIAL_PAGE_SIZE, total)
+  };
+}
+
+function renderTutorialCard(tutorial) {
+  return `
+    <article class="tutorial-result card">
+      <div class="tutorial-card-head">
+        <span class="badge">${esc(tutorial.category)}</span>
+        <span class="badge">${esc(tutorial.difficulty)}</span>
+      </div>
+      <h2>${esc(tutorial.title)}</h2>
+      <p>${esc(tutorial.description)}</p>
+      <dl class="tutorial-meta">
+        <div><dt>Topic</dt><dd>${esc(tutorial.topic)}</dd></div>
+        <div><dt>WCAG</dt><dd>${tutorial.wcagRefs.map((num) => `<a href="#lesson/${getCriterion(num).id}">${esc(num)}</a>`).join(", ")}</dd></div>
+      </dl>
+      <div class="tag-list" aria-label="Tutorial tags">
+        ${tutorial.tags.map((tag) => `<span>${esc(tag)}</span>`).join("")}
+      </div>
+      <details class="tutorial-details">
+        <summary>View study steps</summary>
+        <h3>Learn it</h3>
+        <ol>${tutorial.teach.map((step) => `<li>${esc(step)}</li>`).join("")}</ol>
+        <div class="example-box"><h3>Example</h3><p>${esc(tutorial.example)}</p></div>
+        <div class="plain-box"><h3>Practice</h3><p>${esc(tutorial.practice)}</p></div>
+        <div class="trap-box"><h3>Review prompt</h3><p>${esc(tutorial.check)}</p></div>
+      </details>
+      <div class="actions">
+        <a class="button primary" href="#guided">Start guided review</a>
+        <a class="button" href="#quiz/${getCriterion(tutorial.wcagRefs[0]).id}">Practice quiz</a>
+      </div>
+    </article>
+  `;
+}
+
+function renderTutorialPagination(pageInfo, total) {
+  if (total === 0) return "";
+  const pages = Array.from({ length: pageInfo.pageCount }, (_, index) => index + 1);
+  return `
+    <nav class="pagination" aria-label="Tutorial results pages">
+      <button type="button" class="button" data-tutorial-page="${pageInfo.currentPage - 1}" ${pageInfo.currentPage === 1 ? "disabled" : ""}>Previous</button>
+      <ol>
+        ${pages.map((page) => `
+          <li>
+            <button
+              type="button"
+              class="pagination-page"
+              data-tutorial-page="${page}"
+              ${page === pageInfo.currentPage ? 'aria-current="page"' : ""}
+              aria-label="Page ${page} of ${pageInfo.pageCount}"
+            >${page}</button>
+          </li>
+        `).join("")}
+      </ol>
+      <button type="button" class="button" data-tutorial-page="${pageInfo.currentPage + 1}" ${pageInfo.currentPage === pageInfo.pageCount ? "disabled" : ""}>Next</button>
+    </nav>
+  `;
+}
+
 function renderTutorials() {
+  const tutorials = filteredTutorials();
+  const pageInfo = tutorialPagination(tutorials.length);
+  const currentTutorials = tutorials.slice(pageInfo.start, pageInfo.end);
+  const filteringActive = Boolean(state.tutorialQuery.trim()) || state.tutorialCategory !== "all";
+  const resultLabel = tutorials.length === 1 ? "1 tutorial found" : `${tutorials.length} tutorials found`;
   return layout(`
-    ${pageTitle("Mini tutorials", "Concept summaries", "Each tutorial introduces one accessibility concept, gives a practical example, and links to related WCAG criteria.")}
-    <section class="panel">
-      <h2>Pedagogy used here</h2>
-      <ul>
-        <li><strong>Small chunks:</strong> one idea at a time, because long technical walls are exhausting.</li>
-        <li><strong>Plain first, technical second:</strong> learn the human problem before the WCAG label.</li>
-        <li><strong>Worked examples:</strong> see a realistic pass/fail situation before being tested.</li>
-        <li><strong>Retrieval practice:</strong> answer from memory so the exam feels less surprising.</li>
-        <li><strong>Desirable difficulty:</strong> quizzes use close distractors, but lessons give enough clarity to beat them.</li>
-      </ul>
+    ${pageTitle("Mini tutorials", "Concept summaries", "Search and review focused tutorials by topic, WCAG reference, category, tag, and difficulty.")}
+    <section class="tutorial-dashboard panel" aria-labelledby="tutorial-search-heading">
+      <div>
+        <h2 id="tutorial-search-heading">Find a tutorial</h2>
+        <p>Search the complete tutorial dataset. Results and pagination update together.</p>
+      </div>
+      <div class="tutorial-controls">
+        <label class="search tutorial-search ${filteringActive ? "is-active" : ""}">
+          Search tutorials
+          <input id="tutorial-search" type="search" value="${esc(state.tutorialQuery)}" placeholder="Try keyboard, forms, contrast, 1.1.1..." autocomplete="off" />
+        </label>
+        <label>
+          Category
+          <select id="tutorial-category">
+            ${tutorialCategories().map((category) => `<option value="${esc(category)}" ${state.tutorialCategory === category ? "selected" : ""}>${category === "all" ? "All categories" : esc(category)}</option>`).join("")}
+          </select>
+        </label>
+        ${filteringActive ? `<button type="button" class="button" data-clear-tutorial-search>Clear search</button>` : ""}
+      </div>
+      <div class="result-summary ${filteringActive ? "is-filtering" : ""}" role="status" aria-live="polite">
+        <strong>${esc(resultLabel)}</strong>
+        ${tutorials.length ? `<span>Showing ${pageInfo.start + 1}-${pageInfo.end} of ${tutorials.length}. Page ${pageInfo.currentPage} of ${pageInfo.pageCount}.</span>` : `<span>No tutorials found. Try a different keyword.</span>`}
+      </div>
     </section>
-    <section class="grid two">
-      ${MINI_TUTORIALS.map((tutorial, index) => `
-        <details class="card tutorial-card" ${index === 0 ? "open" : ""}>
-          <summary>
-            <span class="badge">${esc(tutorial.level)}</span>
-            <strong>${esc(tutorial.title)}</strong>
-            <span class="muted">View tutorial details.</span>
-          </summary>
-          <h3>Learn it</h3>
-          <ol>${tutorial.teach.map((step) => `<li>${esc(step)}</li>`).join("")}</ol>
-          <div class="example-box"><h3>Example</h3><p>${esc(tutorial.example)}</p></div>
-          <div class="plain-box"><h3>Practice</h3><p>${esc(tutorial.practice)}</p></div>
-          <div class="trap-box"><h3>Review prompt</h3><p>${esc(tutorial.check)}</p></div>
-          <p class="muted">Related criteria: ${tutorial.related.map((num) => `<a href="#lesson/${getCriterion(num).id}">${esc(num)}</a>`).join(", ")}</p>
-        </details>
-      `).join("")}
+    <section class="tutorial-results" aria-label="Tutorial search results">
+      ${currentTutorials.length ? currentTutorials.map(renderTutorialCard).join("") : `
+        <div class="empty-state panel">
+          <h2>No tutorials found.</h2>
+          <p>Try a different keyword, WCAG reference, category, or tag.</p>
+        </div>
+      `}
     </section>
+    ${renderTutorialPagination(pageInfo, tutorials.length)}
   `);
 }
 
@@ -1029,6 +1201,33 @@ function render() {
   document.querySelector("#principle")?.addEventListener("change", (event) => {
     state.principle = event.target.value;
     render();
+  });
+  document.querySelector("#tutorial-search")?.addEventListener("input", (event) => {
+    state.tutorialQuery = event.target.value;
+    state.tutorialPage = 1;
+    render();
+  });
+  document.querySelector("#tutorial-category")?.addEventListener("change", (event) => {
+    state.tutorialCategory = event.target.value;
+    state.tutorialPage = 1;
+    render();
+  });
+  document.querySelector("[data-clear-tutorial-search]")?.addEventListener("click", () => {
+    state.tutorialQuery = "";
+    state.tutorialCategory = "all";
+    state.tutorialPage = 1;
+    announce("Tutorial search cleared.");
+    render();
+  });
+  document.querySelectorAll("[data-tutorial-page]").forEach((button) => {
+    button.addEventListener("click", (event) => {
+      const page = Number(event.currentTarget.dataset.tutorialPage);
+      if (Number.isFinite(page)) {
+        state.tutorialPage = page;
+        announce(`Tutorial results page ${page}.`);
+        render();
+      }
+    });
   });
   document.querySelector("[data-mark]")?.addEventListener("click", (event) => markStudied(event.currentTarget.dataset.mark));
   document.querySelectorAll("[data-answer]").forEach((button) => {
