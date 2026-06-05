@@ -262,6 +262,7 @@ const TUTORIAL_METADATA = {
 };
 
 const TUTORIAL_PAGE_SIZE = 3;
+const STANDARD_PAGE_SIZE = 12;
 
 const TUTORIAL_RECORDS = MINI_TUTORIALS.map((tutorial) => {
   const meta = TUTORIAL_METADATA[tutorial.id] || {};
@@ -402,6 +403,7 @@ const state = {
   tutorialQuery: "",
   tutorialCategory: "all",
   tutorialPage: 1,
+  standardPage: 1,
   quiz: null,
   selected: null,
   guidedIndex: Number(localStorage.getItem("a11yGuidedIndex") || "0"),
@@ -417,7 +419,7 @@ const routes = [
   ["tutorials", "Mini Tutorials"],
   ["guided", "Guided Mode"],
   ["lessons", "Lessons"],
-  ["bank", "Knowledge Bank"],
+  ["bank", "Standards"],
   ["quiz", "Difficult Quiz"],
   ["exam", "Exam Practice"],
   ["glossary", "Glossary"],
@@ -426,13 +428,12 @@ const routes = [
 
 const navRoutes = [
   ["home", "Home"],
-  ["tutorials", "Start"],
+  ["tutorials", "Tutorials"],
   ["guided", "Guided"],
   ["lessons", "Lessons"],
-  ["bank", "Bank"],
+  ["bank", "Standards"],
   ["quiz", "Quiz"],
   ["exam", "Exam"],
-  ["glossary", "Glossary"],
   ["docs", "Docs"]
 ];
 
@@ -479,6 +480,18 @@ function criteria() {
       const haystack = `${sc.num} ${sc.title} ${sc.level} ${sc.principle} ${sc.guidelineTitle} ${sc.contentText}`.toLowerCase();
       return haystack.includes(state.query.trim().toLowerCase());
     });
+}
+
+function paginate(total, currentPage, pageSize) {
+  const pageCount = Math.max(1, Math.ceil(total / pageSize));
+  const safePage = Math.min(Math.max(1, currentPage), pageCount);
+  const start = (safePage - 1) * pageSize;
+  return {
+    pageCount,
+    currentPage: safePage,
+    start,
+    end: Math.min(start + pageSize, total)
+  };
 }
 
 function groupedByPrinciple() {
@@ -646,6 +659,7 @@ function renderHome() {
         <div class="actions">
           <a class="button primary" href="#tutorials">Start with mini tutorials</a>
           <a class="button primary" href="#guided">Use guided mode</a>
+          <a class="button" href="#course">Open study map</a>
           <a class="button" href="#lessons">Then open lessons</a>
           <a class="button" href="#quiz">Hard quiz after study</a>
         </div>
@@ -695,26 +709,33 @@ function renderHome() {
 }
 
 function filters() {
+  const hasFilters = Boolean(state.query.trim()) || state.level !== "all" || state.principle !== "all";
   return `
-    <div class="toolbar" role="search">
-      <label class="search">Search <input id="search" type="search" value="${esc(state.query)}" placeholder="Try focus, captions, errors, 1.4.3..." /></label>
+    <div class="toolbar ${hasFilters ? "is-filtering" : ""}" role="search" aria-label="Search and filter standards">
+      <label class="search">Search standards <input id="search" type="search" value="${esc(state.query)}" placeholder="Try focus, captions, errors, 1.4.3..." autocomplete="off" /></label>
       <label>Level <select id="level">
         ${["all", "A", "AA", "AAA"].map((level) => `<option value="${level}" ${state.level === level ? "selected" : ""}>${level === "all" ? "All" : level}</option>`).join("")}
       </select></label>
       <label>Principle <select id="principle">
         ${["all", "Perceivable", "Operable", "Understandable", "Robust"].map((principle) => `<option value="${principle}" ${state.principle === principle ? "selected" : ""}>${principle === "all" ? "All" : principle}</option>`).join("")}
       </select></label>
+      ${hasFilters ? `<button type="button" class="button" data-clear-criteria-search>Reset filters</button>` : ""}
     </div>
   `;
 }
 
 function renderLessons() {
   const list = criteria();
+  const hasFilters = Boolean(state.query.trim()) || state.level !== "all" || state.principle !== "all";
   return layout(`
     ${pageTitle("Lessons", "All WCAG 2.2 lessons", "Every criterion gets a plain-language explanation, a real-life example, a common trap, and a practical test routine.")}
     ${filters()}
+    <div class="result-summary ${hasFilters ? "is-filtering" : ""}" role="status" aria-live="polite">
+      <strong>${list.length === 1 ? "1 lesson found" : `${list.length} lessons found`}</strong>
+      <span>${hasFilters ? "Filters are active." : "Showing the full WCAG 2.2 lesson set."}</span>
+    </div>
     <section class="lesson-list" aria-label="Lesson list">
-      ${list.map((sc) => `
+      ${list.length ? list.map((sc) => `
         <a class="lesson-row" href="#lesson/${sc.id}">
           <span>
             <span class="badge level-${sc.level.toLowerCase()}">${esc(sc.level)}</span>
@@ -723,7 +744,12 @@ function renderLessons() {
           </span>
           <span class="badge">${progress[sc.id]?.studied ? "studied" : "open"}</span>
         </a>
-      `).join("")}
+      `).join("") : `
+        <div class="empty-state panel">
+          <h2>No lessons found.</h2>
+          <p>Try a different keyword, level, or principle.</p>
+        </div>
+      `}
     </section>
   `);
 }
@@ -917,6 +943,58 @@ function renderTutorialPagination(pageInfo, total) {
   `;
 }
 
+function renderStandardCard(sc) {
+  return `
+    <article class="standard-card card">
+      <div class="standard-card-head">
+        <span class="criterion-number">${esc(sc.num)}</span>
+        <span class="badge level-${sc.level.toLowerCase()}">Level ${esc(sc.level)}</span>
+        <span class="badge">${esc(sc.principle)}</span>
+      </div>
+      <h2>${esc(sc.title)}</h2>
+      <p>${esc(oneSentence(sc))}</p>
+      <dl class="tutorial-meta">
+        <div><dt>Guideline</dt><dd>${esc(sc.guidelineTitle)}</dd></div>
+        <div><dt>Evidence to collect</dt><dd>${esc(testSteps(sc).slice(1, 3).join(" "))}</dd></div>
+      </dl>
+      <details class="tutorial-details">
+        <summary>Read plain-English detail</summary>
+        <p>${esc(plainExplanation(sc))}</p>
+        <p><strong>Common trap:</strong> ${esc(commonTrap(sc))}</p>
+      </details>
+      <div class="actions">
+        <a class="button primary" href="#lesson/${sc.id}">Open lesson</a>
+        <a class="button" href="#quiz/${sc.id}">Quiz this</a>
+        <a class="button" href="https://www.w3.org/WAI/WCAG22/Understanding/${sc.id}.html" target="_blank" rel="noopener noreferrer">Official doc</a>
+      </div>
+    </article>
+  `;
+}
+
+function renderStandardPagination(pageInfo, total) {
+  if (total === 0) return "";
+  const pages = Array.from({ length: pageInfo.pageCount }, (_, index) => index + 1);
+  return `
+    <nav class="pagination" aria-label="Standards results pages">
+      <button type="button" class="button" data-standard-page="${pageInfo.currentPage - 1}" ${pageInfo.currentPage === 1 ? "disabled" : ""}>Previous</button>
+      <ol>
+        ${pages.map((page) => `
+          <li>
+            <button
+              type="button"
+              class="pagination-page"
+              data-standard-page="${page}"
+              ${page === pageInfo.currentPage ? 'aria-current="page"' : ""}
+              aria-label="Standards page ${page} of ${pageInfo.pageCount}"
+            >${page}</button>
+          </li>
+        `).join("")}
+      </ol>
+      <button type="button" class="button" data-standard-page="${pageInfo.currentPage + 1}" ${pageInfo.currentPage === pageInfo.pageCount ? "disabled" : ""}>Next</button>
+    </nav>
+  `;
+}
+
 function renderTutorials() {
   const tutorials = filteredTutorials();
   const pageInfo = tutorialPagination(tutorials.length);
@@ -1016,12 +1094,20 @@ function renderGuided() {
 
 function renderBank() {
   const list = criteria();
+  const pageInfo = paginate(list.length, state.standardPage, STANDARD_PAGE_SIZE);
+  state.standardPage = pageInfo.currentPage;
+  const visibleStandards = list.slice(pageInfo.start, pageInfo.end);
+  const hasFilters = Boolean(state.query.trim()) || state.level !== "all" || state.principle !== "all";
   return layout(`
-    ${pageTitle("Knowledge bank", "Searchable WCAG 2.2 reference", "Use this when you need to quickly decide which criterion applies and what kind of evidence you need.")}
+    ${pageTitle("Standards", "Searchable WCAG 2.2 reference", "Find the criterion, level, principle, plain-English meaning, evidence to collect, related lesson, and practice quiz.")}
     ${filters()}
+    <div class="result-summary ${hasFilters ? "is-filtering" : ""}" role="status" aria-live="polite">
+      <strong>${list.length === 1 ? "1 standard found" : `${list.length} standards found`}</strong>
+      ${list.length ? `<span>Showing ${pageInfo.start + 1}-${pageInfo.end} of ${list.length}. Page ${pageInfo.currentPage} of ${pageInfo.pageCount}.</span>` : `<span>No standards found. Try a different keyword, level, or principle.</span>`}
+    </div>
     <section class="panel">
       <h2>Expanded course knowledge areas</h2>
-      <p class="muted">Do not try to read the whole bank in one sitting. Pick one topic, study one lesson, then practise one question.</p>
+      <p class="muted">Use these areas to connect WCAG criteria with the kinds of product work where issues usually appear.</p>
       <div class="mini-grid">
         ${COURSE_LIBRARY.map((course) => `
           <div class="mini">
@@ -1031,8 +1117,17 @@ function renderBank() {
         `).join("")}
       </div>
     </section>
+    <section class="standards-grid" aria-label="Standards search results">
+      ${visibleStandards.length ? visibleStandards.map(renderStandardCard).join("") : `
+        <div class="empty-state panel">
+          <h2>No standards found.</h2>
+          <p>Try a different keyword, level, or principle.</p>
+        </div>
+      `}
+    </section>
+    ${renderStandardPagination(pageInfo, list.length)}
     <details class="panel">
-      <summary><strong>Open full WCAG criteria table</strong> <span class="muted">87 rows. Best used with search and filters.</span></summary>
+      <summary><strong>Open compact criteria table</strong> <span class="muted">${list.length} filtered rows. Best for quick comparison.</span></summary>
       <div class="table-wrap">
       <table>
         <thead><tr><th>SC</th><th>Level</th><th>Plain-language meaning</th><th>Common evidence</th></tr></thead>
@@ -1115,13 +1210,15 @@ function renderQuiz(targetId = null, exam = false) {
         ${question.choices.map((choice) => {
           const answered = state.selected;
           const klass = answered && choice.id === question.answer ? "correct" : answered === choice.id ? "wrong" : "";
+          const stateText = answered && choice.id === question.answer ? "Correct answer" : answered === choice.id ? "Selected answer" : "";
           return `<button type="button" class="option ${klass}" data-answer="${esc(choice.id)}" ${answered ? "disabled" : ""}>
             <strong>${esc(choice.num)} ${esc(choice.title)}</strong>
             <span class="muted"> ${esc(choice.principle)} / Level ${esc(choice.level)}</span>
+            ${stateText ? `<span class="answer-state">${esc(stateText)}</span>` : ""}
           </button>`;
         }).join("")}
       </div>
-      ${state.selected ? `<div class="feedback"><strong>${state.selected === question.answer ? "Correct." : "Not quite."}</strong> ${esc(question.explanation)}</div>` : ""}
+      ${state.selected ? `<div class="feedback" role="status" aria-live="polite"><strong>${state.selected === question.answer ? "Correct." : "Not quite."}</strong> ${esc(question.explanation)}</div>` : ""}
       <div class="actions">
         ${state.selected ? `<button type="button" class="button primary" data-next-question>Next question</button>` : ""}
         <a class="button" href="#lesson/${question.sc.id}">Study this criterion</a>
@@ -1192,14 +1289,25 @@ function render() {
 
   document.querySelector("#search")?.addEventListener("input", (event) => {
     state.query = event.target.value;
+    state.standardPage = 1;
     render();
   });
   document.querySelector("#level")?.addEventListener("change", (event) => {
     state.level = event.target.value;
+    state.standardPage = 1;
     render();
   });
   document.querySelector("#principle")?.addEventListener("change", (event) => {
     state.principle = event.target.value;
+    state.standardPage = 1;
+    render();
+  });
+  document.querySelector("[data-clear-criteria-search]")?.addEventListener("click", () => {
+    state.query = "";
+    state.level = "all";
+    state.principle = "all";
+    state.standardPage = 1;
+    announce("Filters reset.");
     render();
   });
   document.querySelector("#tutorial-search")?.addEventListener("input", (event) => {
@@ -1225,6 +1333,16 @@ function render() {
       if (Number.isFinite(page)) {
         state.tutorialPage = page;
         announce(`Tutorial results page ${page}.`);
+        render();
+      }
+    });
+  });
+  document.querySelectorAll("[data-standard-page]").forEach((button) => {
+    button.addEventListener("click", (event) => {
+      const page = Number(event.currentTarget.dataset.standardPage);
+      if (Number.isFinite(page)) {
+        state.standardPage = page;
+        announce(`Standards results page ${page}.`);
         render();
       }
     });
