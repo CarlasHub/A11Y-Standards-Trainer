@@ -1,0 +1,26 @@
+{
+  "name": "a11y-standards-trainer",
+  "version": "1.0.0",
+  "description": "This project is an educational web application for learning and practicing web accessibility standards.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "serve": "python3 -m http.server 4175",
+    "a11y": "node scripts/a11y-check.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CarlasHub/A11Y-Standards-Trainer.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/CarlasHub/A11Y-Standards-Trainer/issues"
+  },
+  "homepage": "https://github.com/CarlasHub/A11Y-Standards-Trainer#readme",
+  "devDependencies": {
+    "axe-core": "^4.12.0",
+    "playwright": "^1.60.0"
+  }
+}

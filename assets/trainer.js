@@ -21,7 +21,7 @@ const COURSE_METHODS = [
 const COURSE_LIBRARY = [
   {
     title: "Accessibility fundamentals",
-    source: "Accessibility Fundamentals, CPACC, IAAP quick guides",
+    source: "W3C/WAI accessibility foundations and disability context",
     topics: ["disability concepts", "models of disability", "guidelines", "laws", "myths", "inclusive language"],
     takeaway: "Accessibility is not a feature. It is the practice of removing barriers between people and the task they came to complete."
   },
@@ -87,8 +87,8 @@ const COURSE_LIBRARY = [
   },
   {
     title: "Testing methods and tools",
-    source: "Web Accessibility Testing: Basic Methods and Tools, QA Fast Track",
-    topics: ["automated checks", "manual inspection", "keyboard testing", "browser tools", "axe rules", "evidence writing"],
+    source: "WAI testing guidance, WCAG techniques, and practical manual testing",
+    topics: ["automated checks", "manual inspection", "keyboard testing", "browser tools", "rule explanations", "evidence writing"],
     takeaway: "Automated tools find some issues quickly. Manual testing proves whether people can actually complete the task."
   },
   {
@@ -111,7 +111,7 @@ const COURSE_LIBRARY = [
   },
   {
     title: "Conformance and regulations",
-    source: "WCAG, EN 301-549, Section 508 conformance courses",
+    source: "WCAG 2.2, EN 301 549, Section 508, and conformance reporting",
     topics: ["WCAG levels", "EN 301-549", "Section 508", "scope", "alternate versions", "third-party content", "reporting"],
     takeaway: "Conformance is evidence-based. You need scope, criteria, test results, exceptions, and reproducible findings."
   }
@@ -234,6 +234,49 @@ const GLOSSARY = [
   ["Status message", "A message about the result of an action, such as saved, loaded, error, or added to cart, that should be announced without moving focus."]
 ];
 
+const OFFICIAL_DOCS = [
+  {
+    title: "WCAG 2.2 Recommendation",
+    url: "https://www.w3.org/TR/WCAG22/",
+    use: "Exact normative success criterion wording and conformance requirements."
+  },
+  {
+    title: "Understanding WCAG 2.2",
+    url: "https://www.w3.org/WAI/WCAG22/Understanding/",
+    use: "Intent, benefits, examples, and techniques for each success criterion."
+  },
+  {
+    title: "How to Meet WCAG 2.2 Quick Reference",
+    url: "https://www.w3.org/WAI/WCAG22/quickref/",
+    use: "Filtered lookup by level, technology, and topic."
+  },
+  {
+    title: "What’s New in WCAG 2.2",
+    url: "https://www.w3.org/WAI/standards-guidelines/wcag/new-in-22/",
+    use: "The new WCAG 2.2 criteria and who they help."
+  },
+  {
+    title: "Cognitive Accessibility at W3C",
+    url: "https://www.w3.org/WAI/cognitive/",
+    use: "W3C/WAI work on cognitive and learning disability accessibility."
+  },
+  {
+    title: "Making Content Usable for People with Cognitive and Learning Disabilities",
+    url: "https://www.w3.org/TR/coga-usable/",
+    use: "Patterns for clear purpose, help, memory support, attention, and error prevention."
+  },
+  {
+    title: "WAI-ARIA Overview",
+    url: "https://www.w3.org/WAI/standards-guidelines/aria/",
+    use: "When ARIA is appropriate and how it fits with accessible web components."
+  },
+  {
+    title: "ARIA Authoring Practices Guide",
+    url: "https://www.w3.org/WAI/ARIA/apg/",
+    use: "Keyboard interaction and semantic patterns for custom widgets."
+  }
+];
+
 const GUIDED_STEPS = MINI_TUTORIALS.flatMap((tutorial) => [
   {
     id: `${tutorial.id}-idea`,
@@ -289,14 +332,15 @@ const progress = JSON.parse(localStorage.getItem("a11yTrainerProgress") || "{}")
 const routes = [
   ["home", "Home"],
   ["course", "Course Map"],
-  ["library", "Course Library"],
+  ["library", "Reference Library"],
   ["tutorials", "Mini Tutorials"],
   ["guided", "Guided Mode"],
   ["lessons", "Lessons"],
   ["bank", "Knowledge Bank"],
   ["quiz", "Difficult Quiz"],
   ["exam", "Exam Practice"],
-  ["glossary", "Glossary"]
+  ["glossary", "Glossary"],
+  ["docs", "Docs"]
 ];
 
 const navRoutes = [
@@ -307,7 +351,8 @@ const navRoutes = [
   ["bank", "Bank"],
   ["quiz", "Quiz"],
   ["exam", "Exam"],
-  ["glossary", "Glossary"]
+  ["glossary", "Glossary"],
+  ["docs", "Docs"]
 ];
 
 function saveProgress() {
@@ -472,7 +517,7 @@ function layout(content) {
       </nav>
     </header>
     <main id="main" class="shell" tabindex="-1">${content}</main>
-    <footer><div class="shell">Original study content built from public WCAG 2.2 references and a course-topic map. Paid course text is not reproduced.</div></footer>
+    <footer><div class="shell">Original learning content built from public W3C/WAI documentation, WCAG 2.2, WAI-ARIA/APG patterns, and cognitive accessibility guidance.</div></footer>
   `;
 }
 
@@ -530,9 +575,9 @@ function renderHome() {
         <div class="actions"><a class="button primary" href="#tutorials">Open mini tutorials</a></div>
       </article>
       <article class="panel">
-        <h2>Broader course coverage</h2>
-        <p>The knowledge bank now includes topic coverage from the wider Deque course catalog: fundamentals, UX, semantics, visual design, input methods, forms, media, SPAs, ARIA widgets, testing, screen readers, usability, regulations, and certification prep.</p>
-        <div class="actions"><a class="button" href="#library">Open course library</a></div>
+        <h2>Broader standards coverage</h2>
+        <p>The knowledge bank connects WCAG to practical accessibility work: disability context, UX, semantic HTML, visual design, input methods, forms, media, SPAs, ARIA widgets, testing, screen readers, usability, and legal conformance.</p>
+        <div class="actions"><a class="button" href="#library">Open reference library</a></div>
       </article>
     </section>
     <section class="domain-grid">
@@ -632,7 +677,7 @@ function renderLesson(id) {
 
 function renderCourse() {
   return layout(`
-    ${pageTitle("Course map", "Deque course structure converted into a study roadmap", "This records the course topic coverage as a navigation map. The trainer lessons themselves use original explanations and public WCAG references.")}
+    ${pageTitle("Study map", "Accessibility study roadmap", "A standards-first path through the skills needed for practical accessibility work, from human context to conformance evidence.")}
     <section class="grid two">
       ${COURSE_METHODS.map((topic, index) => `
         <article class="card">
@@ -656,7 +701,7 @@ function renderCourse() {
 
 function renderLibrary() {
   return layout(`
-    ${pageTitle("Course library", "Expanded accessibility knowledge map", "These topic areas were mapped from the broader available course catalog and converted into original study guidance.")}
+    ${pageTitle("Reference library", "Expanded accessibility knowledge map", "Original study guidance organized around public standards, WAI learning resources, and practical testing responsibilities.")}
     <section class="grid two">
       ${COURSE_LIBRARY.map((course) => `
         <article class="card">
@@ -888,6 +933,30 @@ function renderGlossary() {
   `);
 }
 
+function renderDocs() {
+  return layout(`
+    ${pageTitle("Documentation", "Official sources used by this trainer", "The trainer is original teaching material, but it points learners back to public standards for exact requirements and deeper examples.")}
+    <section class="panel">
+      <h2>How the documentation is used</h2>
+      <ol>
+        <li><strong>WCAG 2.2</strong> gives the exact requirement.</li>
+        <li><strong>Understanding WCAG</strong> explains the intent and examples.</li>
+        <li><strong>WAI cognitive accessibility guidance</strong> shapes the way lessons are chunked, repeated, and written in plain language.</li>
+        <li><strong>WAI-ARIA/APG</strong> guides custom-control semantics and keyboard behavior.</li>
+      </ol>
+    </section>
+    <section class="grid two">
+      ${OFFICIAL_DOCS.map((doc) => `
+        <article class="card">
+          <h2>${esc(doc.title)}</h2>
+          <p>${esc(doc.use)}</p>
+          <p><a href="${doc.url}" target="_blank" rel="noopener noreferrer">Open official documentation</a></p>
+        </article>
+      `).join("")}
+    </section>
+  `);
+}
+
 function render() {
   state.route = slugFromHash();
   const hashParts = window.location.hash.replace(/^#\/?/, "").split("/");
@@ -908,6 +977,7 @@ function render() {
   if (state.route === "quiz") app.innerHTML = renderQuiz(id, false);
   if (state.route === "exam") app.innerHTML = renderQuiz(null, true);
   if (state.route === "glossary") app.innerHTML = renderGlossary();
+  if (state.route === "docs") app.innerHTML = renderDocs();
 
   document.querySelector("#search")?.addEventListener("input", (event) => {
     state.query = event.target.value;
