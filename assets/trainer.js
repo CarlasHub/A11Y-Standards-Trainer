@@ -1,0 +1,965 @@
+import { successCriteria } from "./questionbank-DZXLgNQi.js";
+
+const app = document.querySelector("#app");
+const announcer = document.querySelector("#announcer");
+
+const COURSE_METHODS = [
+  "Getting started, test platforms, required tools, normative WCAG language, conforming alternate versions, and third-party content.",
+  "Text alternatives: active images, informative images, complex images, decorative images, CAPTCHA, and audio/video alternatives.",
+  "Time-based media: audio-only, video-only, prerecorded captions, live captions, media alternatives, and audio description.",
+  "Adaptable content: semantics, data tables, related form groups, headings, lists, reading order, and visual or sound cues.",
+  "Distinguishable content: color-only meaning, link color contrast, audio control, text contrast, non-text contrast, resize, reflow, text spacing, and hover/focus content.",
+  "Keyboard access: keyboard navigation, no keyboard trap, character-key shortcuts, custom gestures, pointer gestures, pointer cancellation, dragging, and motion actuation.",
+  "Timing and seizures: timing adjustable, pause/stop/hide, automatically updating content, flashing thresholds, animation from interactions.",
+  "Navigation: bypass blocks, page titles, focus order, link purpose, multiple ways, headings and labels, focus visible, focus not obscured, section headings.",
+  "Input assistance: errors, visible labels, missing instructions, required fields, error suggestion, legal/financial/data error prevention, redundant entry, and accessible authentication.",
+  "Compatibility: parsing history, name/role/value, custom controls, compatibility expectations, and status messages.",
+  "People-first context: personas for color perception, low vision, blindness, deafness, limited manipulation, limited reach/strength, ADHD, dyslexia, and learning difficulties.",
+  "Practice resources: developer minimum checklist, user stories, reporting accessibility bugs, and exam-style review."
+];
+
+const COURSE_LIBRARY = [
+  {
+    title: "Accessibility fundamentals",
+    source: "Accessibility Fundamentals, CPACC, IAAP quick guides",
+    topics: ["disability concepts", "models of disability", "guidelines", "laws", "myths", "inclusive language"],
+    takeaway: "Accessibility is not a feature. It is the practice of removing barriers between people and the task they came to complete."
+  },
+  {
+    title: "Accessible UX and inclusive design",
+    source: "Designing an Accessible User Experience",
+    topics: ["inclusive patterns", "personas", "plain journeys", "error recovery", "cognitive load", "usable help"],
+    takeaway: "Accessible UX means the path still makes sense when the user is stressed, zoomed in, using assistive technology, or learning slowly."
+  },
+  {
+    title: "Semantic structure and navigation",
+    source: "Semantic Structure and Navigation",
+    topics: ["headings", "landmarks", "lists", "tables", "reading order", "links", "page titles"],
+    takeaway: "Semantic HTML is the page's map. If the map is wrong, screen reader and keyboard users get lost."
+  },
+  {
+    title: "Visual design, color, contrast, and spacing",
+    source: "Visual Design and Colors",
+    topics: ["color-only meaning", "text contrast", "non-text contrast", "focus visibility", "text spacing", "images of text"],
+    takeaway: "Good visual accessibility is not ugly. It is visual information that survives low vision, glare, zoom, fatigue, and color differences."
+  },
+  {
+    title: "Device-independent input",
+    source: "Device-Independent Input Methods",
+    topics: ["keyboard", "focus order", "pointer gestures", "target size", "dragging", "motion actuation", "shortcuts"],
+    takeaway: "Do not design one perfect way to use a feature. Give users more than one reliable input path."
+  },
+  {
+    title: "Forms, validation, and authentication",
+    source: "Form Labels, Instructions, and Validation",
+    topics: ["labels", "instructions", "required fields", "error identification", "suggestions", "redundant entry", "accessible authentication"],
+    takeaway: "A form should behave like a patient helper: say what is needed, explain what went wrong, and preserve the user's work."
+  },
+  {
+    title: "Images, SVG, canvas, and text alternatives",
+    source: "Images, SVG, and Canvas",
+    topics: ["active images", "informative images", "complex images", "decorative images", "SVG names", "canvas fallback"],
+    takeaway: "The right text alternative depends on purpose. Describe the job the image does, not just what it looks like."
+  },
+  {
+    title: "Responsive design, zoom, and reflow",
+    source: "Responsive Design and Zoom",
+    topics: ["400% zoom", "single-column reflow", "orientation", "text resize", "mobile states", "horizontal scrolling"],
+    takeaway: "Zoom is not a special case. For many people, zoom is the normal way to read."
+  },
+  {
+    title: "Multimedia, animation, and motion",
+    source: "Multimedia, Animations, and Motion",
+    topics: ["captions", "transcripts", "audio description", "flashing", "pause/stop/hide", "motion sensitivity"],
+    takeaway: "Media must communicate through more than one channel, and movement must not steal control from the user."
+  },
+  {
+    title: "Dynamic updates, AJAX, and single-page apps",
+    source: "Dynamic Updates, AJAX, and Single-Page Apps",
+    topics: ["status messages", "route changes", "focus after updates", "live regions", "loading states", "announcements"],
+    takeaway: "If the screen changes but assistive technology is not told, part of the interface becomes invisible."
+  },
+  {
+    title: "Custom ARIA and JavaScript components",
+    source: "Custom ARIA/JavaScript Components",
+    topics: ["name role value", "native-first design", "menus", "tabs", "dialogs", "comboboxes", "keyboard patterns"],
+    takeaway: "ARIA does not make broken widgets accessible by magic. It only helps when behavior, focus, state, and naming are all correct."
+  },
+  {
+    title: "Testing methods and tools",
+    source: "Web Accessibility Testing: Basic Methods and Tools, QA Fast Track",
+    topics: ["automated checks", "manual inspection", "keyboard testing", "browser tools", "axe rules", "evidence writing"],
+    takeaway: "Automated tools find some issues quickly. Manual testing proves whether people can actually complete the task."
+  },
+  {
+    title: "Screen reader testing",
+    source: "Web Accessibility Testing: Screen Readers",
+    topics: ["browse mode", "focus mode", "names", "headings", "forms", "dynamic messages", "reading order"],
+    takeaway: "Screen reader testing is not about memorising every command. It is about checking what information reaches the user."
+  },
+  {
+    title: "Usability testing for accessibility",
+    source: "Usability Testing for Accessibility",
+    topics: ["participant tasks", "observation", "barrier notes", "assistive technology setup", "severity", "respectful facilitation"],
+    takeaway: "Real users reveal barriers that checklists miss, especially confusion, fatigue, workarounds, and trust problems."
+  },
+  {
+    title: "Framework and product accessibility",
+    source: "Angular Accessibility, developer fast tracks",
+    topics: ["component contracts", "routing", "template semantics", "state", "testing in CI", "design system rules"],
+    takeaway: "Accessibility scales when components make the accessible path the easy path for every developer."
+  },
+  {
+    title: "Conformance and regulations",
+    source: "WCAG, EN 301-549, Section 508 conformance courses",
+    topics: ["WCAG levels", "EN 301-549", "Section 508", "scope", "alternate versions", "third-party content", "reporting"],
+    takeaway: "Conformance is evidence-based. You need scope, criteria, test results, exceptions, and reproducible findings."
+  }
+];
+
+const MINI_TUTORIALS = [
+  {
+    id: "alt-text-purpose",
+    title: "Alt text: describe the purpose, not the pixels",
+    level: "Beginner",
+    related: ["1.1.1", "4.1.2"],
+    teach: [
+      "Look at the thing that is not text.",
+      "Ask what job it does on this page.",
+      "If it gives information, write the same information in words.",
+      "If it is a button or link, name the action or destination.",
+      "If it is decoration only, hide it from assistive technology."
+    ],
+    example: "A magnifying glass button should be named 'Search', not 'magnifying glass'. A chart needs the important trend, not 'bar chart image'.",
+    practice: "Find three images on a page. Label each one as decorative, informative, complex, or action/control.",
+    check: "If the image disappeared, what would the user need to know or do?"
+  },
+  {
+    id: "keyboard-map",
+    title: "Keyboard testing: make a simple map",
+    level: "Beginner to practical",
+    related: ["2.1.1", "2.1.2", "2.4.3", "2.4.7", "2.4.11"],
+    teach: [
+      "Put the mouse away.",
+      "Press Tab and write down each stop.",
+      "Use Enter, Space, Escape, and arrow keys where they make sense.",
+      "Check that focus is visible and not covered.",
+      "Make sure you can leave every component."
+    ],
+    example: "A modal opens, focus moves into it, Escape closes it, and focus returns to the button that opened it.",
+    practice: "Test a menu, dialog, form, and carousel using only the keyboard.",
+    check: "Can a tired user predict where focus goes next?"
+  },
+  {
+    id: "forms-helper",
+    title: "Forms: behave like a patient helper",
+    level: "Beginner to exam",
+    related: ["1.3.1", "1.3.5", "3.3.1", "3.3.2", "3.3.3", "3.3.7", "3.3.8"],
+    teach: [
+      "Every field needs a real label.",
+      "Instructions should appear before the user makes the mistake.",
+      "Required fields must be clear.",
+      "Errors must identify the field and the problem.",
+      "The user should not retype information the system already knows unless there is a good reason."
+    ],
+    example: "Bad: 'Invalid input'. Better: 'Password must be at least 12 characters and include a number.'",
+    practice: "Submit a form empty, with wrong formats, and after zooming. Record what the user hears and sees.",
+    check: "Would the user know exactly what to fix without guessing?"
+  },
+  {
+    id: "contrast-real-world",
+    title: "Contrast: test the quiet parts too",
+    level: "Practical",
+    related: ["1.4.1", "1.4.3", "1.4.11", "1.4.13", "2.4.7"],
+    teach: [
+      "Check normal text.",
+      "Check large text.",
+      "Check icons, borders, focus indicators, and selected states.",
+      "Check hover and focus popups.",
+      "Check the design in disabled-looking but active states."
+    ],
+    example: "A pale purple focus ring may look stylish but fail if it is hard to see against a dark card.",
+    practice: "Pick five UI states: default, hover, focus, selected, error. Test contrast for each.",
+    check: "Can the user tell what is interactive and what changed?"
+  },
+  {
+    id: "spa-announcements",
+    title: "Single-page apps: tell the user what changed",
+    level: "Intermediate",
+    related: ["2.4.2", "2.4.3", "3.2.2", "4.1.2", "4.1.3"],
+    teach: [
+      "When route content changes, update the page title.",
+      "Move focus to a useful heading or region.",
+      "Announce save, error, loading, and completion messages.",
+      "Do not move focus for every tiny update.",
+      "Use native elements first, then ARIA only when needed."
+    ],
+    example: "After filtering results, a live message says '12 results found' while focus stays in the filter control.",
+    practice: "Test search results, add-to-cart, save, route change, and validation updates with a screen reader.",
+    check: "If the user cannot see the screen, how do they know the action worked?"
+  },
+  {
+    id: "cognitive-load",
+    title: "Cognitive accessibility: reduce memory work",
+    level: "Core",
+    related: ["2.2.1", "2.2.6", "3.2.6", "3.3.2", "3.3.7", "3.3.8"],
+    teach: [
+      "Use familiar words before technical words.",
+      "Give one clear next step at a time.",
+      "Keep help in the same place.",
+      "Do not make users memorize codes, passwords, or information from another screen.",
+      "Let people review, correct, pause, and recover."
+    ],
+    example: "A checkout repeats the shipping address automatically instead of forcing the user to retype it for billing.",
+    practice: "Rewrite one confusing error, one instruction, and one help page in plain language.",
+    check: "Could someone with fatigue, memory difficulty, dyslexia, or anxiety still finish the task?"
+  }
+];
+
+const PRINCIPLE_SUMMARIES = {
+  Perceivable: "People must be able to notice the information. If they cannot see it, hear it, or interpret it in their assistive technology, it may as well not exist.",
+  Operable: "People must be able to use the interface. Keyboard, touch, mouse, switch devices, voice control, and time limits all count.",
+  Understandable: "People must be able to understand what is happening and what to do next. This covers language, consistency, labels, help, and errors.",
+  Robust: "The code must expose reliable meaning to browsers and assistive technologies, especially names, roles, values, and status changes."
+};
+
+const GLOSSARY = [
+  ["Accessible name", "The name assistive technology announces for a control, link, image button, or widget."],
+  ["Assistive technology", "Tools people use to access digital content, such as screen readers, magnifiers, switch control, voice input, captions, and braille displays."],
+  ["Conformance", "A claim that a page or product meets a specific WCAG version and level, such as WCAG 2.2 AA."],
+  ["Decorative content", "Content that adds visual style but no meaning. It should usually be hidden from assistive technology."],
+  ["Focus", "The current interactive place on the page, often shown by a visible outline when using a keyboard."],
+  ["Normative", "The official requirement text. In an exam, normative wording matters more than opinions or habits."],
+  ["Programmatically determined", "Information is available in code so software can read it, not only visible to the eye."],
+  ["Status message", "A message about the result of an action, such as saved, loaded, error, or added to cart, that should be announced without moving focus."]
+];
+
+const GUIDED_STEPS = MINI_TUTORIALS.flatMap((tutorial) => [
+  {
+    id: `${tutorial.id}-idea`,
+    tutorialId: tutorial.id,
+    title: tutorial.title,
+    kind: "idea",
+    prompt: "First, learn the idea.",
+    body: tutorial.teach[0],
+    example: tutorial.example,
+    practice: tutorial.practice,
+    check: tutorial.check,
+    related: tutorial.related
+  },
+  {
+    id: `${tutorial.id}-steps`,
+    tutorialId: tutorial.id,
+    title: tutorial.title,
+    kind: "steps",
+    prompt: "Now follow the steps.",
+    body: tutorial.teach.join(" "),
+    example: tutorial.example,
+    practice: tutorial.practice,
+    check: tutorial.check,
+    related: tutorial.related
+  },
+  {
+    id: `${tutorial.id}-practice`,
+    tutorialId: tutorial.id,
+    title: tutorial.title,
+    kind: "practice",
+    prompt: "Now practise with one real thing.",
+    body: tutorial.practice,
+    example: tutorial.example,
+    practice: tutorial.practice,
+    check: tutorial.check,
+    related: tutorial.related
+  }
+]);
+
+const state = {
+  route: "home",
+  query: "",
+  level: "all",
+  principle: "all",
+  quiz: null,
+  selected: null,
+  guidedIndex: Number(localStorage.getItem("a11yGuidedIndex") || "0"),
+  guidedExampleOpen: false
+};
+
+const progress = JSON.parse(localStorage.getItem("a11yTrainerProgress") || "{}");
+
+const routes = [
+  ["home", "Home"],
+  ["course", "Course Map"],
+  ["library", "Course Library"],
+  ["tutorials", "Mini Tutorials"],
+  ["guided", "Guided Mode"],
+  ["lessons", "Lessons"],
+  ["bank", "Knowledge Bank"],
+  ["quiz", "Difficult Quiz"],
+  ["exam", "Exam Practice"],
+  ["glossary", "Glossary"]
+];
+
+const navRoutes = [
+  ["home", "Home"],
+  ["tutorials", "Start"],
+  ["guided", "Guided"],
+  ["lessons", "Lessons"],
+  ["bank", "Bank"],
+  ["quiz", "Quiz"],
+  ["exam", "Exam"],
+  ["glossary", "Glossary"]
+];
+
+function saveProgress() {
+  localStorage.setItem("a11yTrainerProgress", JSON.stringify(progress));
+}
+
+function saveGuidedIndex() {
+  localStorage.setItem("a11yGuidedIndex", String(state.guidedIndex));
+}
+
+function markStudied(id) {
+  progress[id] = { ...(progress[id] || {}), studied: true, updatedAt: new Date().toISOString() };
+  saveProgress();
+  announce("Marked as studied.");
+  render();
+}
+
+function announce(message) {
+  announcer.textContent = message;
+}
+
+function esc(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+}
+
+function slugFromHash() {
+  const hash = window.location.hash.replace(/^#\/?/, "");
+  const [rawRoute = "home"] = hash.split(/[/?]/);
+  const route = rawRoute === "lesson" ? "lessons" : rawRoute;
+  return routes.some(([id]) => id === route) ? route : "home";
+}
+
+function criteria() {
+  return successCriteria
+    .filter((sc) => state.level === "all" || sc.level === state.level)
+    .filter((sc) => state.principle === "all" || sc.principle === state.principle)
+    .filter((sc) => {
+      if (!state.query.trim()) return true;
+      const haystack = `${sc.num} ${sc.title} ${sc.level} ${sc.principle} ${sc.guidelineTitle} ${sc.contentText}`.toLowerCase();
+      return haystack.includes(state.query.trim().toLowerCase());
+    });
+}
+
+function groupedByPrinciple() {
+  return successCriteria.reduce((acc, sc) => {
+    acc[sc.principle] ||= [];
+    acc[sc.principle].push(sc);
+    return acc;
+  }, {});
+}
+
+function getCriterion(idOrNum) {
+  return successCriteria.find((sc) => sc.id === idOrNum || sc.num === idOrNum) || successCriteria[0];
+}
+
+function plainExplanation(sc) {
+  const title = sc.title.toLowerCase();
+  if (title.includes("non-text")) {
+    return "If something is not text, the user still needs the same meaning somehow. A product image, icon button, chart, CAPTCHA, audio clip, and video all need the right kind of alternative. The trick is choosing the correct alternative, not just adding any alt text.";
+  }
+  if (title.includes("caption")) {
+    return "Captions are not only subtitles for speech. They also include important sounds, speaker changes, and information needed to understand the media when the audio is not available.";
+  }
+  if (title.includes("contrast")) {
+    return "Contrast is about whether people can separate foreground from background. Text, icons, borders, focus indicators, and states can all fail if they look pretty but are too faint.";
+  }
+  if (title.includes("keyboard") || title.includes("focus")) {
+    return "A user must be able to move through the page, operate controls, and understand where they are without using a mouse. If focus gets lost, hidden, trapped, or jumps strangely, the experience breaks.";
+  }
+  if (title.includes("error") || title.includes("label") || title.includes("input") || title.includes("authentication")) {
+    return "Forms must explain what they need, identify what went wrong, and help users recover. A technically valid form can still fail if people cannot understand the label, requirement, or correction.";
+  }
+  if (title.includes("name") || title.includes("role") || title.includes("status")) {
+    return "Custom interface code must expose the same meaning that a native HTML control would expose. Screen readers need to know what the thing is, what it is called, what state it is in, and when important changes happen.";
+  }
+  if (title.includes("language")) {
+    return "Language settings help assistive technology pronounce and interpret text correctly. The page language and any meaningful language changes need to be identified in code.";
+  }
+  if (title.includes("target") || title.includes("pointer") || title.includes("dragging")) {
+    return "Pointer accessibility protects people who have shaky hands, use touch, zoom, stylus, head pointers, or other non-mouse input. The key question is whether the same action is possible without precision or complex movement.";
+  }
+  return `${sc.title} is about making ${sc.guidelineTitle.toLowerCase()} work for real people, not only for ideal users. Ask what information, action, or feedback this criterion protects, then test whether a user can still get it when vision, hearing, movement, memory, or technology changes.`;
+}
+
+function oneSentence(sc) {
+  const title = sc.title.toLowerCase();
+  if (title.includes("non-text")) return "People need a text-based way to understand or use anything that is not already text.";
+  if (title.includes("caption")) return "People who cannot hear the audio still need the spoken words and important sounds.";
+  if (title.includes("contrast")) return "People need enough visual difference to read text and recognise controls, icons, states, and focus.";
+  if (title.includes("keyboard")) return "People must be able to complete the task without a mouse.";
+  if (title.includes("focus")) return "People using a keyboard must always know where they are and what will happen next.";
+  if (title.includes("error")) return "People need to know what went wrong and how to fix it.";
+  if (title.includes("label") || title.includes("input")) return "People need clear field names, instructions, and purpose before they can give the right information.";
+  if (title.includes("authentication")) return "Logging in should not depend only on memory puzzles, transcription, or complex mental work.";
+  if (title.includes("name") || title.includes("role") || title.includes("value")) return "Assistive technology needs the same control meaning that sighted mouse users get visually.";
+  if (title.includes("status")) return "Important updates must be announced without stealing focus.";
+  return "The user should receive the same meaning, control, and feedback even when their body, senses, device, or context changes.";
+}
+
+function protectedUserNeed(sc) {
+  const principle = sc.principle;
+  if (principle === "Perceivable") return "This protects users who may not see, hear, or visually interpret the content in the same way as the designer.";
+  if (principle === "Operable") return "This protects users who may use keyboard, touch, switch devices, voice control, zoom, or slower movement.";
+  if (principle === "Understandable") return "This protects users who need predictable language, clear instructions, consistent behavior, and recoverable mistakes.";
+  return "This protects users who depend on browsers and assistive technologies to understand custom controls and dynamic updates.";
+}
+
+function realExample(sc) {
+  const title = sc.title.toLowerCase();
+  if (title.includes("non-text")) return "A shopping site uses a trash-can icon button in the cart. Passing example: the button name is 'Remove red jacket from cart'. Tricky fail: the icon has alt='trash', because that describes the picture, not the action.";
+  if (title.includes("captions")) return "A training video says 'click the blue security tab' while an alarm sound plays. Captions must include the spoken instruction and the meaningful alarm, not just the dialogue.";
+  if (title.includes("reflow")) return "At 400% zoom, a dashboard should become one readable column. If users must scroll sideways to read each line of text, it likely fails reflow.";
+  if (title.includes("focus not obscured")) return "A sticky cookie banner covers the focused 'Submit' button. Even though the button technically receives focus, the user cannot see it, so the design fails the real purpose.";
+  if (title.includes("label in name")) return "A visible button says 'Search'. The accessible name should include 'Search'. If the code names it 'Submit query', voice users saying 'click Search' may fail.";
+  if (title.includes("target size")) return "A list of tiny adjacent delete buttons creates accidental taps. The fix can be a larger target, spacing, or an equivalent easier control depending on the rule level.";
+  if (title.includes("status")) return "After adding a product to cart, the page shows 'Added'. A screen reader user should hear that update without focus being moved away from the current control.";
+  return "Imagine this in a checkout, health form, learning platform, or government service. The user is tired, zoomed in, using keyboard only, or listening through a screen reader. The pass/fail question is whether the same task still works.";
+}
+
+function commonTrap(sc) {
+  const title = sc.title.toLowerCase();
+  if (title.includes("contrast")) return "Do not only test paragraph text. Disabled-looking active controls, icon buttons, charts, focus indicators, and selected states often hide the real failure.";
+  if (title.includes("keyboard")) return "Do not stop after pressing Tab a few times. Test opening, closing, selecting, escaping, and returning focus after dialogs or menus.";
+  if (title.includes("error")) return "A red border alone is not enough. The user needs text that identifies the error and, for harder criteria, useful correction help.";
+  if (title.includes("audio description")) return "Captions do not replace audio description. Captions cover audio; audio description covers important visual information.";
+  if (title.includes("consistent")) return "Consistency does not mean every page must be identical. It means repeated help, navigation, and controls should not change meaning or location unpredictably.";
+  return "The common mistake is treating the criterion as a checklist phrase instead of testing the user outcome it protects.";
+}
+
+function testSteps(sc) {
+  return [
+    `Read the exact WCAG wording for ${sc.num} and underline the user need it protects.`,
+    "Find every place in the page where this issue could appear, including hidden states, errors, overlays, mobile, and zoom.",
+    "Test with keyboard, browser zoom, screen reader or accessibility tree, and visual inspection as relevant.",
+    "Decide pass or fail from evidence. Write the failure so a developer can reproduce it.",
+    "Retest after the fix, especially if the fix changes names, focus, visible text, or layout."
+  ];
+}
+
+function officialLinks(sc) {
+  return [
+    ["WCAG 2.2 specification", `https://www.w3.org/TR/WCAG22/#${sc.id}`],
+    ["Understanding document", `https://www.w3.org/WAI/WCAG22/Understanding/${sc.id}.html`],
+    ["How to meet WCAG 2.2", "https://www.w3.org/WAI/WCAG22/quickref/"]
+  ];
+}
+
+function layout(content) {
+  const route = state.route;
+  return `
+    <header class="topbar">
+      <a class="brand" href="#home" aria-label="A11Y Standards Trainer home">
+        <span class="brand-logo">A11Y</span>
+        <strong>Standards Trainer</strong>
+      </a>
+      <nav aria-label="Main navigation">
+        ${navRoutes.map(([id, label]) => `<a href="#${id}" ${route === id ? 'aria-current="page"' : ""}>${label}</a>`).join("")}
+      </nav>
+    </header>
+    <main id="main" class="shell" tabindex="-1">${content}</main>
+    <footer><div class="shell">Original study content built from public WCAG 2.2 references and a course-topic map. Paid course text is not reproduced.</div></footer>
+  `;
+}
+
+function pageTitle(kicker, title, description) {
+  return `
+    <section class="page-title">
+      <p class="eyebrow">${esc(kicker)}</p>
+      <h1>${esc(title)}</h1>
+      <p>${esc(description)}</p>
+    </section>
+  `;
+}
+
+function renderHome() {
+  const studied = Object.values(progress).filter((p) => p.studied).length;
+  const byPrinciple = groupedByPrinciple();
+  return layout(`
+    <section class="hero">
+      <div>
+        <p class="eyebrow">WCAG 2.2 conformance study platform</p>
+        <h1>Learn accessibility in plain English, then train with questions that do not go easy on you.</h1>
+        <p class="muted">Start gently. Learn one idea. Practise it. Then make the quiz harder. This platform is built for learners who need clear steps before technical labels.</p>
+        <div class="actions">
+          <a class="button primary" href="#tutorials">Start with mini tutorials</a>
+          <a class="button primary" href="#guided">Use guided mode</a>
+          <a class="button" href="#lessons">Then open lessons</a>
+          <a class="button" href="#quiz">Hard quiz after study</a>
+        </div>
+      </div>
+      <div>
+        <h2>Your safe study path</h2>
+        <ol>
+          <li>Mini tutorial: learn the human problem.</li>
+          <li>Guided mode: learn one card at a time.</li>
+          <li>Lesson: connect it to WCAG.</li>
+          <li>Knowledge bank: look up details.</li>
+          <li>Quiz: practise close calls.</li>
+          <li>Exam: build confidence under pressure.</li>
+        </ol>
+        <h3>Progress</h3>
+        <div class="progress" aria-label="${studied} of ${successCriteria.length} criteria studied"><span style="width:${Math.round((studied / successCriteria.length) * 100)}%"></span></div>
+        <p><strong>${studied}</strong> of <strong>${successCriteria.length}</strong> criteria marked studied.</p>
+      </div>
+    </section>
+    <section class="stats" aria-label="Coverage summary">
+      <div class="stat"><strong>${successCriteria.length}</strong><span>WCAG 2.2 criteria</span></div>
+      <div class="stat"><strong>${successCriteria.filter((sc) => sc.level === "A").length}</strong><span>Level A criteria</span></div>
+      <div class="stat"><strong>${successCriteria.filter((sc) => sc.level === "AA").length}</strong><span>Level AA criteria</span></div>
+      <div class="stat"><strong>${COURSE_LIBRARY.length}</strong><span>course knowledge areas</span></div>
+    </section>
+    <section class="grid two">
+      <article class="panel">
+        <h2>Built for cognitive accessibility</h2>
+        <p>The lessons use small chunks, plain words, concrete examples, repeated patterns, memory hooks, and active recall. This helps learners who struggle with technical language, memory, attention, fatigue, brain injury, dyslexia, anxiety, or exam pressure.</p>
+        <div class="actions"><a class="button primary" href="#tutorials">Open mini tutorials</a></div>
+      </article>
+      <article class="panel">
+        <h2>Broader course coverage</h2>
+        <p>The knowledge bank now includes topic coverage from the wider Deque course catalog: fundamentals, UX, semantics, visual design, input methods, forms, media, SPAs, ARIA widgets, testing, screen readers, usability, regulations, and certification prep.</p>
+        <div class="actions"><a class="button" href="#library">Open course library</a></div>
+      </article>
+    </section>
+    <section class="domain-grid">
+      ${Object.entries(byPrinciple).map(([principle, list]) => `
+        <a class="card" href="#lessons">
+          <span class="badge">${list.length} criteria</span>
+          <h2>${esc(principle)}</h2>
+          <p>${esc(PRINCIPLE_SUMMARIES[principle])}</p>
+        </a>
+      `).join("")}
+    </section>
+  `);
+}
+
+function filters() {
+  return `
+    <div class="toolbar" role="search">
+      <label class="search">Search <input id="search" type="search" value="${esc(state.query)}" placeholder="Try focus, captions, errors, 1.4.3..." /></label>
+      <label>Level <select id="level">
+        ${["all", "A", "AA", "AAA"].map((level) => `<option value="${level}" ${state.level === level ? "selected" : ""}>${level === "all" ? "All" : level}</option>`).join("")}
+      </select></label>
+      <label>Principle <select id="principle">
+        ${["all", "Perceivable", "Operable", "Understandable", "Robust"].map((principle) => `<option value="${principle}" ${state.principle === principle ? "selected" : ""}>${principle === "all" ? "All" : principle}</option>`).join("")}
+      </select></label>
+    </div>
+  `;
+}
+
+function renderLessons() {
+  const list = criteria();
+  return layout(`
+    ${pageTitle("Lessons", "All WCAG 2.2 lessons", "Every criterion gets a plain-language explanation, a real-life example, a common trap, and a practical test routine.")}
+    ${filters()}
+    <section class="lesson-list" aria-label="Lesson list">
+      ${list.map((sc) => `
+        <a class="lesson-row" href="#lesson/${sc.id}">
+          <span>
+            <span class="badge level-${sc.level.toLowerCase()}">${esc(sc.level)}</span>
+            <h2>${esc(sc.num)} ${esc(sc.title)}</h2>
+            <p>${esc(sc.principle)} / ${esc(sc.guidelineTitle)}. ${esc(plainExplanation(sc))}</p>
+          </span>
+          <span class="badge">${progress[sc.id]?.studied ? "studied" : "open"}</span>
+        </a>
+      `).join("")}
+    </section>
+  `);
+}
+
+function renderLesson(id) {
+  const sc = getCriterion(id);
+  return layout(`
+    ${pageTitle(`${sc.principle} / Level ${sc.level}`, `${sc.num} ${sc.title}`, `${sc.guidelineTitle}: ${sc.contentText.slice(0, 220)}${sc.contentText.length > 220 ? "..." : ""}`)}
+    <div class="lesson-layout">
+      <article class="panel">
+        <div class="plain-box">
+          <h2>In one sentence</h2>
+          <p><strong>${esc(oneSentence(sc))}</strong></p>
+        </div>
+        <div class="plain-box">
+          <h2>Who this protects</h2>
+          <p>${esc(protectedUserNeed(sc))}</p>
+        </div>
+        <div class="plain-box">
+          <h2>Plain English</h2>
+          <p>${esc(plainExplanation(sc))}</p>
+        </div>
+        <div class="example-box">
+          <h2>Real-life example</h2>
+          <p>${esc(realExample(sc))}</p>
+        </div>
+        <div class="trap-box">
+          <h2>Exam trap</h2>
+          <p>${esc(commonTrap(sc))}</p>
+        </div>
+        <h2>How to test it</h2>
+        <ol>${testSteps(sc).map((step) => `<li>${esc(step)}</li>`).join("")}</ol>
+        <h2>Memory hook</h2>
+        <p>Ask: <strong>what would break if the user cannot rely on the default screen, mouse, sound, memory, or timing?</strong> That question usually reveals the criterion faster than memorising the title.</p>
+        <div class="example-box">
+          <h2>Try it now</h2>
+          <p>Open any real page and find one place this criterion could matter. Say out loud: <strong>the user needs...</strong> Then finish the sentence before looking at the WCAG wording.</p>
+        </div>
+        <div class="actions">
+          <button class="button primary" data-mark="${esc(sc.id)}">Mark studied</button>
+          <a class="button" href="#quiz/${sc.id}">Quiz this criterion</a>
+          <a class="button" href="#lessons">Back to lessons</a>
+        </div>
+      </article>
+      <aside class="source-panel">
+        <h2>Sources and references</h2>
+        <p class="muted">Use these for exact wording and technique detail.</p>
+        ${officialLinks(sc).map(([label, href]) => `<a href="${href}" target="_blank" rel="noopener noreferrer">${esc(label)}</a>`).join("")}
+      </aside>
+    </div>
+  `);
+}
+
+function renderCourse() {
+  return layout(`
+    ${pageTitle("Course map", "Deque course structure converted into a study roadmap", "This records the course topic coverage as a navigation map. The trainer lessons themselves use original explanations and public WCAG references.")}
+    <section class="grid two">
+      ${COURSE_METHODS.map((topic, index) => `
+        <article class="card">
+          <span class="badge">Module ${index + 1}</span>
+          <h2>${esc(topic.split(":")[0])}</h2>
+          <p>${esc(topic)}</p>
+        </article>
+      `).join("")}
+    </section>
+    <section class="panel">
+      <h2>How to use this map</h2>
+      <ol>
+        <li>Study the plain-language lesson for the criterion.</li>
+        <li>Read the official WCAG wording and Understanding page.</li>
+        <li>Test a real interface state, not only a perfect demo state.</li>
+        <li>Take the difficult quiz until close distractors stop fooling you.</li>
+      </ol>
+    </section>
+  `);
+}
+
+function renderLibrary() {
+  return layout(`
+    ${pageTitle("Course library", "Expanded accessibility knowledge map", "These topic areas were mapped from the broader available course catalog and converted into original study guidance.")}
+    <section class="grid two">
+      ${COURSE_LIBRARY.map((course) => `
+        <article class="card">
+          <span class="badge">${esc(course.source)}</span>
+          <h2>${esc(course.title)}</h2>
+          <p>${esc(course.takeaway)}</p>
+          <h3>Bank topics</h3>
+          <ul>${course.topics.map((topic) => `<li>${esc(topic)}</li>`).join("")}</ul>
+        </article>
+      `).join("")}
+    </section>
+  `);
+}
+
+function renderTutorials() {
+  return layout(`
+    ${pageTitle("Mini tutorials", "Learn slowly, remember deeply", "Each tutorial teaches one accessibility idea in small steps, then asks you to practise and recall the rule in your own words.")}
+    <section class="panel">
+      <h2>Pedagogy used here</h2>
+      <ul>
+        <li><strong>Small chunks:</strong> one idea at a time, because long technical walls are exhausting.</li>
+        <li><strong>Plain first, technical second:</strong> learn the human problem before the WCAG label.</li>
+        <li><strong>Worked examples:</strong> see a realistic pass/fail situation before being tested.</li>
+        <li><strong>Retrieval practice:</strong> answer from memory so the exam feels less surprising.</li>
+        <li><strong>Desirable difficulty:</strong> quizzes use close distractors, but lessons give enough clarity to beat them.</li>
+      </ul>
+    </section>
+    <section class="grid two">
+      ${MINI_TUTORIALS.map((tutorial, index) => `
+        <details class="card tutorial-card" ${index === 0 ? "open" : ""}>
+          <summary>
+            <span class="badge">${esc(tutorial.level)}</span>
+            <strong>${esc(tutorial.title)}</strong>
+            <span class="muted">Open when you are ready.</span>
+          </summary>
+          <h3>Learn it</h3>
+          <ol>${tutorial.teach.map((step) => `<li>${esc(step)}</li>`).join("")}</ol>
+          <div class="example-box"><h3>Example</h3><p>${esc(tutorial.example)}</p></div>
+          <div class="plain-box"><h3>Practice</h3><p>${esc(tutorial.practice)}</p></div>
+          <div class="trap-box"><h3>Memory check</h3><p>${esc(tutorial.check)}</p></div>
+          <p class="muted">Related criteria: ${tutorial.related.map((num) => `<a href="#lesson/${getCriterion(num).id}">${esc(num)}</a>`).join(", ")}</p>
+        </details>
+      `).join("")}
+    </section>
+  `);
+}
+
+function guidedProgressLabel() {
+  return `${Math.min(state.guidedIndex + 1, GUIDED_STEPS.length)} of ${GUIDED_STEPS.length}`;
+}
+
+function renderGuided() {
+  const index = Math.max(0, Math.min(state.guidedIndex, GUIDED_STEPS.length - 1));
+  state.guidedIndex = index;
+  const step = GUIDED_STEPS[index];
+  const relatedCriterion = getCriterion(step.related[0]);
+  const percent = Math.round(((index + 1) / GUIDED_STEPS.length) * 100);
+  return layout(`
+    ${pageTitle("Guided mode", "One idea at a time", "This mode is for tired brains, anxious learners, beginners, and anyone who learns better with one small step at a time.")}
+    <section class="guided-wrap">
+      <article class="guided-card panel" aria-labelledby="guided-title">
+        <div class="toolbar guided-toolbar">
+          <span class="badge">Step ${esc(guidedProgressLabel())}</span>
+          <span class="badge">${esc(step.kind)}</span>
+        </div>
+        <div class="progress" aria-label="Guided progress ${percent}%"><span style="width:${percent}%"></span></div>
+        <p class="eyebrow">${esc(step.prompt)}</p>
+        <h2 id="guided-title">${esc(step.title)}</h2>
+        <p class="guided-big">${esc(step.body)}</p>
+        ${state.guidedExampleOpen ? `
+          <div class="example-box">
+            <h3>Another example</h3>
+            <p>${esc(step.example)}</p>
+          </div>
+        ` : ""}
+        <div class="trap-box">
+          <h3>Memory check</h3>
+          <p>${esc(step.check)}</p>
+        </div>
+        <div class="actions">
+          <button class="button primary" data-guided-next>I understand</button>
+          <button class="button" data-guided-example>${state.guidedExampleOpen ? "Hide example" : "Show another example"}</button>
+          <a class="button" href="#quiz/${relatedCriterion.id}">Quiz me</a>
+          <a class="button" href="#lesson/${relatedCriterion.id}">Open full lesson</a>
+        </div>
+        <p class="muted">Related criteria: ${step.related.map((num) => `<a href="#lesson/${getCriterion(num).id}">${esc(num)}</a>`).join(", ")}</p>
+      </article>
+      <aside class="source-panel">
+        <h2>How to use this mode</h2>
+        <ol>
+          <li>Read only the card in front of you.</li>
+          <li>Say the idea back in your own words.</li>
+          <li>Open the example only if you need it.</li>
+          <li>Use Quiz me when the idea feels familiar.</li>
+        </ol>
+        <button class="button" data-guided-reset>Restart guided mode</button>
+      </aside>
+    </section>
+  `);
+}
+
+function renderBank() {
+  const list = criteria();
+  return layout(`
+    ${pageTitle("Knowledge bank", "Searchable WCAG 2.2 reference", "Use this when you need to quickly decide which criterion applies and what kind of evidence you need.")}
+    ${filters()}
+    <section class="panel">
+      <h2>Expanded course knowledge areas</h2>
+      <p class="muted">Do not try to read the whole bank in one sitting. Pick one topic, study one lesson, then practise one question.</p>
+      <div class="mini-grid">
+        ${COURSE_LIBRARY.map((course) => `
+          <div class="mini">
+            <strong>${esc(course.title)}</strong>
+            <span>${esc(course.topics.slice(0, 4).join(", "))}</span>
+          </div>
+        `).join("")}
+      </div>
+    </section>
+    <details class="panel">
+      <summary><strong>Open full WCAG criteria table</strong> <span class="muted">87 rows. Best used with search and filters.</span></summary>
+      <div class="table-wrap">
+      <table>
+        <thead><tr><th>SC</th><th>Level</th><th>Plain-language meaning</th><th>Common evidence</th></tr></thead>
+        <tbody>
+          ${list.map((sc) => `
+            <tr>
+              <td><a href="#lesson/${sc.id}">${esc(sc.num)} ${esc(sc.title)}</a></td>
+              <td>${esc(sc.level)}</td>
+              <td>${esc(plainExplanation(sc))}</td>
+              <td>${esc(testSteps(sc).slice(1, 4).join(" "))}</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+      </div>
+    </details>
+  `);
+}
+
+function makeQuestion(sc, index = 0) {
+  const pool = successCriteria.filter((other) => other.id !== sc.id && (other.principle === sc.principle || other.level === sc.level));
+  const distractors = pool.slice(index, index + 8).sort((a, b) => a.num.localeCompare(b.num)).slice(0, 3);
+  const choices = [sc, ...distractors].sort((a, b) => a.title.localeCompare(b.title));
+  return {
+    sc,
+    prompt: `A tester finds this issue: ${realExample(sc)} Which WCAG success criterion is the best match?`,
+    choices,
+    answer: sc.id,
+    explanation: `The best match is ${sc.num} ${sc.title}. ${commonTrap(sc)}`
+  };
+}
+
+function startQuiz(targetId = null, count = 10) {
+  const pool = targetId ? [getCriterion(targetId)] : criteria();
+  const expanded = [];
+  for (let i = 0; i < count; i += 1) {
+    expanded.push(makeQuestion(pool[i % pool.length], i));
+  }
+  state.quiz = { questions: expanded, index: 0, score: 0, answered: [], targetId, count };
+  state.selected = null;
+}
+
+function renderQuiz(targetId = null, exam = false) {
+  const expectedCount = exam ? 25 : 10;
+  if (!state.quiz || state.quiz.targetId !== targetId || state.quiz.count !== expectedCount) {
+    startQuiz(targetId, expectedCount);
+  }
+  const quiz = state.quiz;
+  const done = quiz.index >= quiz.questions.length;
+  if (done) {
+    const percent = Math.round((quiz.score / quiz.questions.length) * 100);
+    return layout(`
+      ${pageTitle(exam ? "Exam result" : "Quiz result", `${percent}% score`, "Review missed questions, then go back to the lessons for weak criteria.")}
+      <section class="panel">
+        <p>You scored <strong>${quiz.score}</strong> out of <strong>${quiz.questions.length}</strong>.</p>
+        <div class="actions">
+          <button class="button primary" data-restart="${exam ? "exam" : "quiz"}">Try again</button>
+          <a class="button" href="#lessons">Study lessons</a>
+        </div>
+      </section>
+      <section class="grid">
+        ${quiz.answered.map((a, i) => `
+          <article class="card">
+            <span class="badge">${a.correct ? "Correct" : "Review"}</span>
+            <h2>Question ${i + 1}: ${esc(a.question.sc.num)} ${esc(a.question.sc.title)}</h2>
+            <p>${esc(a.question.explanation)}</p>
+          </article>
+        `).join("")}
+      </section>
+    `);
+  }
+
+  const question = quiz.questions[quiz.index];
+  return layout(`
+    ${pageTitle(exam ? "Exam practice" : "Difficult quiz", exam ? "Mixed WCAG 2.2 exam simulator" : "Close-distractor quiz", "These questions are intentionally tricky. The goal is to recognise the protected user outcome, not just the familiar words.")}
+    <section class="question">
+      <span class="badge">Question ${quiz.index + 1} of ${quiz.questions.length}</span>
+      <h2>${esc(question.prompt)}</h2>
+      <div class="options-list">
+        ${question.choices.map((choice) => {
+          const answered = state.selected;
+          const klass = answered && choice.id === question.answer ? "correct" : answered === choice.id ? "wrong" : "";
+          return `<button class="option ${klass}" data-answer="${esc(choice.id)}" ${answered ? "disabled" : ""}>
+            <strong>${esc(choice.num)} ${esc(choice.title)}</strong>
+            <span class="muted"> ${esc(choice.principle)} / Level ${esc(choice.level)}</span>
+          </button>`;
+        }).join("")}
+      </div>
+      ${state.selected ? `<div class="feedback"><strong>${state.selected === question.answer ? "Correct." : "Not quite."}</strong> ${esc(question.explanation)}</div>` : ""}
+      <div class="actions">
+        ${state.selected ? `<button class="button primary" data-next-question>Next question</button>` : ""}
+        <a class="button" href="#lesson/${question.sc.id}">Study this criterion</a>
+      </div>
+    </section>
+  `);
+}
+
+function renderGlossary() {
+  return layout(`
+    ${pageTitle("Glossary", "Accessibility terms without the fog", "Short definitions for words that often make WCAG harder than it needs to be.")}
+    <section class="grid two">
+      ${GLOSSARY.map(([term, definition]) => `
+        <article class="card">
+          <h2>${esc(term)}</h2>
+          <p>${esc(definition)}</p>
+        </article>
+      `).join("")}
+    </section>
+  `);
+}
+
+function render() {
+  state.route = slugFromHash();
+  const hashParts = window.location.hash.replace(/^#\/?/, "").split("/");
+  const id = hashParts[1];
+  if (state.route !== "quiz" && state.route !== "exam") {
+    state.quiz = null;
+    state.selected = null;
+  }
+
+  if (state.route === "home") app.innerHTML = renderHome();
+  if (state.route === "course") app.innerHTML = renderCourse();
+  if (state.route === "library") app.innerHTML = renderLibrary();
+  if (state.route === "tutorials") app.innerHTML = renderTutorials();
+  if (state.route === "guided") app.innerHTML = renderGuided();
+  if (state.route === "lessons") app.innerHTML = renderLessons();
+  if (hashParts[0] === "lesson") app.innerHTML = renderLesson(id);
+  if (state.route === "bank") app.innerHTML = renderBank();
+  if (state.route === "quiz") app.innerHTML = renderQuiz(id, false);
+  if (state.route === "exam") app.innerHTML = renderQuiz(null, true);
+  if (state.route === "glossary") app.innerHTML = renderGlossary();
+
+  document.querySelector("#search")?.addEventListener("input", (event) => {
+    state.query = event.target.value;
+    render();
+  });
+  document.querySelector("#level")?.addEventListener("change", (event) => {
+    state.level = event.target.value;
+    render();
+  });
+  document.querySelector("#principle")?.addEventListener("change", (event) => {
+    state.principle = event.target.value;
+    render();
+  });
+  document.querySelector("[data-mark]")?.addEventListener("click", (event) => markStudied(event.currentTarget.dataset.mark));
+  document.querySelectorAll("[data-answer]").forEach((button) => {
+    button.addEventListener("click", (event) => {
+      const question = state.quiz.questions[state.quiz.index];
+      state.selected = event.currentTarget.dataset.answer;
+      const correct = state.selected === question.answer;
+      if (correct) state.quiz.score += 1;
+      state.quiz.answered.push({ question, selected: state.selected, correct });
+      render();
+    });
+  });
+  document.querySelector("[data-next-question]")?.addEventListener("click", () => {
+    state.quiz.index += 1;
+    state.selected = null;
+    render();
+  });
+  document.querySelector("[data-restart]")?.addEventListener("click", (event) => {
+    startQuiz(null, event.currentTarget.dataset.restart === "exam" ? 25 : 10);
+    render();
+  });
+  document.querySelector("[data-guided-next]")?.addEventListener("click", () => {
+    state.guidedIndex = Math.min(state.guidedIndex + 1, GUIDED_STEPS.length - 1);
+    state.guidedExampleOpen = false;
+    saveGuidedIndex();
+    announce("Next guided learning card.");
+    render();
+  });
+  document.querySelector("[data-guided-example]")?.addEventListener("click", () => {
+    state.guidedExampleOpen = !state.guidedExampleOpen;
+    render();
+  });
+  document.querySelector("[data-guided-reset]")?.addEventListener("click", () => {
+    state.guidedIndex = 0;
+    state.guidedExampleOpen = false;
+    saveGuidedIndex();
+    announce("Guided mode restarted.");
+    render();
+  });
+}
+
+window.addEventListener("hashchange", render);
+render();
