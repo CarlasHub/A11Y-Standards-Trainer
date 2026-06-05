@@ -277,6 +277,24 @@ const OFFICIAL_DOCS = [
   }
 ];
 
+const FOOTER_LINKS = [
+  {
+    label: "Carla's Hub",
+    href: "https://carlashub.com/",
+    icon: "site"
+  },
+  {
+    label: "GitHub",
+    href: "https://github.com/CarlasHub",
+    icon: "github"
+  },
+  {
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/in/carla-goncalves/",
+    icon: "linkedin"
+  }
+];
+
 const GUIDED_STEPS = MINI_TUTORIALS.flatMap((tutorial) => [
   {
     id: `${tutorial.id}-idea`,
@@ -509,7 +527,7 @@ function layout(content) {
   return `
     <header class="topbar">
       <a class="brand" href="#home" aria-label="A11Y Standards Trainer home">
-        <span class="brand-logo">A11Y</span>
+        <span class="brand-logo" aria-hidden="true">A11Y</span>
         <strong>Standards Trainer</strong>
       </a>
       <nav aria-label="Main navigation">
@@ -517,8 +535,30 @@ function layout(content) {
       </nav>
     </header>
     <main id="main" class="shell" tabindex="-1">${content}</main>
-    <footer><div class="shell">Original learning content built from public W3C/WAI documentation, WCAG 2.2, WAI-ARIA/APG patterns, and cognitive accessibility guidance.</div></footer>
+    <footer class="site-footer">
+      <div class="shell footer-inner">
+        <p>Created by <strong>Carla Goncalves</strong>. Original study content based on public W3C/WAI documentation, WCAG 2.2, WAI-ARIA/APG patterns, and cognitive accessibility guidance.</p>
+        <nav class="footer-links" aria-label="Creator links">
+          ${FOOTER_LINKS.map((link) => `
+            <a href="${link.href}" target="_blank" rel="noopener noreferrer" aria-label="${esc(link.label)}">
+              ${renderIcon(link.icon)}
+              <span>${esc(link.label)}</span>
+            </a>
+          `).join("")}
+        </nav>
+      </div>
+    </footer>
   `;
+}
+
+function renderIcon(icon) {
+  if (icon === "github") {
+    return `<svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><path fill="currentColor" d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.18-3.37-1.18-.45-1.15-1.1-1.46-1.1-1.46-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.89 1.52 2.34 1.08 2.91.83.09-.64.35-1.08.63-1.33-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02A9.54 9.54 0 0 1 12 6.02c.85 0 1.7.11 2.5.34 1.9-1.29 2.74-1.02 2.74-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"/></svg>`;
+  }
+  if (icon === "linkedin") {
+    return `<svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><path fill="currentColor" d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9h4v12H3V9Zm7 0h3.8v1.64h.05c.53-.95 1.82-1.95 3.75-1.95 4.01 0 4.75 2.64 4.75 6.07V21h-4v-5.53c0-1.32-.02-3.02-1.84-3.02-1.84 0-2.12 1.44-2.12 2.92V21H10V9Z"/></svg>`;
+  }
+  return `<svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><path fill="currentColor" d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm6.92 8h-3.18a13.6 13.6 0 0 0-1.02-4.03A7.03 7.03 0 0 1 18.92 11ZM12 5.05c.58.84 1.29 2.65 1.53 5.95h-3.06C10.7 7.7 11.42 5.9 12 5.05ZM5.08 13h3.18c.12 1.54.46 2.93 1.02 4.03A7.03 7.03 0 0 1 5.08 13Zm3.18-2H5.08a7.03 7.03 0 0 1 4.2-4.03A13.6 13.6 0 0 0 8.26 11ZM12 18.95c-.58-.84-1.29-2.65-1.53-5.95h3.06c-.24 3.3-.95 5.1-1.53 5.95Zm2.72-1.92c.56-1.1.9-2.49 1.02-4.03h3.18a7.03 7.03 0 0 1-4.2 4.03Z"/></svg>`;
 }
 
 function pageTitle(kicker, title, description) {
@@ -538,8 +578,8 @@ function renderHome() {
     <section class="hero">
       <div>
         <p class="eyebrow">WCAG 2.2 conformance study platform</p>
-        <h1>Learn accessibility in plain English, then train with questions that do not go easy on you.</h1>
-        <p class="muted">Start gently. Learn one idea. Practise it. Then make the quiz harder. This platform is built for learners who need clear steps before technical labels.</p>
+        <h1>WCAG 2.2 study guide for practical accessibility work.</h1>
+        <p class="muted">Use a structured path to review concepts, connect them to the standard, practise with realistic examples, and prepare for more advanced assessment questions.</p>
         <div class="actions">
           <a class="button primary" href="#tutorials">Start with mini tutorials</a>
           <a class="button primary" href="#guided">Use guided mode</a>
@@ -548,14 +588,13 @@ function renderHome() {
         </div>
       </div>
       <div>
-        <h2>Your safe study path</h2>
+        <h2>Recommended study path</h2>
         <ol>
-          <li>Mini tutorial: learn the human problem.</li>
-          <li>Guided mode: learn one card at a time.</li>
-          <li>Lesson: connect it to WCAG.</li>
-          <li>Knowledge bank: look up details.</li>
-          <li>Quiz: practise close calls.</li>
-          <li>Exam: build confidence under pressure.</li>
+          <li>Review the concept summary.</li>
+          <li>Use guided study for focused review.</li>
+          <li>Read the related WCAG lesson.</li>
+          <li>Use the knowledge bank for reference.</li>
+          <li>Practise with quiz and exam questions.</li>
         </ol>
         <h3>Progress</h3>
         <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="${successCriteria.length}" aria-valuenow="${studied}" aria-label="${studied} of ${successCriteria.length} criteria studied"><span style="width:${Math.round((studied / successCriteria.length) * 100)}%"></span></div>
@@ -570,8 +609,8 @@ function renderHome() {
     </section>
     <section class="grid two">
       <article class="panel">
-        <h2>Built for cognitive accessibility</h2>
-        <p>The lessons use small chunks, plain words, concrete examples, repeated patterns, memory hooks, and active recall. This helps learners who struggle with technical language, memory, attention, fatigue, acquired brain injury, dyslexia, anxiety, or exam pressure.</p>
+        <h2>Study design</h2>
+        <p>The guide uses short sections, consistent structure, concrete examples, review prompts, and active recall. The goal is to make the material easier to review without reducing the technical accuracy.</p>
         <div class="actions"><a class="button primary" href="#tutorials">Open mini tutorials</a></div>
       </article>
       <article class="panel">
@@ -718,7 +757,7 @@ function renderLibrary() {
 
 function renderTutorials() {
   return layout(`
-    ${pageTitle("Mini tutorials", "Learn slowly, remember deeply", "Each tutorial teaches one accessibility idea in small steps, then asks you to practise and recall the rule in your own words.")}
+    ${pageTitle("Mini tutorials", "Concept summaries", "Each tutorial introduces one accessibility concept, gives a practical example, and links to related WCAG criteria.")}
     <section class="panel">
       <h2>Pedagogy used here</h2>
       <ul>
@@ -735,13 +774,13 @@ function renderTutorials() {
           <summary>
             <span class="badge">${esc(tutorial.level)}</span>
             <strong>${esc(tutorial.title)}</strong>
-            <span class="muted">Open when you are ready.</span>
+            <span class="muted">View tutorial details.</span>
           </summary>
           <h3>Learn it</h3>
           <ol>${tutorial.teach.map((step) => `<li>${esc(step)}</li>`).join("")}</ol>
           <div class="example-box"><h3>Example</h3><p>${esc(tutorial.example)}</p></div>
           <div class="plain-box"><h3>Practice</h3><p>${esc(tutorial.practice)}</p></div>
-          <div class="trap-box"><h3>Memory check</h3><p>${esc(tutorial.check)}</p></div>
+          <div class="trap-box"><h3>Review prompt</h3><p>${esc(tutorial.check)}</p></div>
           <p class="muted">Related criteria: ${tutorial.related.map((num) => `<a href="#lesson/${getCriterion(num).id}">${esc(num)}</a>`).join(", ")}</p>
         </details>
       `).join("")}
@@ -760,7 +799,7 @@ function renderGuided() {
   const relatedCriterion = getCriterion(step.related[0]);
   const percent = Math.round(((index + 1) / GUIDED_STEPS.length) * 100);
   return layout(`
-    ${pageTitle("Guided mode", "One idea at a time", "This mode is for learners who need calm pacing, plain language, repetition, or one small step at a time. There is no timer.")}
+    ${pageTitle("Guided study", "Focused concept review", "Review one concept card at a time, then open an example, jump to the related lesson, or practise with a quiz.")}
     <section class="guided-wrap">
       <article class="guided-card panel" aria-labelledby="guided-title" aria-describedby="guided-help guided-body">
         <div class="guided-toolbar" aria-label="Guided learning status">
@@ -778,13 +817,13 @@ function renderGuided() {
           </div>
         ` : ""}
         <div class="trap-box">
-          <h3>Memory check</h3>
+          <h3>Review prompt</h3>
           <p>${esc(step.check)}</p>
         </div>
         <div class="actions">
-          <button type="button" class="button primary" data-guided-next>I understand</button>
-          <button type="button" class="button" data-guided-example aria-expanded="${state.guidedExampleOpen ? "true" : "false"}">${state.guidedExampleOpen ? "Hide example" : "Show another example"}</button>
-          <a class="button" href="#quiz/${relatedCriterion.id}">Quiz me</a>
+          <button type="button" class="button primary" data-guided-next>Mark reviewed</button>
+          <button type="button" class="button" data-guided-example aria-expanded="${state.guidedExampleOpen ? "true" : "false"}">${state.guidedExampleOpen ? "Hide example" : "Show example"}</button>
+          <a class="button" href="#quiz/${relatedCriterion.id}">Practice quiz</a>
           <a class="button" href="#lesson/${relatedCriterion.id}">Open full lesson</a>
         </div>
         <p class="muted">Related criteria: ${step.related.map((num) => `<a href="#lesson/${getCriterion(num).id}">${esc(num)}</a>`).join(", ")}</p>
@@ -792,10 +831,10 @@ function renderGuided() {
       <aside class="source-panel" id="guided-help">
         <h2>How to use this mode</h2>
         <ol>
-          <li>Read only the card in front of you.</li>
-          <li>Say the idea back in your own words.</li>
-          <li>Open the example only if you need it.</li>
-          <li>Use Quiz me when the idea feels familiar.</li>
+          <li>Read the concept card.</li>
+          <li>Review the example.</li>
+          <li>Open the full lesson for context.</li>
+          <li>Use the practice quiz for recall.</li>
         </ol>
         <button type="button" class="button" data-guided-reset>Restart guided mode</button>
       </aside>
@@ -921,7 +960,7 @@ function renderQuiz(targetId = null, exam = false) {
 
 function renderGlossary() {
   return layout(`
-    ${pageTitle("Glossary", "Accessibility terms without the fog", "Short definitions for words that often make WCAG harder than it needs to be.")}
+    ${pageTitle("Glossary", "Accessibility terms", "Short definitions for common WCAG, testing, and assistive technology terms.")}
     <section class="grid two">
       ${GLOSSARY.map(([term, definition]) => `
         <article class="card">

@@ -10,7 +10,7 @@ The goal of the A11Y Standards Trainer is to help developers, designers, and acc
 - A standards-first study roadmap for accessibility and conformance work.
 - An expanded reference library covering fundamentals, UX, semantics, visual design, forms, media, SPAs, ARIA components, testing, screen readers, usability, frameworks, regulations, and conformance evidence.
 - Mini tutorials designed with cognitive accessibility principles: small chunks, plain language, worked examples, repeated patterns, memory checks, and active recall.
-- A guided learning mode that shows one card at a time with "I understand", "show another example", and "quiz me" actions.
+- A guided learning mode that shows one card at a time with review, example, lesson, and practice actions.
 - Plain-language lessons for every WCAG 2.2 success criterion.
 - Real-life examples, common exam traps, and testing steps.
 - A searchable knowledge bank.
