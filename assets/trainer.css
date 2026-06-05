@@ -1150,3 +1150,278 @@ details.panel > summary::marker {
 :focus-visible {
   outline-color: #ffffff;
 }
+
+/* High-contrast learning-card redesign */
+:root {
+  --bg: #090b0f;
+  --surface: #f6f7fb;
+  --surface-2: #ffffff;
+  --surface-3: #eef1f7;
+  --text: #111827;
+  --muted: #4b5563;
+  --line: #cfd6e1;
+  --line-soft: #dce2ea;
+  --brand: #9273e0;
+  --brand-strong: #5b3ab7;
+  --brand-dark: #241a3f;
+  --label-bg: #f0eefb;
+  --label-border: #9273e0;
+}
+
+body {
+  background: var(--bg);
+  color: #eef2f7;
+}
+
+.topbar {
+  border-bottom: 1px solid #1f2937;
+  background: #090b0ff5;
+}
+
+.brand,
+.brand strong {
+  color: #ffffff;
+}
+
+.brand-logo {
+  border: 2px solid #9273e0;
+  background: #9273e0;
+  color: #ffffff;
+}
+
+nav a {
+  border-radius: 3px;
+  color: #ffffff;
+}
+
+nav a[aria-current="page"] {
+  border-color: #9273e0;
+  background: #5b3ab7;
+  color: #ffffff;
+}
+
+.page-title {
+  color: #eef2f7;
+}
+
+.page-title h1,
+.page-title h2,
+.page-title h3 {
+  color: #ffffff;
+}
+
+.page-title p:not(.eyebrow) {
+  color: #d1d8e2;
+}
+
+.eyebrow {
+  color: #f5f7fb;
+}
+
+.panel,
+.card,
+.question,
+.source-panel,
+.lesson-row,
+.hero > div,
+.table-wrap,
+.stat,
+.mini,
+details.card,
+details.panel {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.panel h1,
+.panel h2,
+.panel h3,
+.card h1,
+.card h2,
+.card h3,
+.question h1,
+.question h2,
+.question h3,
+.source-panel h1,
+.source-panel h2,
+.source-panel h3,
+.lesson-row h1,
+.lesson-row h2,
+.lesson-row h3,
+.hero > div h1,
+.hero > div h2,
+.hero > div h3,
+.stat strong,
+.mini strong {
+  color: #111827;
+}
+
+.muted,
+.card p,
+.panel p,
+.lesson-row p,
+.source-panel p,
+.mini span {
+  color: var(--muted);
+}
+
+.guided-card {
+  border-top: 8px solid var(--brand);
+  background: #ffffff;
+}
+
+.guided-big {
+  color: #111827;
+  font-size: clamp(1.22rem, 1.7vw, 1.48rem);
+  font-weight: 500;
+}
+
+.source-panel {
+  background: #ffffff;
+}
+
+.plain-box,
+.example-box,
+.trap-box {
+  border: 1px solid #d7dde6;
+  border-left: 5px solid var(--brand);
+  background: #f8fafc;
+  color: #111827;
+}
+
+.example-box {
+  border-left-color: #2f7d4f;
+}
+
+.trap-box {
+  border-left-color: #a15c4f;
+}
+
+.button,
+button.option,
+.segmented button {
+  min-height: 2.9rem;
+  border: 2px solid #667085;
+  border-radius: 4px;
+  background: #ffffff;
+  color: #111827;
+  font-weight: 750;
+}
+
+.button.primary {
+  border-color: var(--brand-strong);
+  background: var(--brand-strong);
+  color: #ffffff;
+}
+
+.button:hover,
+button.option:hover,
+.segmented button:hover,
+.segmented button[aria-pressed="true"] {
+  border-color: var(--brand-strong);
+  background: #f0eefb;
+  color: #111827;
+}
+
+.button.primary:hover {
+  border-color: var(--brand-dark);
+  background: var(--brand-dark);
+  color: #ffffff;
+}
+
+.badge,
+.meta-tag {
+  border: 1px solid var(--label-border);
+  border-left: 5px solid var(--brand);
+  border-radius: 3px;
+  background: var(--label-bg);
+  color: #111827;
+}
+
+.badge.level-a {
+  border-color: #2f7d4f;
+  border-left-color: #2f7d4f;
+}
+
+.badge.level-aa {
+  border-color: #5b3ab7;
+  border-left-color: #5b3ab7;
+}
+
+.badge.level-aaa {
+  border-color: #a15c4f;
+  border-left-color: #a15c4f;
+}
+
+.progress {
+  border: 1px solid #8b95a5;
+  background: #e5e7eb;
+}
+
+.progress span {
+  background: var(--brand-strong);
+}
+
+.source-panel a,
+.sources-inline a,
+.panel a,
+.card a {
+  color: #4c2ba8;
+}
+
+.source-panel a:hover,
+.sources-inline a:hover,
+.panel a:hover,
+.card a:hover {
+  color: #241a3f;
+}
+
+.lesson-row:hover,
+.lesson-row:focus-visible,
+.card:hover {
+  border-color: var(--brand);
+  background: #ffffff;
+}
+
+details.card > summary,
+details.panel > summary {
+  color: #111827;
+}
+
+details.card > summary strong,
+details.panel > summary strong {
+  color: #111827;
+}
+
+table,
+th,
+td {
+  color: #111827;
+}
+
+th {
+  background: #eef1f7;
+}
+
+input,
+select {
+  color: #111827;
+  background: #ffffff;
+}
+
+.search {
+  background: #ffffff;
+  color: #111827;
+}
+
+:focus-visible {
+  outline: 4px solid #111827;
+  outline-offset: 3px;
+}
+
+footer {
+  border-top-color: #374151;
+  color: #f5f7fb;
+}
