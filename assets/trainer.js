@@ -124,6 +124,9 @@ const DEQUE_COURSE_PATHS = [
     courses: [
       { title: "IAAP Certification Quick Guide", status: 85, href: "https://dequeuniversity.com/class/iaap-certification-quick-guide/?lang=en" },
       { title: "IAAP CPACC Certification Preparation 3.0 (2026)", status: 0, href: "https://dequeuniversity.com/class/iaap-cpacc-3.0/?lang=en" }
+    ],
+    assessments: [
+      { title: "Take graded exam now", status: 75 }
     ]
   },
   {
@@ -150,7 +153,17 @@ const DEQUE_COURSE_PATHS = [
     ]
   },
   {
-    title: "Developer and QA Fast Tracks",
+    title: "Reference Materials for Conformance Testing",
+    purpose: "Convert standards knowledge into formal audit methodology for WCAG, EN 301 549, and Section 508 evidence.",
+    courses: [
+      { title: "WCAG 2.0 & 2.1 Conformance Testing, Detailed Methodology", status: 10, href: "https://dequeuniversity.com/class/wcag-conformance/?lang=en" },
+      { title: "WCAG 2.2 Conformance Testing, Detailed Methodology", status: 100, href: "https://dequeuniversity.com/class/wcag-2.2-conformance/?lang=en" },
+      { title: "EN 301-549 (v. 3.2.1) Conformance Testing, Detailed Methodology", status: 0, href: "https://dequeuniversity.com/class/en301549-conformance/?lang=en" },
+      { title: "Section 508 (2017) Conformance Testing, Detailed Methodology", status: 0, href: "https://dequeuniversity.com/class/section-508-2017-conformance/?lang=en" }
+    ]
+  },
+  {
+    title: "Other Courses",
     purpose: "Practice implementation and testing workflows until accessibility evidence can be written clearly and reproduced.",
     courses: [
       { title: "Semantic Structure and Navigation (WCAG 2.1)", status: 1, href: "https://dequeuniversity.com/class/semantic-structure/?lang=en" },
@@ -163,6 +176,13 @@ const DEQUE_COURSE_PATHS = [
       { title: "IAAP CPACC Certification Preparation (2024)", status: 24, href: "https://dequeuniversity.com/class/iaap-cpacc-2.0/?lang=en" },
       { title: "Fast Track to Accessibility for QA Testers 1.0", status: 10, href: "https://dequeuniversity.com/class/fast-track-for-qa-testers/?lang=en" },
       { title: "Fast Track to Accessibility for QA Testers 2.0", status: 4, href: "https://dequeuniversity.com/class/fast-track-for-qa-testers-2.0/?lang=en" }
+    ],
+    assessments: [
+      { title: "Developer fast track part 1 graded exam", status: 75 },
+      { title: "Developer fast track part 2 graded exam", status: 75 },
+      { title: "QA testers 1.0 exam failed", status: 10 },
+      { title: "Retake QA testers 1.0 graded exam", status: 10 },
+      { title: "QA testers 2.0 graded exam", status: 75 }
     ]
   }
 ];
@@ -865,8 +885,8 @@ function renderLesson(id) {
 
 function coursePathProgress(path) {
   const total = path.courses.length || 1;
-  const completed = path.courses.filter((course) => course.status >= 100).length;
-  const average = Math.round(path.courses.reduce((sum, course) => sum + course.status, 0) / total);
+  const completed = path.courses.filter((course) => Number(course.status) >= 100).length;
+  const average = Math.round(path.courses.reduce((sum, course) => sum + Number(course.status || 0), 0) / total);
   return { total, completed, average };
 }
 
@@ -885,6 +905,7 @@ function courseTopicHint(title) {
   if (lower.includes("aria") || lower.includes("widget") || lower.includes("component")) return "Use native HTML first, then verify name, role, value, state, keyboard behavior, and focus return.";
   if (lower.includes("testing") || lower.includes("qa")) return "Build repeatable evidence: automated scan, keyboard path, screen reader spot check, zoom check, and bug report.";
   if (lower.includes("angular") || lower.includes("developer")) return "Convert accessibility into component contracts, lintable patterns, route behavior, and CI checks.";
+  if (lower.includes("conformance") || lower.includes("section 508") || lower.includes("301")) return "Practise audit scope, methodology, evidence, exceptions, reporting, and reproducible conformance decisions.";
   return "Study the course as a compact concept, then connect it to a WCAG criterion, a real example, and a quiz question.";
 }
 
@@ -910,11 +931,22 @@ function renderCourseProgress(path) {
             </span>
             <span class="course-status">
               <span>${course.status ? `${course.status}%` : "not started"}</span>
-              <span class="course-mini-progress" aria-hidden="true"><span style="width:${course.status}%"></span></span>
+              <span class="course-mini-progress" aria-hidden="true"><span style="width:${Number(course.status || 0)}%"></span></span>
             </span>
           </a>
         `).join("")}
       </div>
+      ${path.assessments?.length ? `
+        <div class="assessment-list" aria-label="${esc(path.title)} assessment actions">
+          <h3>Assessment actions</h3>
+          ${path.assessments.map((assessment) => `
+            <div class="assessment-row">
+              <span>${esc(assessment.title)}</span>
+              <strong>${assessment.status ? `${assessment.status}%` : "not started"}</strong>
+            </div>
+          `).join("")}
+        </div>
+      ` : ""}
     </article>
   `;
 }

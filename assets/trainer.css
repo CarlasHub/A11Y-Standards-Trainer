@@ -2903,6 +2903,33 @@ select:focus-visible {
   background: linear-gradient(90deg, var(--accent-teal), var(--brand));
 }
 
+.assessment-list {
+  display: grid;
+  gap: 0.55rem;
+  border-top: 1px solid var(--line-soft);
+  padding-top: 1rem;
+}
+
+.assessment-list h3 {
+  margin: 0;
+}
+
+.assessment-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  border: 1px solid var(--line-soft);
+  border-radius: 12px;
+  background: rgb(245 158 11 / 8%);
+  color: var(--muted);
+  padding: 0.7rem 0.85rem;
+}
+
+.assessment-row strong {
+  color: var(--warn);
+  white-space: nowrap;
+}
+
 .module-card {
   min-height: 100%;
 }
