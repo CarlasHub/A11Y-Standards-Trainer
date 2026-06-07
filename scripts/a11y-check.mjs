@@ -1,7 +1,7 @@
 import axe from "axe-core";
 import { chromium } from "playwright";
 
-const routes = ["#home", "#guided", "#tutorials", "#lesson/non-text-content", "#bank", "#quiz/non-text-content", "#docs"];
+const routes = ["#home", "#guided", "#tutorials", "#lesson/non-text-content", "#regulations", "#search/1.2", "#bank", "#quiz/non-text-content", "#glossary", "#docs"];
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
 

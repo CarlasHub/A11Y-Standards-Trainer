@@ -114,6 +114,12 @@ const COURSE_LIBRARY = [
     source: "WCAG 2.2, EN 301 549, Section 508, and conformance reporting",
     topics: ["WCAG levels", "EN 301-549", "Section 508", "scope", "alternate versions", "third-party content", "reporting"],
     takeaway: "Conformance is evidence-based. You need scope, criteria, test results, exceptions, and reproducible findings."
+  },
+  {
+    title: "Section 508 and EAA readiness",
+    source: "Section508.gov, EUR-Lex, European Commission, and Your Europe guidance",
+    topics: ["Section 508 scope", "EAA scope", "covered products", "official communications", "conformity evidence", "exceptions"],
+    takeaway: "Regulatory readiness means knowing what is covered, which technical requirements apply, what evidence proves the outcome, and when an exception must be escalated."
   }
 ];
 
@@ -162,7 +168,8 @@ const SOURCE_COURSE_PATHS = [
       { title: "WCAG 2.0 & 2.1 Conformance Testing, Detailed Methodology", status: 10 },
       { title: "WCAG 2.2 Conformance Testing, Detailed Methodology", status: 100 },
       { title: "EN 301-549 (v. 3.2.1) Conformance Testing, Detailed Methodology", status: 0 },
-      { title: "Section 508 (2017) Conformance Testing, Detailed Methodology", status: 0 }
+      { title: "Section 508 (2017) Conformance Testing, Detailed Methodology", status: 0 },
+      { title: "European Accessibility Act Readiness, Scope, and Evidence", status: 0 }
     ]
   },
   {
@@ -307,6 +314,212 @@ const CPACC_REVIEW_TRACK = [
     outcome: "Practise choosing the best answer by impact and responsibility, not by familiar keywords.",
     action: "#quiz"
   }
+];
+
+const REGULATORY_LAST_REVIEWED = "5 June 2026";
+
+const REGULATORY_SOURCES = [
+  {
+    title: "Section508.gov: Applicability and Conformance Requirements",
+    url: "https://www.section508.gov/develop/applicability-conformance/",
+    use: "Confirms that the Revised 508 Standards incorporate WCAG 2.0 Level AA and apply those criteria to web and non-web electronic content."
+  },
+  {
+    title: "Section508.gov: Determine Which Standards Apply",
+    url: "https://www.section508.gov/buy/determine-ict-standards/",
+    use: "Use for scoping public-facing content, agency official communications, software, hardware, support documentation, support services, and functional performance criteria."
+  },
+  {
+    title: "European Commission: European Accessibility Act",
+    url: "https://commission.europa.eu/strategy-and-policy/policies/justice-and-fundamental-rights/disability/european-accessibility-act-eaa_en",
+    use: "Official overview of the EAA purpose and covered products and services, including consumer ICT, transport, banking, e-books, and e-commerce."
+  },
+  {
+    title: "Your Europe: Accessibility requirements for services and products",
+    url: "https://europa.eu/youreurope/business/selling-in-eu/selling-goods-services/accessibility/index_en.htm",
+    use: "Business-facing EU guidance on general accessibility rules, applicability after 28 June 2025, exceptions, and conformity assessment."
+  },
+  {
+    title: "EUR-Lex: Directive (EU) 2019/882",
+    url: "https://eur-lex.europa.eu/eli/dir/2019/882/oj",
+    use: "Primary legal text for exact EAA articles, annexes, scope, accessibility requirements, and transition provisions."
+  },
+  {
+    title: "European Commission news: The EU becomes more accessible for all",
+    url: "https://commission.europa.eu/news-and-media/news/eu-becomes-more-accessible-all-2025-07-31_en",
+    use: "Current public summary of EAA effects after it came into effect in June 2025, including examples and mandatory disability/accessibility training for service providers."
+  }
+];
+
+const REGULATORY_WCAG_DIFFERENCES = [
+  {
+    axis: "What it is",
+    wcag: "A technical accessibility standard for web content success criteria and conformance levels.",
+    section508: "A U.S. federal ICT requirement that uses WCAG 2.0 A/AA for many web, software, and electronic-content checks.",
+    eaa: "An EU product and service accessibility law for covered market categories, implemented through Member State law.",
+    takeaway: "WCAG tells you how to test many digital barriers. Section 508 and the EAA tell you when that evidence has regulatory consequences."
+  },
+  {
+    axis: "Starting question",
+    wcag: "Does this page/content meet the selected WCAG version and level?",
+    section508: "Is this federal ICT, public-facing content, agency official communication, software, hardware, documentation, or support?",
+    eaa: "Is this a covered product or service placed on the EU market after the relevant applicability date?",
+    takeaway: "WCAG starts with the interface. Regulations start with scope."
+  },
+  {
+    axis: "Technical baseline",
+    wcag: "The trainer teaches WCAG 2.2 for modern product skill and exam readiness.",
+    section508: "The Revised 508 Standards incorporate WCAG 2.0 Level A and AA for applicable web and electronic content.",
+    eaa: "The EAA sets accessibility outcomes; teams often use harmonised standards such as EN 301 549 to show technical conformity.",
+    takeaway: "Do not assume the same WCAG version is the legal baseline in every jurisdiction."
+  },
+  {
+    axis: "What goes beyond ordinary WCAG page testing",
+    wcag: "Focuses on content outcomes such as text alternatives, keyboard access, contrast, captions, errors, and robust semantics.",
+    section508: "Adds federal ICT scoping, functional performance criteria, software/hardware concerns, authoring tools, support documentation, and support services.",
+    eaa: "Adds product/service categories, accessible information and support, conformity assessment, CE marking for products, exceptions, market surveillance, and national implementation.",
+    takeaway: "A WCAG pass can be necessary and still not be the full regulatory answer."
+  },
+  {
+    axis: "Evidence students must write",
+    wcag: "Criterion, page/state, steps, expected result, actual result, user impact, and retest.",
+    section508: "Everything in the WCAG note plus applicable 508 chapter or content type, exception status, and procurement/ACR relevance.",
+    eaa: "Everything in the WCAG note plus covered product/service scope, accessibility outcome, conformity evidence, support-channel impact, and national-law follow-up.",
+    takeaway: "Regulatory evidence is WCAG evidence plus scope, ownership, and decision trail."
+  }
+];
+
+const REGULATORY_MODULES = [
+  {
+    title: "1. Start with WCAG, then ask what the law changes",
+    badge: "Triage",
+    summary: "Regulatory readiness starts by using WCAG as the testing language, then adding the legal scope question. Students should be able to say what WCAG proves, what it does not prove, and what Section 508 or the EAA changes.",
+    learn: [
+      "Name the WCAG issue first: user need, failing state, criterion, and evidence.",
+      "Then write a one-sentence regulatory scope statement before choosing the legal requirement.",
+      "Separate legal scope from technical test scope: law, product/service, platform, audience, release date, and content type.",
+      "Flag edge cases for a Section 508 Program Manager, procurement owner, legal counsel, or relevant EU national authority."
+    ],
+    drill: "Given a checkout, PDF, kiosk, training course, or mobile app, decide whether the first question is Section 508, EAA, both, or neither."
+  },
+  {
+    title: "2. Section 508 specified requirements",
+    badge: "United States federal ICT",
+    summary: "For U.S. federal ICT, the Revised 508 Standards are the anchor. For web and many electronic content situations, students must know that Section 508 currently incorporates WCAG 2.0 Level A and AA, then adds scoping, support, software, hardware, and functional performance requirements.",
+    learn: [
+      "Public-facing federal electronic content must be accessible.",
+      "Agency official communications can be covered even when they are not public-facing, including emergency notices, benefits notices, forms, surveys, educational materials, and intranet web pages.",
+      "Web-based content and software typically require all applicable WCAG A and AA success criteria; non-web electronic content has specific WCAG exceptions.",
+      "Do not stop at web pages: support documentation, support services, software interoperability, hardware, authoring tools, and functional performance criteria can matter."
+    ],
+    drill: "Build a mini ACR note for a federal benefits form: scope, applicable 508 chapter, WCAG evidence, support documentation, and unresolved exceptions."
+  },
+  {
+    title: "3. Current European Accessibility Act readiness",
+    badge: "EU products and services",
+    summary: "The EAA, Directive (EU) 2019/882, applies to covered products and services placed on the EU market after 28 June 2025. Students should learn the covered categories, the functional accessibility outcomes, and the evidence a business needs to explain conformance.",
+    learn: [
+      "Covered examples include computers and operating systems, smartphones, ATMs, ticketing and check-in machines, consumer banking, passenger transport services, electronic communications, audiovisual media access services, e-books, and e-commerce.",
+      "General expectations include cognitive accessibility, assistive technology interoperability, multiple input and output options, consistent navigation, enough time, and avoiding seizure-inducing visuals.",
+      "Conformity evidence should describe the product or service, how it meets accessibility requirements, and the technical and design procedures used.",
+      "The EAA is an EU directive implemented through Member State law, so final compliance checks need the relevant national implementation and any applicable harmonized standards."
+    ],
+    drill: "Scope an EU e-commerce checkout: covered service, user journey, WCAG/EN 301 549 evidence to gather, support-channel requirements, and national-law follow-up."
+  },
+  {
+    title: "4. Crosswalk WCAG skill into regulatory evidence",
+    badge: "Evidence",
+    summary: "WCAG testing skill is necessary but not enough. Students need to translate findings into regulatory evidence: user impact, technical failure, affected requirement, product scope, exception status, and retest plan.",
+    learn: [
+      "For Section 508, connect each finding to the Revised 508 scoping requirement and the applicable WCAG 2.0 A/AA success criterion or non-WCAG chapter.",
+      "For EAA work, connect findings to the covered product/service, Annex I accessibility outcomes, customer support or information obligations, and the technical standard the team is using.",
+      "Write evidence that a developer, procurement reviewer, product owner, and auditor can reproduce without guessing.",
+      "Treat automated findings as leads; regulatory evidence still needs manual confirmation."
+    ],
+    drill: "Rewrite a scanner finding as a regulatory note with scope, user impact, applicable requirement, failed state, expected result, and retest method."
+  },
+  {
+    title: "5. Exceptions, transitions, and risk communication",
+    badge: "Judgment",
+    summary: "Students should be prepared to identify when a claim is outside ordinary testing judgment. Exceptions and transitional rules need evidence and approval; they should not be used casually to avoid fixing barriers.",
+    learn: [
+      "Section 508 allows limited conforming alternate versions, but only under constrained conditions.",
+      "EAA guidance includes transition provisions, microenterprise service-provider exceptions, and disproportionate-burden claims that require evidence and periodic review.",
+      "When unsure, write the accessibility risk clearly and route the legal decision to the accountable owner.",
+      "A good accessibility professional says what was tested, what failed, what is unknown, and who must decide the exception."
+    ],
+    drill: "Practise saying: 'This is a legal/business exception question. Here is the accessibility evidence, the user impact, and the decision owner.'"
+  }
+];
+
+const REGULATORY_CROSSWALK = [
+  {
+    title: "Section 508 baseline",
+    standard: "Revised 508",
+    details: "Use WCAG 2.0 Level A and AA for web content and many electronic content/software checks, then confirm 508 scoping and chapters for support, software, hardware, authoring tools, and functional performance criteria.",
+    action: "#bank"
+  },
+  {
+    title: "EAA baseline",
+    standard: "Directive (EU) 2019/882",
+    details: "Start with covered product/service scope and the EAA accessibility outcomes. Use EN 301 549/WCAG mapping where appropriate, then confirm the Member State implementation and harmonized standard status.",
+    action: "#regulations"
+  },
+  {
+    title: "Shared testing spine",
+    standard: "WCAG evidence",
+    details: "Keyboard, focus, semantics, names, captions, contrast, reflow, errors, timing, status messages, and cognitive support are the repeatable skill base for both regulatory tracks.",
+    action: "#tutorials"
+  },
+  {
+    title: "Reporting output",
+    standard: "Audit readiness",
+    details: "A complete note includes scope, affected users, failing state, requirement reference, reproduction steps, evidence, recommended fix, exception status, and retest result.",
+    action: "#lessons"
+  }
+];
+
+const REGULATORY_SCENARIOS = [
+  {
+    title: "Federal benefits application",
+    law: "Section 508",
+    ask: "A public-facing web form lets citizens apply for benefits and upload supporting documents.",
+    answer: "Treat the web flow as public-facing electronic content. Test applicable WCAG A/AA criteria, file upload states, errors, confirmation messages, documents, and support information. Record any inaccessible third-party or document workflow separately."
+  },
+  {
+    title: "Internal agency training deck",
+    law: "Section 508",
+    ask: "A self-paced employee training course is posted on an agency intranet with slides, quiz questions, and downloadable handouts.",
+    answer: "Educational or training materials can be agency official communications. Check electronic documents and web-based course screens, including headings, reading order, alt text, captions, keyboard access, quiz feedback, and support documentation."
+  },
+  {
+    title: "EU online shop checkout",
+    law: "European Accessibility Act",
+    ask: "A retailer sells to EU consumers through an e-commerce site updated after 28 June 2025.",
+    answer: "Scope it as an EAA-covered e-commerce service. Test account creation, product selection, cart, payment, errors, support, and confirmation. Prepare evidence for accessible information, consistent navigation, timing, assistive technology compatibility, and cognitive accessibility."
+  },
+  {
+    title: "Banking app and payment terminal",
+    law: "European Accessibility Act",
+    ask: "A bank offers an app and customer payment terminal for EU consumers.",
+    answer: "Banking services and some self-service terminals are covered categories. Test digital flows, authentication, transaction review, support channels, multi-sensory output, input alternatives, compatibility with assistive technology, and physical-terminal constraints owned by the product team."
+  },
+  {
+    title: "Transport ticketing kiosk",
+    law: "European Accessibility Act",
+    ask: "A rail operator uses self-service kiosks and a web ticketing flow.",
+    answer: "Passenger transport services and ticketing/check-in machines are covered examples. Test digital journey steps, announcements, time limits, error recovery, readable information, nonvisual operation, support options, and any transition rule for terminals already in lawful use."
+  }
+];
+
+const REGULATORY_READINESS_CHECKS = [
+  "I can explain the difference between legal scope, technical standard, and test evidence.",
+  "I can identify when Section 508 applies to public-facing content, agency official communications, software, hardware, support documentation, and support services.",
+  "I can name the current Section 508 web/electronic-content baseline: WCAG 2.0 Level A and AA, plus relevant 508 scoping and non-WCAG chapters.",
+  "I can identify common EAA-covered products and services and the 28 June 2025 applicability date.",
+  "I can explain that the EAA is a directive implemented through Member State law, so national implementation and harmonized-standard status matter.",
+  "I can write a regulatory finding with scope, user impact, requirement reference, reproduction steps, expected result, and retest method.",
+  "I know when to escalate exception claims, disproportionate-burden claims, transition questions, or equivalent-facilitation questions."
 ];
 
 const MINI_TUTORIALS = [
@@ -569,14 +782,100 @@ const PRINCIPLE_SUMMARIES = {
 };
 
 const GLOSSARY = [
+  ["A11Y", "Numeronym for accessibility: A, then 11 letters, then Y."],
+  ["Accessibility", "The practice of making products, services, content, and environments usable by people with a wide range of abilities and contexts."],
+  ["Accessibility Conformance Report (ACR)", "A report that documents how a product meets accessibility standards, often created from a VPAT template."],
+  ["Accessible authentication", "Login or verification that does not depend only on memory, transcription, puzzles, or complex mental work."],
+  ["Accessible description", "Extra programmatic information that helps explain a control or element beyond its accessible name."],
   ["Accessible name", "The name assistive technology announces for a control, link, image button, or widget."],
+  ["Accessible Rich Internet Applications (ARIA)", "A W3C specification for adding roles, states, and properties when native HTML cannot express a custom interface correctly."],
+  ["ADA", "Americans with Disabilities Act, a U.S. civil rights law that prohibits disability discrimination in covered contexts."],
+  ["ADS", "Accessible Document Specialist, an IAAP certification focused on accessible document creation and remediation."],
+  ["Alternative for time-based media", "A text document that provides equivalent information for audio or video, such as a full transcript with relevant visual detail."],
+  ["Alternative text", "Text that communicates the purpose or information of non-text content, often through an image alt attribute or nearby equivalent."],
+  ["APG", "ARIA Authoring Practices Guide, W3C guidance for expected keyboard interaction and semantics for common widgets."],
   ["Assistive technology", "Tools people use to access digital content, such as screen readers, magnifiers, switch control, voice input, captions, and braille displays."],
+  ["AT", "Assistive technology."],
+  ["ATAG", "Authoring Tool Accessibility Guidelines, W3C guidance for tools used to create web content."],
+  ["Audio description", "Narration that describes important visual information in video for people who cannot see it."],
+  ["Authoring tool", "Software or a service used to create content, such as a CMS, document editor, design tool, or course builder."],
+  ["Bypass blocks", "A way to skip repeated content, such as a skip link that moves keyboard focus directly to the main content."],
+  ["CAPTCHA", "A test intended to distinguish people from automated systems; accessible CAPTCHA must provide alternatives for different sensory abilities."],
+  ["Captions", "Text synchronized with media that includes speech and meaningful sounds needed to understand the audio."],
+  ["CE marking", "A mark used for some products in the European market to indicate declared conformity with applicable EU requirements."],
+  ["CEN", "European Committee for Standardization, one of the European standards organizations involved in harmonized standards."],
+  ["CENELEC", "European Committee for Electrotechnical Standardization, a European standards organization."],
+  ["COGA", "Cognitive and Learning Disabilities Accessibility, a W3C/WAI area focused on cognitive and learning disability needs."],
+  ["Compatibility", "WCAG principle covering whether content works reliably with browsers, user agents, and assistive technologies."],
+  ["Conforming alternate version", "An alternate version that meets WCAG conformance requirements when the original cannot, subject to strict conditions."],
   ["Conformance", "A claim that a page or product meets a specific WCAG version and level, such as WCAG 2.2 AA."],
+  ["Content management system (CMS)", "Software used to create, edit, publish, and manage digital content."],
+  ["CPACC", "Certified Professional in Accessibility Core Competencies, an IAAP certification covering disability, accessibility, universal design, and laws/standards."],
+  ["CSS pixel", "A web layout unit used by browsers; WCAG zoom and reflow requirements often refer to CSS pixels."],
   ["Decorative content", "Content that adds visual style but no meaning. It should usually be hidden from assistive technology."],
+  ["DOM", "Document Object Model, the browser's structured representation of a web page."],
+  ["EAA", "European Accessibility Act, Directive (EU) 2019/882, covering accessibility requirements for certain products and services in the EU market."],
+  ["Electronic content", "Digital content such as web pages, documents, media, forms, training materials, and messages."],
+  ["EN 301 549", "European standard for accessibility requirements for ICT products and services, often used for public procurement and EAA/WAD technical alignment."],
+  ["Equivalent facilitation", "An accessibility approach that uses an alternate method to provide substantially equivalent or greater access."],
+  ["Essential", "A WCAG term for something that cannot be removed without fundamentally changing the information or function."],
+  ["ETSI", "European Telecommunications Standards Institute, one of the standards organizations involved in EN 301 549."],
+  ["European Accessibility Act", "EU directive setting accessibility requirements for covered products and services such as e-commerce, banking, e-books, transport services, and consumer ICT."],
   ["Focus", "The current interactive place on the page, often shown by a visible outline when using a keyboard."],
+  ["Focus indicator", "The visible styling that shows which element currently has keyboard focus."],
+  ["Focus order", "The sequence in which keyboard focus moves through interactive elements."],
+  ["Focus trap", "A failure where keyboard focus cannot leave a component or page area."],
+  ["Functional performance criteria (FPC)", "Criteria that describe access by functional ability, used in Section 508 when technical provisions do not fully address a user need."],
+  ["Harmonized standard", "A European standard cited in the Official Journal of the EU that can provide a presumption of conformity for relevant legal requirements."],
+  ["HTML", "HyperText Markup Language, the core markup language for web page structure and semantics."],
+  ["IAAP", "International Association of Accessibility Professionals, an organization that provides accessibility certifications and professional resources."],
+  ["ICT", "Information and communication technology, including software, hardware, electronic content, support services, and telecommunications."],
+  ["Informative", "Helpful explanatory material that is not itself the binding requirement."],
+  ["Keyboard trap", "A state where keyboard users can move focus into an area but cannot move focus out using standard keys."],
+  ["Label in name", "WCAG requirement that the accessible name of a control includes the visible label text, supporting speech input and screen reader users."],
+  ["Landmark", "A semantic page region such as main, navigation, search, banner, contentinfo, or complementary."],
+  ["Live region", "An area of a page that can announce dynamic updates to assistive technologies without moving focus."],
+  ["Market surveillance", "Oversight activity by authorities to check whether products or services meet applicable market requirements."],
+  ["Name, role, value", "The core accessibility information a control must expose: what it is called, what type of thing it is, and its current state or value."],
+  ["Native HTML", "Built-in HTML elements with default semantics and behavior, such as button, input, select, heading, list, and table elements."],
   ["Normative", "The official requirement text. In an exam, normative wording matters more than opinions or habits."],
+  ["Non-interference", "WCAG conformance rule that certain failures must not block the whole page, even if alternate content exists."],
+  ["Non-text content", "Content that is not text, such as images, icons, charts, audio, video, CAPTCHA, and canvas drawings."],
+  ["NVDA", "NonVisual Desktop Access, a free Windows screen reader commonly used for accessibility testing."],
+  ["OCR", "Optical character recognition, a process that converts images of text into machine-readable text."],
+  ["Official Journal of the European Union (OJEU)", "The official publication where EU legal acts and harmonized standard references are published."],
+  ["Operable", "WCAG principle requiring that people can use interface controls and navigation."],
+  ["Perceivable", "WCAG principle requiring that people can perceive the information being presented."],
+  ["PDF/UA", "PDF/Universal Accessibility, an ISO standard for accessible PDF documents."],
+  ["Pointer gesture", "A pointer interaction such as swiping, dragging, pinching, or path-based movement."],
+  ["POUR", "The four WCAG principles: Perceivable, Operable, Understandable, and Robust."],
   ["Programmatically determined", "Information is available in code so software can read it, not only visible to the eye."],
-  ["Status message", "A message about the result of an action, such as saved, loaded, error, or added to cart, that should be announced without moving focus."]
+  ["QA", "Quality assurance, the process of checking whether a product behaves as expected and meets requirements."],
+  ["Reflow", "Layout behavior that allows content to fit in one direction at high zoom or narrow viewport widths without two-dimensional scrolling."],
+  ["Robust", "WCAG principle requiring that content works with current and future user agents and assistive technologies."],
+  ["SC", "Success criterion, a specific testable WCAG requirement such as 1.1.1 Non-text Content."],
+  ["Screen reader", "Assistive technology that speaks or brailles interface content and structure."],
+  ["Section 508", "U.S. federal accessibility requirements for ICT developed, procured, maintained, or used by federal agencies."],
+  ["Semantic HTML", "HTML that communicates meaning and structure, not just visual appearance."],
+  ["SPA", "Single-page application, a web app that changes views dynamically without full page reloads."],
+  ["Status message", "A message about the result of an action, such as saved, loaded, error, or added to cart, that should be announced without moving focus."],
+  ["SVG", "Scalable Vector Graphics, an XML-based format for vector images that may need accessible names or hiding when decorative."],
+  ["Transcript", "Text version of audio or media content, often including speech and relevant non-speech information."],
+  ["UA", "User agent, software that presents web content, such as a browser, media player, or assistive technology."],
+  ["UAAG", "User Agent Accessibility Guidelines, W3C guidance for browsers and other user agents."],
+  ["Understandable", "WCAG principle requiring that content and operation are clear, predictable, and supported by helpful input assistance."],
+  ["User interface component", "A control or widget that users interact with, such as a button, link, field, tab, menu, slider, or dialog."],
+  ["UX", "User experience, the overall quality of how people perceive, understand, and complete tasks in a product or service."],
+  ["VoiceOver", "Apple's built-in screen reader for macOS, iOS, iPadOS, watchOS, and tvOS."],
+  ["VPAT", "Voluntary Product Accessibility Template, a template used to create an Accessibility Conformance Report."],
+  ["W3C", "World Wide Web Consortium, the standards organization that publishes WCAG, WAI-ARIA, ATAG, and related web standards."],
+  ["WAD", "Web Accessibility Directive, EU directive covering accessibility of public sector websites and mobile apps."],
+  ["WAI", "Web Accessibility Initiative, the W3C group that develops accessibility standards and guidance."],
+  ["WAI-ARIA", "W3C Accessible Rich Internet Applications specification."],
+  ["WAS", "Web Accessibility Specialist, an IAAP certification focused on technical web accessibility knowledge."],
+  ["WCAG", "Web Content Accessibility Guidelines, the main W3C standard for accessible web content."],
+  ["WCAG2ICT", "W3C guidance on applying WCAG 2 requirements to non-web documents and software."],
+  ["WebVTT", "Web Video Text Tracks, a format used for captions, subtitles, and text tracks in web media."]
 ];
 
 const OFFICIAL_DOCS = [
@@ -654,6 +953,31 @@ const OFFICIAL_DOCS = [
     title: "Apple VoiceOver User Guide",
     url: "https://support.apple.com/guide/voiceover/welcome/mac",
     use: "Official VoiceOver guidance for testing on macOS and Safari."
+  },
+  {
+    title: "Section508.gov Applicability and Conformance",
+    url: "https://www.section508.gov/develop/applicability-conformance/",
+    use: "Official U.S. federal guidance on Revised 508 applicability, WCAG 2.0 Level AA incorporation, and conformance expectations."
+  },
+  {
+    title: "Section508.gov Determine Which Standards Apply",
+    url: "https://www.section508.gov/buy/determine-ict-standards/",
+    use: "Official scoping guide for electronic content, software, hardware, support documentation, support services, and functional performance criteria."
+  },
+  {
+    title: "European Commission European Accessibility Act",
+    url: "https://commission.europa.eu/strategy-and-policy/policies/justice-and-fundamental-rights/disability/european-accessibility-act-eaa_en",
+    use: "Official EAA overview covering purpose and products/services such as computers, ATMs, smartphones, transport, banking, e-books, and e-commerce."
+  },
+  {
+    title: "EUR-Lex Directive (EU) 2019/882",
+    url: "https://eur-lex.europa.eu/eli/dir/2019/882/oj",
+    use: "Primary legal text for European Accessibility Act articles, annexes, scope, requirements, and transition provisions."
+  },
+  {
+    title: "Your Europe Accessibility Requirements",
+    url: "https://europa.eu/youreurope/business/selling-in-eu/selling-goods-services/accessibility/index_en.htm",
+    use: "Business-facing EU guidance on covered products and services, general accessibility rules, exceptions, and conformity assessment."
   }
 ];
 
@@ -733,7 +1057,7 @@ const FOOTER_LINKS = [
   },
   {
     label: "LinkedIn",
-    href: "https://www.linkedin.com/in/carla-goncalves/",
+    href: "https://www.linkedin.com/in/carla-goncalves-9a01a5164/",
     icon: "linkedin"
   }
 ];
@@ -786,6 +1110,7 @@ const state = {
   tutorialCategory: "all",
   tutorialPage: 1,
   standardPage: 1,
+  globalSearchQuery: "",
   quiz: null,
   selected: null,
   guidedIndex: Number(localStorage.getItem("a11yGuidedIndex") || "0"),
@@ -801,6 +1126,8 @@ const routes = [
   ["tutorials", "Mini Tutorials"],
   ["guided", "Guided Mode"],
   ["lessons", "Lessons"],
+  ["regulations", "Regulations"],
+  ["search", "Search"],
   ["bank", "Standards"],
   ["quiz", "Difficult Quiz"],
   ["exam", "Exam Practice"],
@@ -813,6 +1140,7 @@ const navRoutes = [
   ["tutorials", "Tutorials"],
   ["guided", "Guided"],
   ["lessons", "Lessons"],
+  ["regulations", "Regulations"],
   ["bank", "Standards"],
   ["quiz", "Quiz"],
   ["exam", "Exam"],
@@ -852,6 +1180,18 @@ function slugFromHash() {
   const [rawRoute = "home"] = hash.split(/[/?]/);
   const route = rawRoute === "lesson" ? "lessons" : rawRoute;
   return routes.some(([id]) => id === route) ? route : "home";
+}
+
+function searchTermFromHash() {
+  const hash = window.location.hash.replace(/^#\/?/, "");
+  const [rawRoute = "", ...parts] = hash.split("/");
+  if (rawRoute !== "search") return "";
+  const rawTerm = parts.join("/");
+  try {
+    return decodeURIComponent(rawTerm).trim();
+  } catch {
+    return rawTerm.trim();
+  }
 }
 
 function criteria() {
@@ -1118,6 +1458,11 @@ function layout(content) {
         <span class="brand-logo" aria-hidden="true">A11Y</span>
         <strong>Standards Trainer</strong>
       </a>
+      <form class="nav-search" role="search" aria-label="Global site search" data-global-search>
+        <label class="sr-only" for="nav-search-input">Search terms and references</label>
+        <input id="nav-search-input" name="q" type="search" value="${esc(state.globalSearchQuery)}" placeholder="Search 1.2, captions, EAA..." autocomplete="off" />
+        <button type="submit">Search</button>
+      </form>
       <nav aria-label="Main navigation">
         ${navRoutes.map(([id, label]) => `<a href="#${id}" ${route === id ? 'aria-current="page"' : ""}>${label}</a>`).join("")}
       </nav>
@@ -1172,6 +1517,7 @@ function renderHome() {
           <a class="button primary" href="#tutorials">Start with mini tutorials</a>
           <a class="button primary" href="#guided">Use guided mode</a>
           <a class="button" href="#course">Open study map</a>
+          <a class="button" href="#regulations">Regulatory training</a>
           <a class="button" href="#lessons">Then open lessons</a>
           <a class="button" href="#quiz">Hard quiz after study</a>
         </div>
@@ -1204,8 +1550,11 @@ function renderHome() {
       </article>
       <article class="panel">
         <h2>Broader standards coverage</h2>
-        <p>The knowledge bank connects WCAG to practical accessibility work: disability context, UX, semantic HTML, visual design, input methods, forms, media, SPAs, ARIA widgets, testing, screen readers, usability, and legal conformance.</p>
-        <div class="actions"><a class="button" href="#library">Open reference library</a></div>
+        <p>The knowledge bank connects WCAG to practical accessibility work: disability context, UX, semantic HTML, visual design, input methods, forms, media, SPAs, ARIA widgets, testing, screen readers, usability, Section 508, and the European Accessibility Act.</p>
+        <div class="actions">
+          <a class="button" href="#library">Open reference library</a>
+          <a class="button" href="#regulations">Open regulations</a>
+        </div>
       </article>
     </section>
     <section class="domain-grid">
@@ -1364,7 +1713,7 @@ function courseTopicHint(title) {
 function courseInternalAction(title) {
   const lower = title.toLowerCase();
   if (lower.includes("qa") || lower.includes("testing") || lower.includes("screen reader")) return { href: "#tutorials", label: "Study tester tutorials" };
-  if (lower.includes("conformance") || lower.includes("section 508") || lower.includes("301")) return { href: "#bank", label: "Open standards bank" };
+  if (lower.includes("conformance") || lower.includes("section 508") || lower.includes("301") || lower.includes("accessibility act")) return { href: "#regulations", label: "Study regulations" };
   if (lower.includes("cpacc") || lower.includes("fundamentals") || lower.includes("ux")) return { href: "#guided", label: "Start guided review" };
   if (lower.includes("form") || lower.includes("image") || lower.includes("visual") || lower.includes("input") || lower.includes("semantic")) return { href: "#tutorials", label: "Find related tutorials" };
   if (lower.includes("aria") || lower.includes("dynamic") || lower.includes("angular") || lower.includes("developer")) return { href: "#quiz", label: "Practise questions" };
@@ -1460,6 +1809,172 @@ function renderCpaccTrackStep(step) {
   `;
 }
 
+function renderRegulatoryModule(module) {
+  return `
+    <article class="regulation-module card">
+      <div class="tutorial-card-head">
+        <span class="badge">${esc(module.badge)}</span>
+      </div>
+      <h2>${esc(module.title)}</h2>
+      <p>${esc(module.summary)}</p>
+      <h3>Learn this</h3>
+      <ul>${module.learn.map((item) => `<li>${esc(item)}</li>`).join("")}</ul>
+      <div class="plain-box">
+        <h3>Practice drill</h3>
+        <p>${esc(module.drill)}</p>
+      </div>
+    </article>
+  `;
+}
+
+function renderRegulatoryCrosswalk(card) {
+  return `
+    <article class="regulation-crosswalk-card">
+      <span class="badge">${esc(card.standard)}</span>
+      <h3>${esc(card.title)}</h3>
+      <p>${esc(card.details)}</p>
+      <a class="button" href="${card.action}">Study related area</a>
+    </article>
+  `;
+}
+
+function renderRegulatoryScenario(scenario) {
+  return `
+    <article class="scenario-card">
+      <div class="tutorial-card-head">
+        <span class="badge">${esc(scenario.law)}</span>
+      </div>
+      <h3>${esc(scenario.title)}</h3>
+      <p><strong>Scenario:</strong> ${esc(scenario.ask)}</p>
+      <details class="tutorial-details">
+        <summary>Reveal expected analysis</summary>
+        <p>${esc(scenario.answer)}</p>
+      </details>
+    </article>
+  `;
+}
+
+function renderRegulatorySource(source) {
+  return `
+    <article class="source-card">
+      <h3>${esc(source.title)}</h3>
+      <p>${esc(source.use)}</p>
+      <a href="${source.url}" target="_blank" rel="noopener noreferrer">Open official source</a>
+    </article>
+  `;
+}
+
+function renderWcagDifferenceCard(item) {
+  return `
+    <article class="wcag-difference-card">
+      <h3>${esc(item.axis)}</h3>
+      <dl class="comparison-list">
+        <div><dt>WCAG</dt><dd>${esc(item.wcag)}</dd></div>
+        <div><dt>Section 508</dt><dd>${esc(item.section508)}</dd></div>
+        <div><dt>EAA</dt><dd>${esc(item.eaa)}</dd></div>
+      </dl>
+      <p class="difference-note"><strong>Difference to remember:</strong> ${esc(item.takeaway)}</p>
+    </article>
+  `;
+}
+
+function renderRegulatoryReadinessList() {
+  return `
+    <ol class="readiness-list">
+      ${REGULATORY_READINESS_CHECKS.map((check) => `<li>${esc(check)}</li>`).join("")}
+    </ol>
+  `;
+}
+
+function renderRegulations() {
+  return layout(`
+    ${pageTitle("Regulations", "Section 508 and European Accessibility Act training", `A full readiness section for regulatory scope, current official requirements, evidence writing, exception handling, and scenario practice. Source facts last checked ${REGULATORY_LAST_REVIEWED}.`)}
+    <section class="regulation-hero panel">
+      <div>
+        <p class="eyebrow">Preparation target</p>
+        <h2>Students should leave this section able to scope, test, explain, and escalate.</h2>
+        <p>Section 508 and the European Accessibility Act both rely on accessibility outcomes, but they do not work the same way. This section teaches students to separate legal scope from technical standards, collect evidence, and know when a question belongs to an accountable regulatory owner.</p>
+      </div>
+      <div class="regulation-callout">
+        <strong>Current anchors</strong>
+        <ul>
+          <li>Section 508: Revised 508 Standards with WCAG 2.0 Level A and AA for applicable web and electronic content.</li>
+          <li>EAA: Directive (EU) 2019/882 applies to covered products and services placed on the EU market after 28 June 2025.</li>
+          <li>Both: testing skill is evidence, not legal advice. Edge cases need documented escalation.</li>
+        </ul>
+      </div>
+    </section>
+    <section class="panel wcag-comparison-panel">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Start here</p>
+          <h2>Compare everything with WCAG first</h2>
+        </div>
+        <p>Students should learn WCAG as the testing language, then learn what Section 508 and the EAA add: scope, covered products and services, legal baselines, exceptions, and evidence expectations.</p>
+      </div>
+      <div class="wcag-difference-grid">
+        ${REGULATORY_WCAG_DIFFERENCES.map(renderWcagDifferenceCard).join("")}
+      </div>
+    </section>
+    <section class="regulation-grid" aria-label="Regulatory training modules">
+      ${REGULATORY_MODULES.map(renderRegulatoryModule).join("")}
+    </section>
+    <section class="panel">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Crosswalk</p>
+          <h2>How WCAG practice turns into regulatory readiness</h2>
+        </div>
+        <p>Use this as the bridge from day-to-day accessibility testing into Section 508 and EAA evidence.</p>
+      </div>
+      <div class="regulation-crosswalk">
+        ${REGULATORY_CROSSWALK.map(renderRegulatoryCrosswalk).join("")}
+      </div>
+    </section>
+    <section class="panel">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Scenario lab</p>
+          <h2>Practise deciding what applies</h2>
+        </div>
+        <p>Each scenario asks students to identify the law, scope, likely requirements, and evidence they would collect.</p>
+      </div>
+      <div class="scenario-grid">
+        ${REGULATORY_SCENARIOS.map(renderRegulatoryScenario).join("")}
+      </div>
+    </section>
+    <section class="grid two">
+      <article class="panel">
+        <p class="eyebrow">Readiness checklist</p>
+        <h2>Fully prepared means the student can do these without notes</h2>
+        ${renderRegulatoryReadinessList()}
+      </article>
+      <article class="panel">
+        <p class="eyebrow">Evidence formula</p>
+        <h2>Write findings so they survive audit review</h2>
+        <dl class="comparison-list">
+          <div><dt>Scope</dt><dd>Product, service, owner, jurisdiction, platform, release date, and user journey.</dd></div>
+          <div><dt>Requirement</dt><dd>Section 508 chapter/WCAG criterion or EAA product/service outcome and supporting standard.</dd></div>
+          <div><dt>Evidence</dt><dd>Steps, actual result, expected result, affected users, screenshots or assistive technology notes, and retest method.</dd></div>
+          <div><dt>Escalation</dt><dd>Exception, transition, disproportionate burden, equivalent facilitation, or national-law question owner.</dd></div>
+        </dl>
+      </article>
+    </section>
+    <section class="panel">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Official sources</p>
+          <h2>Primary references for this training</h2>
+        </div>
+        <p>Use these sources for exact wording and current regulatory interpretation before final audit or legal claims.</p>
+      </div>
+      <div class="source-grid">
+        ${REGULATORY_SOURCES.map(renderRegulatorySource).join("")}
+      </div>
+    </section>
+  `);
+}
+
 function renderCourse() {
   const uniqueCourses = SOURCE_TOC_COVERAGE.length;
   const tocPages = SOURCE_TOC_COVERAGE.reduce((sum, course) => sum + course.pages, 0);
@@ -1510,6 +2025,21 @@ function renderCourse() {
       </div>
       <div class="qa-track-grid">
         ${QA_TESTER_TRACK.map(renderQaTrackStep).join("")}
+      </div>
+    </section>
+    <section class="panel qa-track-panel">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Regulatory readiness</p>
+          <h2>Section 508 and European Accessibility Act track</h2>
+        </div>
+        <p>This track prepares students to scope regulatory work, explain current requirements, collect evidence, and escalate legal exception questions responsibly.</p>
+      </div>
+      <div class="regulation-crosswalk">
+        ${REGULATORY_CROSSWALK.map(renderRegulatoryCrosswalk).join("")}
+      </div>
+      <div class="actions">
+        <a class="button primary" href="#regulations">Open full regulatory training</a>
       </div>
     </section>
     <section class="toc-coverage" aria-label="Indexed course page coverage">
@@ -1962,6 +2492,221 @@ function renderQuiz(targetId = null, exam = false) {
   `);
 }
 
+function textIncludesQuery(query, values) {
+  return values
+    .flat()
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase()
+    .includes(query);
+}
+
+function globalSearchResults(term) {
+  const query = term.trim().toLowerCase();
+  if (!query) {
+    return { criteria: [], tutorials: [], docs: [], regulations: [], glossary: [], courses: [] };
+  }
+
+  const criterionNumberQuery = /^\d+(?:\.\d+)*$/.test(query);
+  const criteriaMatches = successCriteria.filter((sc) => {
+    if (criterionNumberQuery) return sc.num.toLowerCase().startsWith(query);
+    return textIncludesQuery(query, [
+      sc.num,
+      sc.id,
+      sc.title,
+      sc.level,
+      sc.principle,
+      sc.guidelineTitle,
+      sc.contentText,
+      plainExplanation(sc),
+      oneSentence(sc)
+    ]);
+  });
+
+  const tutorials = TUTORIAL_RECORDS.filter((tutorial) => textIncludesQuery(query, [
+    tutorial.title,
+    tutorial.description,
+    tutorial.category,
+    tutorial.topic,
+    tutorial.difficulty,
+    tutorial.level,
+    tutorial.example,
+    tutorial.practice,
+    tutorial.check,
+    tutorial.tags,
+    tutorial.wcagRefs,
+    tutorial.teach
+  ]));
+
+  const docs = [...OFFICIAL_DOCS, ...REGULATORY_SOURCES].filter((doc) => textIncludesQuery(query, [
+    doc.title,
+    doc.url,
+    doc.use
+  ]));
+
+  const regulations = [
+    ...REGULATORY_WCAG_DIFFERENCES.map((item) => ({
+      title: item.axis,
+      label: "WCAG comparison",
+      body: item.takeaway,
+      details: [item.wcag, item.section508, item.eaa]
+    })),
+    ...REGULATORY_MODULES.map((item) => ({
+      title: item.title,
+      label: item.badge,
+      body: item.summary,
+      details: [item.learn, item.drill]
+    })),
+    ...REGULATORY_CROSSWALK.map((item) => ({
+      title: item.title,
+      label: item.standard,
+      body: item.details,
+      details: [item.action]
+    })),
+    ...REGULATORY_SCENARIOS.map((item) => ({
+      title: item.title,
+      label: item.law,
+      body: item.ask,
+      details: [item.answer]
+    }))
+  ].filter((item) => textIncludesQuery(query, [item.title, item.label, item.body, item.details]));
+
+  const glossary = GLOSSARY
+    .map(([termName, definition]) => ({ title: termName, body: definition }))
+    .filter((item) => textIncludesQuery(query, [item.title, item.body]));
+
+  const courses = [
+    ...COURSE_LIBRARY.map((course) => ({
+      title: course.title,
+      label: course.source,
+      body: course.takeaway,
+      details: course.topics
+    })),
+    ...SOURCE_TOC_COVERAGE.map((course) => ({
+      title: course.title,
+      label: course.lane,
+      body: `${course.pages} indexed pages`,
+      details: course.sample
+    }))
+  ].filter((item) => textIncludesQuery(query, [item.title, item.label, item.body, item.details]));
+
+  return { criteria: criteriaMatches, tutorials, docs, regulations, glossary, courses };
+}
+
+function globalSearchCount(results) {
+  return Object.values(results).reduce((sum, list) => sum + list.length, 0);
+}
+
+function renderSearchForm(term) {
+  return `
+    <form class="search-page-form panel" role="search" aria-label="Search all trainer content" data-global-search>
+      <label for="search-page-input">Search terms and references</label>
+      <div class="search-page-input-row">
+        <input id="search-page-input" name="q" type="search" value="${esc(term)}" placeholder="Try 1.2, captions, Section 508, EAA, focus..." autocomplete="off" />
+        <button type="submit" class="button primary">Search</button>
+      </div>
+    </form>
+  `;
+}
+
+function renderSearchCriterion(sc) {
+  return `
+    <article class="search-result-card">
+      <div class="standard-card-head">
+        <span class="criterion-number">${esc(sc.num)}</span>
+        <span class="badge level-${sc.level.toLowerCase()}">Level ${esc(sc.level)}</span>
+        <span class="badge">${esc(sc.principle)}</span>
+      </div>
+      <h3>${esc(sc.title)}</h3>
+      <p>${esc(oneSentence(sc))}</p>
+      <p class="muted">${esc(sc.guidelineTitle)}. ${esc(sc.contentText.slice(0, 240))}${sc.contentText.length > 240 ? "..." : ""}</p>
+      <div class="search-result-links" aria-label="${esc(sc.num)} references">
+        <a class="button primary" href="#lesson/${sc.id}">Lesson</a>
+        <a class="button" href="#quiz/${sc.id}">Quiz</a>
+        ${officialLinks(sc).map(([label, href]) => `<a class="button" href="${href}" target="_blank" rel="noopener noreferrer">${esc(label)}</a>`).join("")}
+      </div>
+    </article>
+  `;
+}
+
+function renderSearchTutorial(tutorial) {
+  return `
+    <article class="search-result-card">
+      <span class="badge">${esc(tutorial.category)}</span>
+      <h3>${esc(tutorial.title)}</h3>
+      <p>${esc(tutorial.description)}</p>
+      <p class="muted">References: ${tutorial.wcagRefs.map((num) => `<a href="#lesson/${getCriterion(num).id}">${esc(num)}</a>`).join(", ")}</p>
+      <div class="search-result-links">
+        <a class="button primary" href="#tutorials">Open tutorials</a>
+        <a class="button" href="#quiz/${getCriterion(tutorial.wcagRefs[0]).id}">Practice related quiz</a>
+      </div>
+    </article>
+  `;
+}
+
+function renderSearchDoc(doc) {
+  return `
+    <article class="search-result-card">
+      <span class="badge">Official source</span>
+      <h3>${esc(doc.title)}</h3>
+      <p>${esc(doc.use)}</p>
+      <a class="button" href="${doc.url}" target="_blank" rel="noopener noreferrer">Open reference</a>
+    </article>
+  `;
+}
+
+function renderSearchTextResult(item, label, href = null) {
+  return `
+    <article class="search-result-card">
+      <span class="badge">${esc(item.label || label)}</span>
+      <h3>${esc(item.title)}</h3>
+      <p>${esc(item.body)}</p>
+      ${href ? `<a class="button" href="${href}">Open related section</a>` : ""}
+    </article>
+  `;
+}
+
+function renderSearchResultsSection(title, count, body) {
+  if (!count) return "";
+  return `
+    <section class="search-results-section" aria-labelledby="${esc(title.toLowerCase().replaceAll(" ", "-"))}-heading">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">${count} match${count === 1 ? "" : "es"}</p>
+          <h2 id="${esc(title.toLowerCase().replaceAll(" ", "-"))}-heading">${esc(title)}</h2>
+        </div>
+      </div>
+      <div class="search-results-grid">${body}</div>
+    </section>
+  `;
+}
+
+function renderSearch(term) {
+  const results = globalSearchResults(term);
+  const total = globalSearchCount(results);
+  const searched = Boolean(term.trim());
+  return layout(`
+    ${pageTitle("Search", "Search terms and references", "Search WCAG criteria, references, tutorials, official docs, regulations, glossary terms, and course material from the main navigation.")}
+    ${renderSearchForm(term)}
+    <div class="result-summary ${searched ? "is-filtering" : ""}" role="status" aria-live="polite">
+      ${searched ? `<strong>${total} result${total === 1 ? "" : "s"} for ${esc(term)}</strong>` : "<strong>Enter a term to search all trainer content.</strong>"}
+      ${searched && /^\d+(?:\.\d+)*$/.test(term.trim()) ? "<span>Number searches match criterion prefixes, so 1.2 returns 1.2.1, 1.2.2, and related references.</span>" : "<span>Try a WCAG reference, concept, law, tool, or source name.</span>"}
+    </div>
+    ${searched && total === 0 ? `
+      <section class="empty-state panel">
+        <h2>No results found.</h2>
+        <p>Try a shorter term, a WCAG prefix like 1.2, or a concept such as captions, keyboard, Section 508, or EAA.</p>
+      </section>
+    ` : ""}
+    ${renderSearchResultsSection("WCAG criteria and references", results.criteria.length, results.criteria.map(renderSearchCriterion).join(""))}
+    ${renderSearchResultsSection("Mini tutorials", results.tutorials.length, results.tutorials.map(renderSearchTutorial).join(""))}
+    ${renderSearchResultsSection("Official documentation", results.docs.length, results.docs.map(renderSearchDoc).join(""))}
+    ${renderSearchResultsSection("Regulatory training", results.regulations.length, results.regulations.map((item) => renderSearchTextResult(item, "Regulations", "#regulations")).join(""))}
+    ${renderSearchResultsSection("Glossary", results.glossary.length, results.glossary.map((item) => renderSearchTextResult(item, "Glossary", "#glossary")).join(""))}
+    ${renderSearchResultsSection("Course material", results.courses.length, results.courses.map((item) => renderSearchTextResult(item, "Course", "#course")).join(""))}
+  `);
+}
+
 function renderGlossary() {
   return layout(`
     ${pageTitle("Glossary", "Accessibility terms", "Short definitions for common WCAG, testing, and assistive technology terms.")}
@@ -1986,6 +2731,8 @@ function renderDocs() {
         <li><strong>Understanding WCAG</strong> explains the intent and examples.</li>
         <li><strong>WAI cognitive accessibility guidance</strong> shapes the way lessons are chunked, repeated, and written in plain language.</li>
         <li><strong>WAI-ARIA/APG</strong> guides custom-control semantics and keyboard behavior.</li>
+        <li><strong>Section508.gov</strong> anchors U.S. federal ICT scope, Revised 508 requirements, and WCAG 2.0 Level A/AA conformance expectations.</li>
+        <li><strong>European Commission, EUR-Lex, and Your Europe</strong> anchor the European Accessibility Act scope, 28 June 2025 applicability date, covered products and services, and conformity evidence expectations.</li>
       </ol>
     </section>
     <section class="grid two">
@@ -2004,6 +2751,9 @@ function render() {
   state.route = slugFromHash();
   const hashParts = window.location.hash.replace(/^#\/?/, "").split("/");
   const id = hashParts[1];
+  if (state.route === "search") {
+    state.globalSearchQuery = searchTermFromHash();
+  }
   if (state.route !== "quiz" && state.route !== "exam") {
     state.quiz = null;
     state.selected = null;
@@ -2015,6 +2765,8 @@ function render() {
   if (state.route === "tutorials") app.innerHTML = renderTutorials();
   if (state.route === "guided") app.innerHTML = renderGuided();
   if (state.route === "lessons") app.innerHTML = renderLessons();
+  if (state.route === "regulations") app.innerHTML = renderRegulations();
+  if (state.route === "search") app.innerHTML = renderSearch(state.globalSearchQuery);
   if (hashParts[0] === "lesson") app.innerHTML = renderLesson(id);
   if (state.route === "bank") app.innerHTML = renderBank();
   if (state.route === "quiz") app.innerHTML = renderQuiz(id, false);
@@ -2119,6 +2871,24 @@ function render() {
     saveGuidedIndex();
     announce("Guided mode restarted.");
     render();
+  });
+  document.querySelectorAll("[data-global-search]").forEach((form) => {
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const formData = new FormData(event.currentTarget);
+      const term = String(formData.get("q") || "").trim();
+      state.globalSearchQuery = term;
+      if (!term) {
+        if (window.location.hash === "#search") render();
+        else window.location.hash = "#search";
+        announce("Search cleared.");
+        return;
+      }
+      const nextHash = `#search/${encodeURIComponent(term)}`;
+      if (window.location.hash === nextHash) render();
+      else window.location.hash = nextHash;
+      announce(`Search results for ${term}.`);
+    });
   });
 }
 
