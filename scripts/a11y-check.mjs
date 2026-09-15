@@ -140,6 +140,25 @@ if (!(await navToggle.isVisible())) {
   }
 }
 
+const footerCredit = await page.locator(".footer-built-by").innerText();
+if (!footerCredit.includes("Built by Carla Goncalves")) {
+  failed = true;
+  console.log(`Footer: expected the creator credit but found “${footerCredit}”.`);
+}
+
+const expectedFooterLinks = new Map([
+  ["LinkedIn", "https://www.linkedin.com/in/carla-goncalves-9a01a5164/"],
+  ["GitHub", "https://github.com/CarlasHub"],
+  ["Website", "https://carlashub.com/"]
+]);
+for (const [label, href] of expectedFooterLinks) {
+  const link = page.locator(".footer-links a", { hasText: label });
+  if ((await link.count()) !== 1 || (await link.getAttribute("href")) !== href) {
+    failed = true;
+    console.log(`Footer: ${label} link is missing or does not use the verified URL.`);
+  }
+}
+
 const expectedAssessmentSizes = new Map([
   ["#quiz/section-508", 14],
   ["#quiz/title-ii", 14],

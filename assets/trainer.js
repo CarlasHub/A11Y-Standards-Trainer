@@ -2511,9 +2511,9 @@ const TOOL_REFERENCES = [
 
 const FOOTER_LINKS = [
   {
-    label: "Carla's Hub",
-    href: "https://carlashub.com/",
-    icon: "site"
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/in/carla-goncalves-9a01a5164/",
+    icon: "linkedin"
   },
   {
     label: "GitHub",
@@ -2521,9 +2521,9 @@ const FOOTER_LINKS = [
     icon: "github"
   },
   {
-    label: "LinkedIn",
-    href: "https://www.linkedin.com/in/carla-goncalves-9a01a5164/",
-    icon: "linkedin"
+    label: "Website",
+    href: "https://carlashub.com/",
+    icon: "site"
   }
 ];
 
@@ -2982,14 +2982,22 @@ function layout(content) {
     <main id="main" class="shell" tabindex="-1">${content}</main>
     <footer class="site-footer">
       <div class="shell footer-inner">
-        <p>Created by <strong>Carla Goncalves</strong>. Original study content based on public W3C/WAI documentation, WCAG 2.2, WAI-ARIA/APG patterns, and cognitive accessibility guidance.</p>
+        <div class="footer-credit">
+          <p class="footer-built-by">Built by <a href="https://carlashub.com/" target="_blank" rel="me noopener noreferrer">Carla Goncalves<span class="sr-only"> (opens in a new tab)</span></a></p>
+          <p>Original study content based on public W3C/WAI documentation, WCAG 2.2, WAI-ARIA/APG patterns, and cognitive accessibility guidance.</p>
+        </div>
         <nav class="footer-links" aria-label="Creator links">
-          ${FOOTER_LINKS.map((link) => `
-            <a href="${link.href}" target="_blank" rel="noopener noreferrer" aria-label="${esc(link.label)}">
-              ${renderIcon(link.icon)}
-              <span>${esc(link.label)}</span>
-            </a>
-          `).join("")}
+          <ul>
+            ${FOOTER_LINKS.map((link) => `
+              <li>
+                <a href="${link.href}" target="_blank" rel="me noopener noreferrer">
+                  ${renderIcon(link.icon)}
+                  <span>${esc(link.label)}</span>
+                  <span class="sr-only"> (opens in a new tab)</span>
+                </a>
+              </li>
+            `).join("")}
+          </ul>
         </nav>
       </div>
     </footer>
