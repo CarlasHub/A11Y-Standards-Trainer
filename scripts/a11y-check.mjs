@@ -1,7 +1,22 @@
 import axe from "axe-core";
 import { chromium } from "playwright";
 
-const routes = ["#home", "#guided", "#tutorials", "#lesson/non-text-content", "#regulations", "#search/1.2", "#bank", "#quiz/non-text-content", "#glossary", "#docs"];
+const routes = [
+  "#home",
+  "#guided",
+  "#tutorials",
+  "#lesson/non-text-content",
+  "#regulations",
+  "#casebook",
+  "#search/1.2",
+  "#bank",
+  "#quiz/non-text-content",
+  "#quiz/section-508",
+  "#quiz/wcag-advanced",
+  "#exam",
+  "#glossary",
+  "#docs",
+];
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
 
@@ -31,6 +46,21 @@ for (const route of routes) {
     }
   } else {
     console.log(`${route}: no serious/critical axe violations`);
+  }
+}
+
+await page.setViewportSize({ width: 390, height: 844 });
+for (const route of ["#casebook", "#docs"]) {
+  await page.goto(`http://localhost:4175/?v=mobile-check${route}`, { waitUntil: "domcontentloaded" });
+  const hasHorizontalOverflow = await page.evaluate(() => {
+    return document.documentElement.scrollWidth > document.documentElement.clientWidth;
+  });
+
+  if (hasHorizontalOverflow) {
+    failed = true;
+    console.log(`${route}: horizontal overflow at 390px viewport`);
+  } else {
+    console.log(`${route}: no horizontal overflow at 390px viewport`);
   }
 }
 

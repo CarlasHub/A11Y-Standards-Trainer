@@ -316,9 +316,14 @@ const CPACC_REVIEW_TRACK = [
   }
 ];
 
-const REGULATORY_LAST_REVIEWED = "5 June 2026";
+const REGULATORY_LAST_REVIEWED = "15 September 2026";
 
 const REGULATORY_SOURCES = [
+  {
+    title: "U.S. Access Board: Revised 508 Standards",
+    url: "https://www.access-board.gov/ict/",
+    use: "Primary text for the Revised 508 application, scoping, functional-performance, hardware, software, support, and referenced-standard requirements."
+  },
   {
     title: "Section508.gov: Applicability and Conformance Requirements",
     url: "https://www.section508.gov/develop/applicability-conformance/",
@@ -348,6 +353,115 @@ const REGULATORY_SOURCES = [
     title: "European Commission news: The EU becomes more accessible for all",
     url: "https://commission.europa.eu/news-and-media/news/eu-becomes-more-accessible-all-2025-07-31_en",
     use: "Current public summary of EAA effects after it came into effect in June 2025, including examples and mandatory disability/accessibility training for service providers."
+  }
+];
+
+const SECTION_508_CHAPTERS = [
+  {
+    chapter: "508 Chapter 1",
+    focus: "Application and administration",
+    decisions: "Definitions, referenced standards, equivalent facilitation, and the rules used to interpret the rest of the standard.",
+    anchors: "E101–E103"
+  },
+  {
+    chapter: "508 Chapter 2",
+    focus: "Scoping",
+    decisions: "When the standard applies, exceptions, functional performance, electronic content, hardware, software, and support obligations.",
+    anchors: "E201–E208"
+  },
+  {
+    chapter: "Chapter 3",
+    focus: "Functional performance criteria",
+    decisions: "Outcome-based access for users with limited vision, color perception, hearing, speech, manipulation, reach, and cognition.",
+    anchors: "301–302"
+  },
+  {
+    chapter: "Chapter 4",
+    focus: "Hardware",
+    decisions: "Closed functionality, biometrics, privacy, operable parts, displays, status indicators, connections, and multimedia controls.",
+    anchors: "401–415"
+  },
+  {
+    chapter: "Chapter 5",
+    focus: "Software",
+    decisions: "Platform accessibility, assistive-technology interoperability, applications, and authoring-tool output and prompts.",
+    anchors: "501–504"
+  },
+  {
+    chapter: "Chapter 6",
+    focus: "Support",
+    decisions: "Accessible product documentation, accessibility-feature documentation, accommodation of communication needs, and support services.",
+    anchors: "601–603"
+  },
+  {
+    chapter: "Chapter 7",
+    focus: "Referenced standards",
+    decisions: "The precise editions and extent of incorporated standards, including WCAG 2.0 and other technology-specific references.",
+    anchors: "701–702"
+  }
+];
+
+const SECTION_508_SCOPE_STEPS = [
+  ["1", "Inventory every ICT component", "Separate content, software, hardware, authoring functions, documentation, and support; a single product can trigger several chapters."],
+  ["2", "Evaluate exceptions component by component", "Document the exact exception and owner. An exception for one component does not automatically remove requirements from the others."],
+  ["3", "Apply Chapter 2 scoping", "Classify public-facing content, the nine categories of non-public official communication, web/non-web software, hardware, and support."],
+  ["4", "Map the technical requirements", "Apply the incorporated WCAG baseline and every relevant non-WCAG chapter; include functional performance where E204 calls for it."],
+  ["5", "Write reproducible evidence", "Record requirement, state, steps, expected and actual result, affected users, method, exception status, owner, and retest."],
+  ["6", "Keep the decision trail", "Preserve scoping notes, test results, vendor claims, remediation decisions, and approvals instead of reducing conformance to a single badge."]
+];
+
+const SECTION_508_OFFICIAL_COMMUNICATIONS = [
+  "Emergency notifications",
+  "Initial or final decisions adjudicating an administrative claim or proceeding",
+  "Internal or external program or policy announcements",
+  "Notices of benefits, program eligibility, employment opportunity, or personnel action",
+  "Formal acknowledgments of receipt",
+  "Survey questionnaires",
+  "Templates or forms",
+  "Educational or training materials",
+  "Intranet content designed as a web page"
+];
+
+const SECTION_508_COMPONENT_MATRIX = [
+  {
+    component: "Public-facing electronic content",
+    baseline: "E205 plus all WCAG 2.0 A and AA success criteria; support documentation and services also apply.",
+    watch: "Public-facing is broader than an agency website and can include social media, documents, multimedia, or content shown on a kiosk."
+  },
+  {
+    component: "Non-public official communication",
+    baseline: "E205 when the content falls within one or more of the nine specified categories.",
+    watch: "Delivery by email, text, storage media, download, or intranet does not by itself decide coverage."
+  },
+  {
+    component: "Non-web electronic document",
+    baseline: "WCAG 2.0 A/AA except 2.4.1, 2.4.5, 3.2.3, and 3.2.4, plus 602 and 603.",
+    watch: "The four exclusions are format/scoping adjustments, not permission to ignore structure, reading order, contrast, forms, or alternatives."
+  },
+  {
+    component: "Web-based software",
+    baseline: "WCAG 2.0 A/AA plus 502, 503, 602, and 603; apply Chapter 3 when E204 requires functional performance review.",
+    watch: "A browser interface can be both content and software. Component classification must not erase application behavior or AT interoperability."
+  },
+  {
+    component: "Non-web software",
+    baseline: "WCAG 2.0 A/AA with the same four exclusions, plus 502, 503, 602, and 603; Chapter 3 can also apply through E204.",
+    watch: "Native applications are not evaluated by WCAG alone: platform services, object information, preferences, focus, and documented accessibility features matter."
+  },
+  {
+    component: "Authoring tool",
+    baseline: "The applicable software requirements plus 504 Authoring Tools.",
+    watch: "Test whether accessible output can be created, whether accessibility information is preserved, and whether prompts or repair assistance are available."
+  },
+  {
+    component: "Hardware or closed functionality",
+    baseline: "Chapter 4, including 402 for closed functionality when users cannot attach or install assistive technology; add the applicable display, biometric, voice, and multimedia provisions.",
+    watch: "A kiosk may need both hardware testing and separate testing of its content/software; a screen-reader test on the web version is not sufficient evidence."
+  },
+  {
+    component: "Support documentation and services",
+    baseline: "602 and 603, including accessible documentation and accommodation of users' communication needs.",
+    watch: "A conforming interface does not cancel inaccessible setup guides, undocumented accessibility features, or unusable support channels."
   }
 ];
 
@@ -521,6 +635,398 @@ const REGULATORY_READINESS_CHECKS = [
   "I can write a regulatory finding with scope, user impact, requirement reference, reproduction steps, expected result, and retest method.",
   "I know when to escalate exception claims, disproportionate-burden claims, transition questions, or equivalent-facilitation questions."
 ];
+
+const SECTION_508_QUESTIONS = [
+  {
+    id: "508-mixed-product",
+    title: "Scope a multi-component acquisition",
+    competency: "Component scoping",
+    source: "Revised 508 E205–E208; Chapters 4–6",
+    prompt: "An agency buys a lobby kiosk package containing a touch display, locked-down application, public instructions, PDF receipts, and a vendor help desk. The web administration portal passes WCAG. Which conclusion is strongest?",
+    choices: [
+      ["a", "The package conforms because WCAG conformance of its web portal covers the complete acquisition.", "WCAG evidence for one component cannot establish conformance for the hardware, closed software, content, documents, and support components."],
+      ["b", "Inventory and scope each component, then apply the relevant content, software, hardware, closed-functionality, documentation, and support requirements.", "Correct: Section 508 applicability is determined for each ICT component, and a single solution may trigger several chapters."],
+      ["c", "Only Chapter 4 applies because a kiosk is always classified solely as hardware.", "A kiosk has hardware, but its software, displayed content, documents, and support can independently trigger other requirements."],
+      ["d", "Only functional performance criteria apply because users cannot install assistive technology on the kiosk.", "Closed functionality triggers specific Chapter 4 requirements; functional performance criteria do not replace all technical scoping."]
+    ],
+    answer: "b",
+    explanation: "Start with an ICT inventory, not the product label. Scope every component and preserve a separate evidence trail for each applicable chapter.",
+    studyHref: "#regulations"
+  },
+  {
+    id: "508-internal-content",
+    title: "Distinguish covered internal content",
+    competency: "E205 official communications",
+    source: "Revised 508 E205.3",
+    prompt: "Which non-public agency item most clearly falls outside the nine categories of agency official communication, assuming it is not otherwise public-facing?",
+    choices: [
+      ["a", "A required cybersecurity training quiz sent to employees.", "Educational and training materials are one of the nine named categories."],
+      ["b", "An employee survey measuring workplace satisfaction.", "Survey questionnaires are one of the nine named categories."],
+      ["c", "An informal set of personal brainstorming notes never distributed as agency business.", "Correct: private, informal working notes do not become covered official communications merely because they are electronic."],
+      ["d", "An email formally acknowledging receipt of a benefits application.", "A formal acknowledgment of receipt is one of the nine named categories."]
+    ],
+    answer: "c",
+    explanation: "For non-public content, classify the communication by purpose. The delivery channel does not decide coverage; the nine E205.3 categories do.",
+    studyHref: "#regulations"
+  },
+  {
+    id: "508-document-exclusions",
+    title: "Apply the non-web document baseline",
+    competency: "Incorporated WCAG",
+    source: "Revised 508 E205.4",
+    prompt: "A covered, non-web PDF is an agency training handout. Which set identifies the four WCAG 2.0 success criteria excluded from the non-web electronic-content mapping?",
+    choices: [
+      ["a", "1.4.10 Reflow, 2.5.5 Target Size, 3.1.2 Language of Parts, and 4.1.3 Status Messages", "These are not the four non-web exclusions, and several did not exist in WCAG 2.0."],
+      ["b", "2.4.1 Bypass Blocks, 2.4.5 Multiple Ways, 3.2.3 Consistent Navigation, and 3.2.4 Consistent Identification", "Correct: these four provisions are excluded in the non-web mapping."],
+      ["c", "1.2.2 Captions, 1.2.5 Audio Description, 2.1.1 Keyboard, and 2.3.1 Three Flashes", "Media and keyboard requirements remain applicable when their conditions are present."],
+      ["d", "All of Guideline 2.4 and Guideline 3.2", "The adjustment is limited to four named success criteria, not two entire guidelines."]
+    ],
+    answer: "b",
+    explanation: "The exclusions are narrow. They do not remove requirements for headings, meaningful sequence, text alternatives, contrast, keyboard operation, or accessible forms.",
+    studyHref: "#regulations"
+  },
+  {
+    id: "508-web-software",
+    title: "Do not stop at a WCAG pass",
+    competency: "Software requirements",
+    source: "Revised 508 E207; 502; 503; 602; 603",
+    prompt: "A browser-based federal case-management application passes every applicable WCAG 2.0 A/AA test. What evidence is still needed before claiming complete Section 508 coverage for the software component?",
+    choices: [
+      ["a", "None; WCAG is the complete Section 508 standard for all software.", "The Revised 508 Standards add software interoperability, application, documentation, and support requirements."],
+      ["b", "Only a WCAG 2.2 AAA automated scan.", "A later or higher WCAG target can be useful, but it does not substitute for the applicable non-WCAG requirements."],
+      ["c", "Evidence for 502 interoperability, 503 applications, 602 documentation, 603 support services, and any functional-performance review required by E204.", "Correct: these requirements sit alongside the incorporated WCAG baseline."],
+      ["d", "A vendor statement that the product works with one screen reader.", "A narrow compatibility assertion is not reproducible evidence across the applicable provisions."]
+    ],
+    answer: "c",
+    explanation: "WCAG is a major technical baseline under Section 508, not the entire rule. Software and support obligations require their own tests and evidence.",
+    studyHref: "#regulations"
+  },
+  {
+    id: "508-authoring-tool",
+    title: "Recognise authoring-tool scope",
+    competency: "Chapter 5",
+    source: "Revised 508 504",
+    prompt: "An agency procures a low-code tool whose users build public web forms. The forms can be accessible after manual code repair, but the tool drops accessibility information when templates are edited and gives authors no accessibility prompts. What is the most complete analysis?",
+    choices: [
+      ["a", "Test only the published forms against WCAG because authoring behavior is outside Section 508.", "Published output matters, but the tool's authoring functions separately trigger 504."],
+      ["b", "Apply the software requirements and 504, including preservation of accessibility information and support for producing accessible output.", "Correct: tools used to create or modify content for others are authoring tools, so 504 adds requirements."],
+      ["c", "Treat the tool solely as support documentation because authors use it for guidance.", "The primary item is software with authoring functionality, not merely documentation."],
+      ["d", "Accept manual remediation as equivalent facilitation without an outcome comparison or agency decision.", "Equivalent facilitation requires substantially equivalent or greater accessibility and an accountable determination; it is not an informal workaround label."]
+    ],
+    answer: "b",
+    explanation: "Test both the application and the authoring workflow. Accessible final output alone does not answer whether the procured authoring tool meets 504.",
+    studyHref: "#regulations"
+  },
+  {
+    id: "508-closed-functionality",
+    title: "Test closed functionality",
+    competency: "Chapter 4",
+    source: "Revised 508 402; 407–415",
+    prompt: "A ticket kiosk prevents users from attaching or installing assistive technology. The same transaction is accessible on a separate website. Which test decision is defensible?",
+    choices: [
+      ["a", "Skip the kiosk because an accessible website automatically makes it a conforming alternate version.", "Alternate versions are constrained, and a separate channel does not erase requirements scoped to the kiosk."],
+      ["b", "Test 402 closed functionality and every applicable hardware provision, plus the kiosk's own software and content; document the website separately.", "Correct: the kiosk must be evaluated as the ICT actually provided."],
+      ["c", "Run only a screen-reader test on the separate website.", "That produces no evidence about privacy, operable parts, display, speech output, or the closed kiosk journey."],
+      ["d", "Apply only WCAG 2.2 because all modern kiosks are web content.", "Kiosks can combine hardware, closed software, and content; Chapter 4 is not replaced by WCAG."]
+    ],
+    answer: "b",
+    explanation: "Closed functionality is a signal to expand the test plan. Verify nonvisual access, privacy, operable parts, time, audio, displays, and other provisions actually triggered by the device.",
+    studyHref: "#regulations"
+  },
+  {
+    id: "508-functional-performance",
+    title: "Use functional performance correctly",
+    competency: "E204 and Chapter 3",
+    source: "Revised 508 E204; 301–302",
+    prompt: "When should a team use Chapter 3 functional performance criteria in a Section 508 analysis?",
+    choices: [
+      ["a", "As a universal substitute whenever testing technical provisions is inconvenient.", "Functional performance criteria do not provide a convenience exception to Chapters 4 and 5."],
+      ["b", "Only after every user with a disability has completed a usability study.", "User research is valuable, but this is not the scoping trigger stated in E204."],
+      ["c", "When Chapters 4 or 5 do not address one or more functions, or when evaluating substantially equivalent access under equivalent facilitation.", "Correct: E204 and E101.2 identify these roles for functional performance."],
+      ["d", "Never, because WCAG completely replaced Chapter 3.", "Chapter 3 remains part of the Revised 508 Standards and has defined scoping roles."]
+    ],
+    answer: "c",
+    explanation: "Functional performance is an outcome backstop and an equivalent-facilitation measure, not a blanket replacement for technical requirements.",
+    studyHref: "#regulations"
+  },
+  {
+    id: "508-support",
+    title: "Include the support experience",
+    competency: "Chapter 6",
+    source: "Revised 508 602–603",
+    prompt: "An agency application itself conforms, but its setup guide is an untagged PDF and the help desk refuses relay calls. What should the conformance report say?",
+    choices: [
+      ["a", "Conforming, because support sits outside the ICT product.", "Chapter 6 explicitly covers support documentation and support services."],
+      ["b", "Partially tested: record separate failures under 602 and 603 and avoid a complete-conformance claim until the scoped support barriers are resolved.", "Correct: interface conformance does not cancel independent support obligations."],
+      ["c", "Conforming if the vendor promises to update the guide after deployment.", "A future promise is remediation planning, not current conformance evidence."],
+      ["d", "Test the guide only against color contrast because documents do not need structure.", "Covered electronic documents retain many WCAG requirements, including programmatic structure and meaningful sequence."]
+    ],
+    answer: "b",
+    explanation: "Report at the requirement and component level. A single global label would hide material barriers in documentation and support.",
+    studyHref: "#regulations"
+  },
+  {
+    id: "508-sequence",
+    title: "Judge a complete process",
+    competency: "Conformance",
+    source: "WCAG conformance as incorporated by Revised 508",
+    prompt: "A four-step federal benefits application passes at steps 1, 2, and 4. At step 3, a keyboard user cannot activate the upload control. Which statement is accurate?",
+    choices: [
+      ["a", "The process conforms because 75% of its pages pass.", "WCAG conformance is not averaged across pages or process steps."],
+      ["b", "Only step 3 needs to be reported; the complete process cannot be claimed conforming while a required step fails.", "Correct: every page in a complete process must conform at the claimed level."],
+      ["c", "The process conforms if most users can email the file later.", "An informal workaround does not establish conformance of the provided process."],
+      ["d", "The failure is excluded because file upload is software rather than content.", "The control is part of the web application's required user journey and remains in scope."]
+    ],
+    answer: "b",
+    explanation: "Conformance is not a percentage score. Preserve both the page-level finding and its consequence for the end-to-end process claim.",
+    studyHref: "#regulations"
+  },
+  {
+    id: "508-public-facing",
+    title: "Interpret public-facing content",
+    competency: "E205 scoping",
+    source: "Revised 508 E205.2",
+    prompt: "An agency publishes emergency instructions only on a public social-media account and on a display in a federal waiting room. Neither item sits on the agency's main website. What is the right first conclusion?",
+    choices: [
+      ["a", "Neither is covered because public-facing means HTML on an agency-owned domain.", "Public-facing is based on availability to the general public, not ownership of the platform or an HTML-only format."],
+      ["b", "Both are candidates for public-facing electronic-content scope; classify their formats and any hardware/software components before mapping requirements.", "Correct: public-facing content can appear on third-party platforms or non-web displays."],
+      ["c", "Only the social-media post is covered because displays cannot contain electronic content.", "Content on a display can be public-facing and the display may introduce hardware requirements too."],
+      ["d", "Only the waiting-room display is covered because social media is always exempt third-party content.", "Platform ownership alone does not create a categorical exemption for agency-published content."]
+    ],
+    answer: "b",
+    explanation: "Ask who can access the agency content and what components deliver it. Do not equate public-facing with 'a page on our website.'",
+    studyHref: "#regulations"
+  },
+  {
+    id: "508-nara-component",
+    title: "Limit an exception to its component",
+    competency: "Exception analysis",
+    source: "Revised 508 E205.3 note; Section508.gov applicability sequence",
+    prompt: "A records-search product contains archived electronic records maintained by NARA, new search software, and public help documentation. A content exception applies to the archived records. What follows?",
+    choices: [
+      ["a", "The entire product is outside Section 508 because one content component is excepted.", "An exception for archived records does not automatically extend to separately scoped software or documentation."],
+      ["b", "Continue scoping the search software and help documentation, and document the exact boundary of the records exception.", "Correct: exceptions must be applied at the relevant component and the remaining ICT still needs analysis."],
+      ["c", "Test the records but ignore the new software because content always controls the product classification.", "The software is an independent ICT component with its own scoping requirements."],
+      ["d", "Replace all testing with an ACR requested from the vendor.", "A vendor report can contribute evidence but does not perform the agency's scoping decision or resolve uncovered components."]
+    ],
+    answer: "b",
+    explanation: "Write the exception as a bounded decision: what component, under what provision, decided by whom, and what remains in scope.",
+    studyHref: "#regulations"
+  },
+  {
+    id: "508-at-exception",
+    title: "Scope assistive technology",
+    competency: "Software exceptions",
+    source: "Section508.gov software applicability sequence",
+    prompt: "A federal solution bundles assistive-technology software with a mainstream desktop application and dedicated hardware. The AT software component is treated as not having to conform under the software applicability sequence. Which next step is correct?",
+    choices: [
+      ["a", "Close the review because any presence of assistive technology exempts the bundle.", "The determination applies to the AT software component, not automatically to other software or hardware."],
+      ["b", "Continue scoping the mainstream application and hardware, recording the boundary and rationale for the AT software determination.", "Correct: the other components retain their own applicability analysis."],
+      ["c", "Test only the AT software against WCAG AAA.", "This reverses the applicability result and ignores the in-scope components."],
+      ["d", "Apply only Chapter 6 because assistive technology is a support service.", "Assistive technology is not automatically classified as support, and the rest of the bundle remains software/hardware."]
+    ],
+    answer: "b",
+    explanation: "Component boundaries matter throughout Section 508. Never promote a narrow exception into a product-wide conclusion without a provision that supports it.",
+    studyHref: "#regulations"
+  },
+  {
+    id: "508-acr-evidence",
+    title: "Evaluate a vendor claim",
+    competency: "Procurement evidence",
+    source: "Section 508 acquisition process",
+    prompt: "A vendor's ACR marks every row 'Supports' but provides identical text—'the product is accessible'—for each criterion and omits test methods, versions, and known limitations. What is the best procurement response?",
+    choices: [
+      ["a", "Accept it as conclusive because the ACR format is itself a federal certification.", "An ACR records a vendor's conformance claim; its presence does not make vague assertions sufficient evidence."],
+      ["b", "Request criterion-specific evidence, tested versions and configurations, methods, limitations, and clarification for the scoped non-WCAG requirements; validate high-risk claims.", "Correct: useful evidence must be specific enough to assess and reproduce."],
+      ["c", "Reject the product solely because no product can support every criterion.", "Some criteria can legitimately be not applicable or supported; the problem here is unsupported, non-specific evidence."],
+      ["d", "Replace the ACR with a single automated WCAG scan of the marketing site.", "That would neither test the procured product nor cover manual and non-WCAG requirements."]
+    ],
+    answer: "b",
+    explanation: "Treat an ACR as structured evidence to interrogate, not a compliance certificate. Procurement decisions need scope-matched, version-specific detail.",
+    studyHref: "#regulations"
+  },
+  {
+    id: "508-alternate-version",
+    title: "Challenge an alternate-version claim",
+    competency: "Conformance judgment",
+    source: "Revised 508 E101.2, E205, and E207",
+    prompt: "A team leaves an inaccessible primary federal form unchanged and offers a simplified accessible form at another URL. Which review comment is strongest?",
+    choices: [
+      ["a", "Approve automatically because any accessible alternate satisfies Section 508.", "The Revised 508 Standards place constraints on alternate versions and equivalent facilitation."],
+      ["b", "Reject automatically because alternate designs are never allowed.", "Equivalent facilitation and some conforming alternate-version paths exist, but they require a defensible, scoped analysis."],
+      ["c", "Require the accountable owner to show the applicable basis and that access and usability are substantially equivalent or greater; document why direct conformance is not the operative path.", "Correct: the claim needs a provision-specific decision and evidence, not a convenient label."],
+      ["d", "Compare only the two home pages because process completion is irrelevant.", "The comparison must cover the information, functionality, and complete user journey affected by the claim."]
+    ],
+    answer: "c",
+    explanation: "Do not let 'alternate' collapse several legal concepts. Record the exact provision, equivalence evidence, process coverage, and decision owner.",
+    studyHref: "#regulations"
+  }
+];
+
+const ADVANCED_WCAG_QUESTIONS = [
+  {
+    id: "wcag-name-label",
+    title: "Separate name rules",
+    competency: "Criterion discrimination",
+    source: "WCAG 2.2: 2.5.3 and 4.1.2",
+    prompt: "A speech-input user says “Search products” to a button whose visible text is “Search products,” but its accessible name is “Find catalogue.” Screen readers still announce a role and name. Which analysis is most precise?",
+    choices: [
+      ["a", "Only 4.1.2 fails because the button has no programmatic name.", "The control does have a programmatic name; the mismatch is the central problem."],
+      ["b", "2.5.3 is the direct failure because the accessible name does not contain the visible label; 4.1.2 may still pass its basic name requirement.", "Correct: Label in Name protects alignment between visible text and the programmatic name used by speech input."],
+      ["c", "1.3.1 fails because all visible text must be encoded as a heading.", "The issue is not structural heading information."],
+      ["d", "No criterion fails because accessible and visible labels may always use unrelated synonyms.", "Unrelated names can prevent voice users from activating the control by speaking what they see." ]
+    ],
+    answer: "b",
+    explanation: "Choose the narrowest criterion that explains the user failure. A named control can satisfy one aspect of 4.1.2 while still failing 2.5.3.",
+    studyHref: "#lesson/label-in-name"
+  },
+  {
+    id: "wcag-dragging",
+    title: "Distinguish dragging from path gestures",
+    competency: "Input alternatives",
+    source: "WCAG 2.2: 2.5.1 and 2.5.7",
+    prompt: "A kanban card can be moved only by holding and dragging it in a straight line. The gesture does not require drawing a particular path. Which success criterion is the best primary match?",
+    choices: [
+      ["a", "2.5.1 Pointer Gestures, because every drag is a path-based gesture.", "2.5.1 targets multipoint or path-based gestures; a drag is separately addressed even when its path is arbitrary."],
+      ["b", "2.5.7 Dragging Movements, because functionality that uses dragging needs a non-dragging single-pointer alternative unless dragging is essential.", "Correct: the defining interaction is the maintained-contact dragging movement."],
+      ["c", "2.1.2 No Keyboard Trap, because the pointer remains captured while moving.", "Pointer capture is not itself a keyboard trap."],
+      ["d", "1.4.13 Content on Hover or Focus, because the card changes position.", "The issue is an input method, not dismissible hover-triggered content."]
+    ],
+    answer: "b",
+    explanation: "Classify the motor action precisely. Add controls such as Move left/right or a destination menu, then separately verify keyboard operation.",
+    studyHref: "#lesson/dragging-movements"
+  },
+  {
+    id: "wcag-status-name",
+    title: "Separate status updates from control semantics",
+    competency: "Dynamic content",
+    source: "WCAG 2.2: 4.1.2 and 4.1.3",
+    prompt: "Submitting a form adds “Saved” visually without moving focus. The submit button already has a correct role, name, value, and state. A screen reader announces nothing. What is the strongest primary finding?",
+    choices: [
+      ["a", "4.1.2 Name, Role, Value, because every unannounced change is a control-state failure.", "The control semantics are already correct; the missing information is a status update."],
+      ["b", "4.1.3 Status Messages, because the update communicates success without a focus change and is not programmatically exposed as a status.", "Correct: users should receive the result through role or properties without focus being moved."],
+      ["c", "2.4.3 Focus Order, because focus must always move to confirmation text.", "Status messages are designed to be conveyed without requiring a focus move."],
+      ["d", "3.3.1 Error Identification, because saving is an input error.", "A successful save is not an error condition."]
+    ],
+    answer: "b",
+    explanation: "Test what changed and what the message does. Correct control semantics do not automatically expose a separate dynamic result.",
+    studyHref: "#lesson/status-messages"
+  },
+  {
+    id: "wcag-errors",
+    title: "Layer form-error requirements",
+    competency: "Overlapping criteria",
+    source: "WCAG 2.2: 3.3.1, 3.3.3, and 3.3.4",
+    prompt: "A tax-payment form marks an invalid account number only with a red border. It neither identifies the field in text nor suggests the required format, and submission immediately creates a legally binding payment. Which assessment is most complete?",
+    choices: [
+      ["a", "Only 1.4.1 Use of Color can fail because all error requirements collapse into color use.", "Color is one problem, but the scenario supplies evidence relevant to multiple independent error and legal-transaction safeguards."],
+      ["b", "Assess 1.4.1 and 3.3.1; also assess 3.3.3 if a known correction can be suggested, and 3.3.4 for review, confirmation, or reversibility of the legal transaction.", "Correct: overlapping criteria protect different outcomes and should be reported separately when their conditions apply."],
+      ["c", "Only 3.3.4 applies because legal transactions override all lower-level criteria.", "Conformance requirements accumulate; a higher-risk context does not remove the basic error-identification obligations."],
+      ["d", "No failure exists if the server rejects the number after submission.", "Server rejection does not make the error identifiable or provide the required prevention safeguards."]
+    ],
+    answer: "b",
+    explanation: "Hard questions often have several true observations. Choose the option that preserves each distinct user outcome without treating one criterion as a catch-all.",
+    studyHref: "#lesson/error-identification"
+  },
+  {
+    id: "wcag-focus-obscured",
+    title: "Evaluate sticky overlays",
+    competency: "Focus visibility",
+    source: "WCAG 2.2: 2.4.11 and 2.4.12",
+    prompt: "When keyboard focus moves to the final link, a sticky cookie banner covers the lower half of its focus indicator but leaves the upper half visible. Which statement is correct at WCAG 2.2?",
+    choices: [
+      ["a", "It necessarily fails 2.4.11 Focus Not Obscured (Minimum), because any covered pixel is a failure.", "The minimum criterion requires that the focused component is not entirely hidden by author-created content."],
+      ["b", "It can pass 2.4.11 while failing the AAA 2.4.12 Focus Not Obscured (Enhanced), which requires the component not be obscured at all.", "Correct: partial visibility distinguishes the minimum and enhanced outcomes, subject to the exact component geometry."],
+      ["c", "It fails only 1.4.11 Non-text Contrast, regardless of indicator color.", "Obscuring and contrast are separate tests; no color measurements are given."],
+      ["d", "It always passes because cookie banners are user-agent content.", "An author-provided sticky banner is author-created content and remains relevant to the criterion."]
+    ],
+    answer: "b",
+    explanation: "Do not import the stricter AAA threshold into AA. Record whether the focused component is fully or partially obscured and which conformance target is being assessed.",
+    studyHref: "#lesson/focus-not-obscured-minimum"
+  },
+  {
+    id: "wcag-authentication",
+    title: "Analyse authentication effort",
+    competency: "Cognitive access",
+    source: "WCAG 2.2: 3.3.8",
+    prompt: "A sign-in flow requires users to memorize a one-time code shown on the same device, disables paste, and offers no password manager, copy, object-recognition, or other mechanism. What is the best AA analysis?",
+    choices: [
+      ["a", "No issue, because one-time codes are categorically exempt from accessible authentication.", "A code does not create a blanket exception; the test concerns the cognitive function required and available alternatives or assistance."],
+      ["b", "Assess 3.3.8 Accessible Authentication (Minimum): memorization is required without an alternative, assistance mechanism, or qualifying object/personal-content recognition path.", "Correct: the scenario intentionally removes mechanisms that could avoid the cognitive-function test."],
+      ["c", "Only 2.2.1 Timing Adjustable applies because all authentication problems are time limits.", "Timing may also matter, but the stated barrier is forced memorization without assistance."],
+      ["d", "Only 1.3.5 Identify Input Purpose applies because the code field lacks autocomplete.", "Input-purpose metadata is different from requiring a cognitive-function test to authenticate."]
+    ],
+    answer: "b",
+    explanation: "Test the actual cognitive task and the mechanisms offered. Do not decide from the authentication technology's label alone.",
+    studyHref: "#lesson/accessible-authentication-minimum"
+  },
+  {
+    id: "wcag-redundant-entry",
+    title: "Recognise repeated data",
+    competency: "Cognitive access",
+    source: "WCAG 2.2: 3.3.7",
+    prompt: "During one application process, a user enters their address in step 1. Step 4 asks for the same address again, but allows the user to select “Use application address,” which populates editable fields. What is the strongest conclusion?",
+    choices: [
+      ["a", "It automatically fails 3.3.7 because repeated information may never appear again.", "The criterion allows previously entered information to be auto-populated or available for selection, with exceptions."],
+      ["b", "The selection mechanism can satisfy 3.3.7 because the previously entered information is available for reuse and remains editable.", "Correct: the mechanism avoids requiring the user to recall and re-enter the same data."],
+      ["c", "It passes only if browser autocomplete is the sole reuse method.", "The criterion does not require one particular technology; selectable reuse is expressly relevant."],
+      ["d", "The only applicable criterion is 1.3.5 because addresses are input purposes.", "Input-purpose metadata and redundant entry protect different outcomes."]
+    ],
+    answer: "b",
+    explanation: "Focus on whether the process forces recall and re-entry. A usable selection or auto-population path can satisfy the outcome.",
+    studyHref: "#lesson/redundant-entry"
+  },
+  {
+    id: "wcag-target-spacing",
+    title: "Apply target-size exceptions",
+    competency: "Pointer access",
+    source: "WCAG 2.2: 2.5.8",
+    prompt: "A 16 by 16 CSS-pixel icon button sits inside a table row. No other pointer target intersects a 24-pixel-diameter circle centered on it, and equivalent controls are not provided elsewhere. What additional fact is decisive for the spacing exception?",
+    choices: [
+      ["a", "Whether the icon has an accessible name.", "Naming is important but does not determine the target-size spacing exception."],
+      ["b", "Whether the 24-pixel circle around the undersized target intersects the same kind of circle around any adjacent undersized target.", "Correct: the spacing method evaluates separation between undersized targets, not merely visible edge-to-edge distance."],
+      ["c", "Whether the table uses zebra striping.", "Row styling does not affect the target geometry."],
+      ["d", "Whether the button is reached in a logical keyboard order.", "Keyboard order is a separate requirement and does not settle pointer target size."]
+    ],
+    answer: "b",
+    explanation: "Measure the exception exactly rather than guessing from visual density. Then test other applicable requirements such as name, contrast, and keyboard access separately.",
+    studyHref: "#lesson/target-size-minimum"
+  },
+  {
+    id: "wcag-text-spacing-reflow",
+    title: "Separate reflow from text spacing",
+    competency: "Visual adaptation",
+    source: "WCAG 2.2: 1.4.10 and 1.4.12",
+    prompt: "At 320 CSS pixels wide, a page has no two-dimensional scrolling. After a user applies the specified text-spacing overrides, button labels are clipped and controls overlap. Which finding is best supported?",
+    choices: [
+      ["a", "Only 1.4.10 Reflow fails because all viewport and spacing adaptations are the same test.", "The viewport already reflows; the new failure is caused by user-applied text spacing."],
+      ["b", "1.4.12 Text Spacing is directly implicated; 1.4.10 may pass in the tested narrow viewport because no two-dimensional scrolling or loss was observed before the spacing override.", "Correct: the tests have different conditions and must not be conflated."],
+      ["c", "1.4.4 Resize Text necessarily fails even though no zoom or text-resize result is described.", "The prompt provides no evidence from the resize-text test condition."],
+      ["d", "No failure exists because custom user styles are never covered.", "1.4.12 specifically tests whether content remains usable when users override defined text-spacing properties."]
+    ],
+    answer: "b",
+    explanation: "Attribute the failure to the condition that caused it. Related responsive criteria should be tested independently and reported only with evidence.",
+    studyHref: "#lesson/text-spacing"
+  },
+  {
+    id: "wcag-media",
+    title: "Classify prerecorded media alternatives",
+    competency: "Time-based media",
+    source: "WCAG 2.2: 1.2.2, 1.2.3, and 1.2.5",
+    prompt: "A prerecorded training video has dialogue, meaningful silent demonstrations, accurate captions, and no audio description. A complete text alternative describes both the dialogue and visual demonstrations. At Level AA, what is the most precise result?",
+    choices: [
+      ["a", "The text alternative always substitutes for audio description at Level AA.", "At Level AA, 1.2.5 requires audio description for prerecorded video; the Level A alternative in 1.2.3 does not replace it."],
+      ["b", "1.2.2 can pass through the captions and 1.2.3 can pass through the text alternative, but 1.2.5 fails without audio description of essential visual information.", "Correct: each criterion and conformance level adds a distinct media outcome."],
+      ["c", "Only 1.2.1 applies because every prerecorded video is audio-only content.", "A synchronized audiovisual training video is not audio-only or video-only content."],
+      ["d", "All media criteria pass because the dialogue is captioned.", "Captions expose audio information but do not convey meaningful visual demonstrations to users who cannot see them."]
+    ],
+    answer: "b",
+    explanation: "Track media modality, prerecorded/live status, the information missing from each channel, and the claimed conformance level before choosing a criterion.",
+    studyHref: "#lesson/audio-description-prerecorded"
+  }
+];
+
+const ADVANCED_QUESTION_BANK = [...SECTION_508_QUESTIONS, ...ADVANCED_WCAG_QUESTIONS];
 
 const MINI_TUTORIALS = [
   {
@@ -981,6 +1487,223 @@ const OFFICIAL_DOCS = [
   }
 ];
 
+const AUTHORITY_CHAINS = [
+  {
+    jurisdiction: "United States",
+    title: "Section 508 authority chain",
+    description: "Trace a conclusion from the legal duty to the evidence. Each layer answers a different question.",
+    steps: [
+      ["1", "Statute", "29 U.S.C. § 794d", "Creates the federal-agency duty for ICT developed, procured, maintained, or used."],
+      ["2", "Regulation", "36 CFR Part 1194, Appendices A and C", "Supplies scoping rules, exceptions, and technical requirements."],
+      ["3", "Incorporated standard", "WCAG 2.0 Level A and AA", "Provides criteria incorporated for applicable web, content, and software."],
+      ["4", "Evidence", "Agency method and ICT Testing Baseline", "Shows how provisions were evaluated; it does not create the duty."]
+    ]
+  },
+  {
+    jurisdiction: "European Union",
+    title: "European Accessibility Act authority chain",
+    description: "Keep EU legislation, national law, standards, and evidence separate.",
+    steps: [
+      ["1", "EU legislation", "Directive (EU) 2019/882", "Defines Union-level scope, requirements, operator duties, limitations, and transitions."],
+      ["2", "National law", "Member State implementing measure", "Controls the jurisdiction-specific enforcement route, procedures, and penalties."],
+      ["3", "Conformity route", "Cited harmonised standard", "Can give limited presumption of conformity when the Article 15 conditions are met."],
+      ["4", "Evidence", "Assessment and technical documentation", "Supports conformity or a properly bounded limitation claim."]
+    ]
+  }
+];
+
+const LEGAL_DOCUMENTS = [
+  {
+    title: "Section 508 statute — 29 U.S.C. § 794d",
+    url: "https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title29-section794d&num=0&edition=prelim",
+    jurisdiction: "us", authority: "legislation", force: "Binding federal statute", reference: "29 U.S.C. § 794d",
+    use: "Identify the federal-agency duty and statutory boundaries before moving to the Access Board standards.",
+    question: "What duty exists, for whom, and for what ICT activity?"
+  },
+  {
+    title: "Revised 508 Standards",
+    url: "https://www.access-board.gov/ict/",
+    jurisdiction: "us", authority: "regulation", force: "Mandatory standards in 36 CFR Part 1194", reference: "Appendices A and C",
+    use: "Use scoping Chapters 1–2 before selecting technical provisions in Chapters 3–7.",
+    question: "Which component, exception, and technical chapter control?"
+  },
+  {
+    title: "WCAG 2.0 incorporated by reference",
+    url: "https://www.access-board.gov/ict/#E205.4",
+    jurisdiction: "us", authority: "standard", force: "Binding where the Revised 508 Standards incorporate it", reference: "E205.4 and E207.2",
+    use: "Apply Level A and AA as incorporated, including the four named exclusions for non-web documents and software.",
+    question: "Which WCAG version and mapping does the regulation invoke?"
+  },
+  {
+    title: "ICT Testing Baseline Portfolio",
+    url: "https://www.section508.gov/test/ict-testing-baseline-portfolio/",
+    jurisdiction: "us", authority: "testing", force: "Official test components; not a legal standard", reference: "Section508.gov",
+    use: "Build consistent test evidence while citing the controlling Revised 508 provision separately.",
+    question: "What reproducible evidence demonstrates the requirement?"
+  },
+  {
+    title: "European Accessibility Act legal text",
+    url: "https://eur-lex.europa.eu/eli/dir/2019/882/oj",
+    jurisdiction: "eu", authority: "legislation", force: "EU directive requiring national implementation", reference: "Directive (EU) 2019/882",
+    use: "Read the relevant Article with its Annex, definitions, limitations, operator duties, and Article 32 transitions.",
+    question: "Is the item in scope, and which Annex I section applies?"
+  },
+  {
+    title: "National implementing legislation lookup",
+    url: "https://commission.europa.eu/law/search-law/national-law_en",
+    jurisdiction: "eu", authority: "legislation", force: "National law controls jurisdiction-specific enforcement", reference: "Member State transposition",
+    use: "Find the implementing measure, competent authority, procedures, and penalties connected to the facts.",
+    question: "Which national measure and authority govern?"
+  },
+  {
+    title: "EAA accessibility requirements",
+    url: "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32019L0882",
+    jurisdiction: "eu", authority: "legislation", force: "Directive requirements as implemented nationally", reference: "Article 4 and Annex I",
+    use: "Map the product or service to the common, specific, and functional-performance requirements that apply.",
+    question: "Which exact requirement applies to this feature and operator?"
+  },
+  {
+    title: "EAA presumption of conformity",
+    url: "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32019L0882",
+    jurisdiction: "eu", authority: "standard", force: "Conditional conformity route", reference: "Article 15",
+    use: "Verify the current Official Journal reference, edition, scope, and requirements covered before claiming presumption.",
+    question: "Is the standard currently cited, applicable, and complete for this claim?"
+  },
+  {
+    title: "Fundamental alteration and disproportionate burden",
+    url: "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32019L0882",
+    jurisdiction: "eu", authority: "legislation", force: "Narrow limitation requiring assessment", reference: "Article 14 and Annex VI",
+    use: "Document the assessment, retain evidence, and reassess it when the law or service facts require.",
+    question: "What supports the limitation, and when must it be reassessed?"
+  },
+  {
+    title: "WCAG 2.2 Recommendation",
+    url: "https://www.w3.org/TR/WCAG22/",
+    jurisdiction: "foundation", authority: "standard", force: "W3C Recommendation; legal force depends on adoption", reference: "WCAG 2.2",
+    use: "Use as the current W3C standard without silently replacing the WCAG version incorporated by controlling law.",
+    question: "Is this the technical target, the legally incorporated version, or both?"
+  }
+];
+
+const CASEBOOK_CASES = [
+  {
+    id: "federal-personnel-pdf", title: "The internal personnel-action packet", law: "Section 508", difficulty: "Advanced",
+    brief: "A federal agency distributes a nonpublic PDF confirming an employee promotion and requiring acknowledgement. The manager says internal documents are outside Section 508; the tester uses WCAG 2.2 but never records why the packet is covered.",
+    task: "Build a defensible coverage and baseline memo.",
+    dimensions: [
+      {
+        id: "scope", label: "Scope conclusion", prompt: "Which fact most directly establishes coverage?", answer: "personnel",
+        choices: [["public", "Every employee is legally part of the public."], ["personnel", "It is a formal personnel action, one of E205.3's nine official-communication categories."], ["pdf", "Every federal PDF is automatically covered."], ["control", "Only the acknowledgement control is covered."]],
+        explanation: "E205.3 category 4 covers formal personnel actions. Internal delivery alone neither proves nor defeats coverage."
+      },
+      {
+        id: "baseline", label: "Controlling baseline", prompt: "Which baseline belongs in the memo?", answer: "e205",
+        choices: [["wcag22", "WCAG 2.2 AAA because the newest version is automatically law."], ["e205", "E205.4: WCAG 2.0 A/AA with the four named non-web exclusions."], ["hardware", "Chapter 4 because a computer displays the PDF."], ["aria", "ARIA APG as the complete legal baseline."]],
+        explanation: "The four exclusions are 2.4.1, 2.4.5, 3.2.3, and 3.2.4. WCAG 2.2 may be an additional policy target, but it is not the incorporated Section 508 version."
+      },
+      {
+        id: "authority", label: "Authority trail", prompt: "Which chain best supports the conclusion?", answer: "chain",
+        choices: [["chain", "29 U.S.C. § 794d → 36 CFR Part 1194 E205.3/E205.4 → incorporated WCAG 2.0."], ["blog", "Blog → scanner score → vendor statement."], ["wcag", "WCAG 2.2 alone, without Section 508 scoping."], ["policy", "Agency policy, even if it conflicts with the regulation."]],
+        explanation: "Trace statute to the Revised 508 scoping provision and then to incorporated criteria. Guidance explains; it does not replace the authority chain."
+      },
+      {
+        id: "evidence", label: "Evidence record", prompt: "Which evidence package is strongest?", answer: "record",
+        choices: [["score", "A passing automated PDF score."], ["record", "Coverage rationale, provisions, exclusions, manual/tool results, impact, owner, and retest record."], ["reader", "A statement that it opens in one screen reader."], ["checklist", "A WCAG 2.2 checklist with no Section 508 mapping."]],
+        explanation: "A defensible record separates coverage, baseline, evidence, impact, ownership, and retest. A tool score cannot establish legal scope."
+      }
+    ],
+    memo: ["Covered under E205.3 category 4 as a formal personnel action.", "Apply E205.4's incorporated WCAG 2.0 A/AA baseline and record the four exclusions.", "Treat any WCAG 2.2 target as an additional policy commitment and retain criterion-level evidence."],
+    caution: "Coverage of this packet does not make every unrelated file in the repository covered."
+  },
+  {
+    id: "federal-kiosk", title: "The ‘WCAG-passing’ kiosk acquisition", law: "Section 508", difficulty: "Expert",
+    brief: "An agency is acquiring a benefits kiosk package: web portal, authoring CMS, locked-down kiosk, receipt PDFs, manual, and vendor help desk. The portal passes WCAG 2.0 A/AA, so procurement proposes marking the entire package conformant.",
+    task: "Scope the package and identify the evidence still required.",
+    dimensions: [
+      {
+        id: "scope", label: "Component analysis", prompt: "What is the strongest scoping approach?", answer: "inventory",
+        choices: [["portal", "Use the portal result for the whole package."], ["inventory", "Inventory each component and map content, software, hardware, authoring, documentation, and support."], ["hardware", "Call the whole package hardware."], ["fpc", "Apply only functional performance criteria."]],
+        explanation: "E205–E208 route different components to Chapters 3–6. One acquisition can require several evidence tracks."
+      },
+      {
+        id: "missing", label: "Missing provisions", prompt: "What remains after the portal WCAG pass?", answer: "chapters",
+        choices: [["none", "Nothing."], ["chapters", "Closed functionality/hardware, interoperability, authoring, receipts, documentation, and support."], ["aaa", "Only automated WCAG 2.2 AAA."], ["mobile", "Only mobile-app testing."]],
+        explanation: "Relevant requirements can include 402, Chapter 4, 502–504, 602, and 603 in addition to WCAG. Facts decide the exact mapping."
+      },
+      {
+        id: "exception", label: "Exception handling", prompt: "The kiosk blocks user-installed assistive technology. What follows?", answer: "closed",
+        choices: [["waiver", "The whole package is exempt."], ["closed", "Assess closed-functionality requirements and document any separate exception or equivalent-facilitation decision."], ["ignore", "Ignore nonvisual operation."], ["vendor", "Let the vendor make the agency decision."]],
+        explanation: "Closed functionality is a requirement path, not a waiver. Any exception is tied to a component, provision, owner, and evidence."
+      },
+      {
+        id: "record", label: "Procurement record", prompt: "Which record is defensible?", answer: "matrix",
+        choices: [["matrix", "Component-by-provision matrix, results, gaps, exception decisions, commitments, and acceptance criteria."], ["vpat", "Only the supplier ACR."], ["scan", "Only the portal scan."], ["promise", "A general promise to fix later."]],
+        explanation: "Supplier claims are inputs. The agency record must show what was evaluated, accepted, remediated, or escalated."
+      }
+    ],
+    memo: ["Inventory every ICT component rather than inheriting the portal result.", "Map each component through E205–E208 to the applicable chapters.", "Keep exception and equivalent-facilitation decisions narrow and evidence-based."],
+    caution: "An ACR or VPAT is supplier disclosure, not an agency-wide conformance determination."
+  },
+  {
+    id: "eu-commerce", title: "The cross-border e-commerce service", law: "European Accessibility Act", difficulty: "Expert",
+    brief: "A retailer sells to consumers in several EU countries after 28 June 2025. It cites WCAG 2.2 and EN 301 549, but has not identified national implementing laws, Article 32 transitions, or the scope of an Official Journal citation.",
+    task: "Build the authority and conformity analysis without treating a standard as the law.",
+    dimensions: [
+      {
+        id: "scope", label: "Scope route", prompt: "Where should the analysis begin?", answer: "directive",
+        choices: [["wcag", "WCAG 2.2 decides EAA scope."], ["directive", "Article 2/definitions, service facts, Article 32 transitions, and relevant national implementing law."], ["standard", "EN 301 549 alone."], ["date", "The date alone; all EU websites are covered."]],
+        explanation: "Scope comes from legislation and national implementation, not a technical standard. Service, operator, date, country, exclusions, and transitions matter."
+      },
+      {
+        id: "requirements", label: "Requirements map", prompt: "Which mapping is most complete?", answer: "annex",
+        choices: [["annex", "Article 4 → Annex I Section III common service requirements + Section IV e-commerce requirements → national law."], ["wcag", "WCAG only."], ["product", "Only product requirements."], ["statement", "Only the accessibility statement."]],
+        explanation: "Use the common and e-commerce-specific Annex I requirements. WCAG evidence helps, but does not exhaust the legal analysis."
+      },
+      {
+        id: "presumption", label: "Presumption claim", prompt: "When is the standards claim strongest?", answer: "verify",
+        choices: [["name", "Whenever EN 301 549 is named."], ["verify", "After verifying the current OJ reference, edition, scope, and requirements covered."], ["wcag", "Whenever WCAG 2.2 AA is claimed."], ["vendor", "Whenever a vendor calls it harmonised."]],
+        explanation: "Article 15 presumption is conditional and limited. A standard name does not prove current status, edition, scope, or full coverage."
+      },
+      {
+        id: "record", label: "Service evidence", prompt: "What should be maintained?", answer: "service",
+        choices: [["badge", "A homepage badge."], ["service", "Scope/national-law analysis, Annex mapping, service information, tests, changes, complaints, and limitations."], ["scan", "One launch scan."], ["certificate", "A certificate with no legal mapping."]],
+        explanation: "Evidence must explain the service, requirements, conformity basis, ongoing changes, and any claimed limitation for the national route."
+      }
+    ],
+    memo: ["Classify the service and identify relevant Member State measures and transition facts.", "Map Article 4 to Annex I rather than replacing it with WCAG.", "Claim Article 15 presumption only after verifying OJ status, edition, scope, and coverage."],
+    caution: "The 28 June 2025 date does not erase Article 32 transitions or case-specific facts."
+  },
+  {
+    id: "eu-limitation", title: "The microenterprise and burden claim", law: "European Accessibility Act", difficulty: "Expert",
+    brief: "A small company provides a covered service and imports a covered product. It employs eight people. Management says ‘microenterprises are exempt’ or remediation is too expensive, but has no financial evidence, operator-role analysis, Article 14 assessment, or national-law review.",
+    task: "Separate service, product, exemption, and burden questions.",
+    dimensions: [
+      {
+        id: "definition", label: "Status", prompt: "What establishes microenterprise status?", answer: "criteria",
+        choices: [["staff", "Fewer than ten people alone."], ["criteria", "Fewer than ten people plus the Directive's turnover or balance-sheet threshold, evidenced for the entity."], ["claim", "A management declaration."], ["sector", "Working in technology."]],
+        explanation: "The definition combines a staffing threshold with a financial threshold. The relevant entity and current facts need evidence."
+      },
+      {
+        id: "boundary", label: "Exemption boundary", prompt: "If it qualifies, which statement is strongest?", answer: "service",
+        choices: [["all", "All product and service activity is exempt."], ["service", "Article 4(5) exempts microenterprises providing services; product importing needs a separate operator-duty analysis."], ["none", "Status never matters."], ["wcag", "The exemption depends on WCAG results."]],
+        explanation: "The express exemption concerns service provision. Do not extend it automatically to covered product activity."
+      },
+      {
+        id: "burden", label: "Article 14", prompt: "What supports disproportionate burden?", answer: "assessment",
+        choices: [["cost", "Saying it costs too much."], ["assessment", "A documented Article 14/Annex VI assessment, retained and reassessed as required, with national duties checked."], ["scan", "A failed scan."], ["certificate", "Any consultant certificate."]],
+        explanation: "Disproportionate burden is an evidenced, bounded assessment—not inconvenience or unbudgeted work."
+      },
+      {
+        id: "decision", label: "Decision", prompt: "What can be concluded now?", answer: "insufficient",
+        choices: [["exempt", "Approve a company-wide exemption."], ["burden", "Approve burden because the company is small."], ["insufficient", "Evidence is insufficient: establish status/roles, separate service and product, apply national law, and assess Article 14."], ["wcag", "Test WCAG and omit legal analysis."]],
+        explanation: "The record proves neither status nor the reach of a limitation. Service and product roles require separate national analyses."
+      }
+    ],
+    memo: ["Verify status with staffing and financial evidence.", "Apply Article 4(5) to qualifying service provision only; analyse the product role separately.", "For Article 14, retain the Annex VI assessment and check national notification and reassessment duties."],
+    caution: "‘Small business,’ ‘microenterprise,’ and ‘disproportionate burden’ are not interchangeable conclusions."
+  }
+];
+
 const TOOL_REFERENCES = [
   {
     title: "W3C Quick Reference",
@@ -1111,6 +1834,14 @@ const state = {
   tutorialPage: 1,
   standardPage: 1,
   globalSearchQuery: "",
+  docQuery: "",
+  docJurisdiction: "all",
+  docAuthority: "all",
+  casebook: {
+    caseId: "federal-personnel-pdf",
+    answers: {},
+    submitted: false
+  },
   quiz: null,
   selected: null,
   guidedIndex: Number(localStorage.getItem("a11yGuidedIndex") || "0"),
@@ -1126,7 +1857,8 @@ const routes = [
   ["tutorials", "Mini Tutorials"],
   ["guided", "Guided Mode"],
   ["lessons", "Lessons"],
-  ["regulations", "Regulations"],
+  ["regulations", "Section 508 + EAA"],
+  ["casebook", "Standards Casebook"],
   ["search", "Search"],
   ["bank", "Standards"],
   ["quiz", "Difficult Quiz"],
@@ -1140,7 +1872,8 @@ const navRoutes = [
   ["tutorials", "Tutorials"],
   ["guided", "Guided"],
   ["lessons", "Lessons"],
-  ["regulations", "Regulations"],
+  ["regulations", "508 + EAA"],
+  ["casebook", "Casebook"],
   ["bank", "Standards"],
   ["quiz", "Quiz"],
   ["exam", "Exam"],
@@ -1886,9 +2619,39 @@ function renderRegulatoryReadinessList() {
   `;
 }
 
+function renderSection508Chapter(chapter) {
+  return `
+    <article class="section-508-chapter-card">
+      <span class="badge">${esc(chapter.anchors)}</span>
+      <h3>${esc(chapter.chapter)}</h3>
+      <p><strong>${esc(chapter.focus)}</strong></p>
+      <p>${esc(chapter.decisions)}</p>
+    </article>
+  `;
+}
+
+function renderSection508ScopeStep(step) {
+  return `
+    <li class="section-508-scope-step">
+      <span class="scope-step-number" aria-hidden="true">${esc(step[0])}</span>
+      <div><strong>${esc(step[1])}</strong><p>${esc(step[2])}</p></div>
+    </li>
+  `;
+}
+
+function renderSection508ComponentRow(row) {
+  return `
+    <tr>
+      <th scope="row">${esc(row.component)}</th>
+      <td>${esc(row.baseline)}</td>
+      <td>${esc(row.watch)}</td>
+    </tr>
+  `;
+}
+
 function renderRegulations() {
   return layout(`
-    ${pageTitle("Regulations", "Section 508 and European Accessibility Act training", `A full readiness section for regulatory scope, current official requirements, evidence writing, exception handling, and scenario practice. Source facts last checked ${REGULATORY_LAST_REVIEWED}.`)}
+    ${pageTitle("Regulations", "Section 508 deep-dive and European Accessibility Act training", `Learn to scope mixed ICT, choose the controlling provisions, test the applicable baseline, and defend the evidence. Source facts last checked ${REGULATORY_LAST_REVIEWED}.`)}
     <section class="regulation-hero panel">
       <div>
         <p class="eyebrow">Preparation target</p>
@@ -1902,6 +2665,70 @@ function renderRegulations() {
           <li>EAA: Directive (EU) 2019/882 applies to covered products and services placed on the EU market after 28 June 2025.</li>
           <li>Both: testing skill is evidence, not legal advice. Edge cases need documented escalation.</li>
         </ul>
+      </div>
+    </section>
+    <section class="panel section-508-architecture">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Section 508 architecture</p>
+          <h2>Start with the component, not a blanket WCAG label</h2>
+        </div>
+        <p>A single acquisition can contain content, software, hardware, authoring, and support components. Scope and test each component against the chapters that govern it.</p>
+      </div>
+      <div class="section-508-chapter-grid">
+        ${SECTION_508_CHAPTERS.map(renderSection508Chapter).join("")}
+      </div>
+    </section>
+    <section class="panel section-508-scope-panel">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Decision sequence</p>
+          <h2>Six moves from inventory to defensible finding</h2>
+        </div>
+        <p>Exceptions and equivalent facilitation are bounded decisions. Record the component, owner, authority, and evidence instead of treating one exception as a product-wide waiver.</p>
+      </div>
+      <ol class="section-508-scope-list">
+        ${SECTION_508_SCOPE_STEPS.map(renderSection508ScopeStep).join("")}
+      </ol>
+    </section>
+    <section class="grid two section-508-detail-grid">
+      <article class="panel">
+        <p class="eyebrow">E205 nonpublic content</p>
+        <h2>Nine official-communication categories</h2>
+        <p>Nonpublic electronic content must conform when it communicates agency official business in one or more of these categories.</p>
+        <ol class="official-communications-list">
+          ${SECTION_508_OFFICIAL_COMMUNICATIONS.map((item) => `<li>${esc(item)}</li>`).join("")}
+        </ol>
+      </article>
+      <article class="panel">
+        <p class="eyebrow">Non-web electronic documents</p>
+        <h2>Know the four WCAG provisions that do not apply</h2>
+        <p>Apply WCAG 2.0 Level A and AA except <strong>2.4.1 Bypass Blocks</strong>, <strong>2.4.5 Multiple Ways</strong>, <strong>3.2.3 Consistent Navigation</strong>, and <strong>3.2.4 Consistent Identification</strong>. Then assess Chapter 6 support documentation and services where applicable.</p>
+        <div class="plain-box">
+          <h3>Do not overgeneralise</h3>
+          <p>This four-item exclusion is for non-web documents and non-web software. It is not permission to omit keyboard access, names and roles, error identification, contrast, or document structure.</p>
+        </div>
+      </article>
+    </section>
+    <section class="panel">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Component matrix</p>
+          <h2>What to test—and what people commonly miss</h2>
+        </div>
+        <p>Use this as an initial routing aid, then confirm the exact provisions in the Revised 508 Standards for the product and acquisition.</p>
+      </div>
+      <div class="table-wrap section-508-table-wrap">
+        <table class="section-508-component-table">
+          <thead><tr><th>ICT component</th><th>Primary baseline</th><th>Commonly missed</th></tr></thead>
+          <tbody>${SECTION_508_COMPONENT_MATRIX.map(renderSection508ComponentRow).join("")}</tbody>
+        </table>
+      </div>
+      <div class="actions section-508-challenge-actions">
+        <a class="button primary" href="#casebook">Work the Standards Casebook</a>
+        <a class="button primary" href="#quiz/section-508">Take the Section 508 challenge</a>
+        <a class="button" href="#quiz/wcag-advanced">Take the advanced WCAG challenge</a>
+        <a class="button" href="#exam">Run the mixed exam</a>
       </div>
     </section>
     <section class="panel wcag-comparison-panel">
@@ -2411,34 +3238,78 @@ function renderBank() {
   `);
 }
 
-function makeQuestion(sc, index = 0) {
-  const pool = successCriteria.filter((other) => other.id !== sc.id && (other.principle === sc.principle || other.level === sc.level));
-  const distractors = pool.slice(index, index + 8).sort((a, b) => a.num.localeCompare(b.num)).slice(0, 3);
-  const choices = [sc, ...distractors].sort((a, b) => a.title.localeCompare(b.title));
+function shuffled(values) {
+  const copy = [...values];
+  for (let i = copy.length - 1; i > 0; i -= 1) {
+    const swapIndex = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[swapIndex]] = [copy[swapIndex], copy[i]];
+  }
+  return copy;
+}
+
+function materializeAdvancedQuestion(question) {
   return {
-    sc,
-    prompt: `A tester finds this issue: ${realExample(sc)} Which WCAG success criterion is the best match?`,
-    choices,
-    answer: sc.id,
-    explanation: `The best match is ${sc.num} ${sc.title}. ${commonTrap(sc)}`
+    ...question,
+    choices: shuffled(question.choices.map(([id, label, rationale]) => ({ id, label, rationale })))
   };
 }
 
-function startQuiz(targetId = null, count = 10) {
-  const filteredPool = criteria();
-  const pool = targetId ? [getCriterion(targetId)] : filteredPool.length ? filteredPool : successCriteria;
-  const expanded = [];
-  for (let i = 0; i < count; i += 1) {
-    expanded.push(makeQuestion(pool[i % pool.length], i));
+function makeQuestion(sc, index = 0) {
+  const pool = successCriteria.filter((other) => other.id !== sc.id && (other.principle === sc.principle || other.level === sc.level));
+  const distractors = pool.slice(index, index + 8).sort((a, b) => a.num.localeCompare(b.num)).slice(0, 3);
+  const choices = shuffled([sc, ...distractors].map((choice) => ({
+    id: choice.id,
+    label: `${choice.num} ${choice.title}`,
+    rationale: choice.id === sc.id
+      ? `Correct: ${plainExplanation(sc)}`
+      : `${choice.num} addresses ${plainExplanation(choice).toLowerCase()} It is not the closest match for this scenario.`
+  })));
+  return {
+    id: `criterion-${sc.id}-${index}`,
+    title: `${sc.num} ${sc.title}`,
+    competency: "Criterion discrimination",
+    source: `WCAG 2.2 ${sc.num}`,
+    prompt: `A tester finds this issue: ${realExample(sc)} Which WCAG success criterion is the most defensible primary finding?`,
+    choices,
+    answer: sc.id,
+    explanation: `The best match is ${sc.num} ${sc.title}. ${commonTrap(sc)}`,
+    studyHref: `#lesson/${sc.id}`
+  };
+}
+
+function startQuiz(targetId = null, count = 10, exam = false) {
+  let questions = [];
+  if (exam || !targetId || targetId === "mixed") {
+    questions = shuffled(ADVANCED_QUESTION_BANK).slice(0, count).map(materializeAdvancedQuestion);
+  } else if (targetId === "section-508") {
+    questions = shuffled(SECTION_508_QUESTIONS).slice(0, count).map(materializeAdvancedQuestion);
+  } else if (targetId === "wcag-advanced") {
+    questions = shuffled(ADVANCED_WCAG_QUESTIONS).slice(0, count).map(materializeAdvancedQuestion);
+  } else {
+    const criterion = getCriterion(targetId);
+    if (criterion) questions = [makeQuestion(criterion)];
   }
-  state.quiz = { questions: expanded, index: 0, score: 0, answered: [], targetId, count };
+
+  const filteredPool = criteria().length ? criteria() : successCriteria;
+  for (let i = questions.length; i < count; i += 1) {
+    questions.push(makeQuestion(filteredPool[i % filteredPool.length], i));
+  }
+
+  state.quiz = { questions, index: 0, score: 0, answered: [], targetId, count, exam };
   state.selected = null;
+}
+
+function quizPresentation(targetId, exam) {
+  if (exam) return ["Exam practice", "Mixed Section 508 and WCAG exam", "Twenty-five expert questions test scope, exceptions, interacting requirements, and the strongest evidence—not keyword recall."];
+  if (targetId === "section-508") return ["Section 508 challenge", "Component scoping and conformance judgment", "Choose the controlling provisions for mixed ICT, internal content, software, hardware, authoring tools, support, and exceptions."];
+  if (targetId === "wcag-advanced") return ["Advanced WCAG challenge", "Close-call criterion analysis", "Separate neighbouring success criteria, identify layered failures, and choose the narrowest defensible primary finding."];
+  return ["Expert challenge", "Mixed Section 508 and WCAG analysis", "These questions require multi-step judgment. Expect plausible distractors and explanations for why each selected answer succeeds or fails."];
 }
 
 function renderQuiz(targetId = null, exam = false) {
   const expectedCount = exam ? 25 : 10;
-  if (!state.quiz || state.quiz.targetId !== targetId || state.quiz.count !== expectedCount) {
-    startQuiz(targetId, expectedCount);
+  if (!state.quiz || state.quiz.targetId !== targetId || state.quiz.count !== expectedCount || state.quiz.exam !== exam) {
+    startQuiz(targetId, expectedCount, exam);
   }
   const quiz = state.quiz;
   const done = quiz.index >= quiz.questions.length;
@@ -2449,27 +3320,47 @@ function renderQuiz(targetId = null, exam = false) {
       <section class="panel">
         <p>You scored <strong>${quiz.score}</strong> out of <strong>${quiz.questions.length}</strong>.</p>
         <div class="actions">
-          <button type="button" class="button primary" data-restart="${exam ? "exam" : "quiz"}">Try again</button>
-          <a class="button" href="#lessons">Study lessons</a>
+          <button type="button" class="button primary" data-restart>Try again</button>
+          <a class="button" href="#regulations">Review Section 508</a>
+          <a class="button" href="#lessons">Review WCAG</a>
         </div>
       </section>
       <section class="grid">
-        ${quiz.answered.map((a, i) => `
-          <article class="card">
-            <span class="badge">${a.correct ? "Correct" : "Review"}</span>
-            <h2>Question ${i + 1}: ${esc(a.question.sc.num)} ${esc(a.question.sc.title)}</h2>
-            <p>${esc(a.question.explanation)}</p>
-          </article>
-        `).join("")}
+        ${quiz.answered.map((a, i) => {
+          const selectedChoice = a.question.choices.find((choice) => choice.id === a.selected);
+          const correctChoice = a.question.choices.find((choice) => choice.id === a.question.answer);
+          return `
+            <article class="card quiz-review-card">
+              <span class="badge">${a.correct ? "Correct" : "Review"}</span>
+              <h2>Question ${i + 1}: ${esc(a.question.title)}</h2>
+              <p><strong>Your answer:</strong> ${esc(selectedChoice?.label || "No answer")}</p>
+              ${a.correct ? "" : `<p><strong>Best answer:</strong> ${esc(correctChoice?.label || "")}</p>`}
+              <p>${esc(a.question.explanation)}</p>
+              <a href="${a.question.studyHref}">Review the source lesson</a>
+            </article>
+          `;
+        }).join("")}
       </section>
     `);
   }
 
   const question = quiz.questions[quiz.index];
+  const selectedChoice = question.choices.find((choice) => choice.id === state.selected);
+  const correctChoice = question.choices.find((choice) => choice.id === question.answer);
+  const [eyebrow, title, description] = quizPresentation(targetId, exam);
   return layout(`
-    ${pageTitle(exam ? "Exam practice" : "Difficult quiz", exam ? "Mixed WCAG 2.2 exam simulator" : "Close-distractor quiz", "These questions are intentionally tricky. The goal is to recognise the protected user outcome, not just the familiar words.")}
+    ${pageTitle(eyebrow, title, description)}
+    ${exam ? "" : `<nav class="quiz-mode-nav" aria-label="Challenge type">
+      <a class="button ${!targetId || targetId === "mixed" ? "primary" : ""}" href="#quiz/mixed">Mixed expert</a>
+      <a class="button ${targetId === "section-508" ? "primary" : ""}" href="#quiz/section-508">Section 508</a>
+      <a class="button ${targetId === "wcag-advanced" ? "primary" : ""}" href="#quiz/wcag-advanced">Advanced WCAG</a>
+    </nav>`}
     <section class="question">
-      <span class="badge">Question ${quiz.index + 1} of ${quiz.questions.length}</span>
+      <div class="question-meta">
+        <span class="badge">Question ${quiz.index + 1} of ${quiz.questions.length}</span>
+        <span>${esc(question.competency)}</span>
+        <span>${esc(question.source)}</span>
+      </div>
       <h2>${esc(question.prompt)}</h2>
       <div class="options-list">
         ${question.choices.map((choice) => {
@@ -2477,16 +3368,19 @@ function renderQuiz(targetId = null, exam = false) {
           const klass = answered && choice.id === question.answer ? "correct" : answered === choice.id ? "wrong" : "";
           const stateText = answered && choice.id === question.answer ? "Correct answer" : answered === choice.id ? "Selected answer" : "";
           return `<button type="button" class="option ${klass}" data-answer="${esc(choice.id)}" ${answered ? "disabled" : ""}>
-            <strong>${esc(choice.num)} ${esc(choice.title)}</strong>
-            <span class="muted"> ${esc(choice.principle)} / Level ${esc(choice.level)}</span>
+            <strong>${esc(choice.label)}</strong>
             ${stateText ? `<span class="answer-state">${esc(stateText)}</span>` : ""}
           </button>`;
         }).join("")}
       </div>
-      ${state.selected ? `<div class="feedback" role="status" aria-live="polite"><strong>${state.selected === question.answer ? "Correct." : "Not quite."}</strong> ${esc(question.explanation)}</div>` : ""}
+      ${state.selected ? `<div class="feedback" role="status" aria-live="polite">
+        <p><strong>${state.selected === question.answer ? "Correct." : "Not quite."}</strong> ${esc(question.explanation)}</p>
+        <p><strong>Why your choice ${state.selected === question.answer ? "works" : "falls short"}:</strong> ${esc(selectedChoice?.rationale || "Review the controlling requirement and user impact.")}</p>
+        ${state.selected === question.answer ? "" : `<p><strong>Best answer:</strong> ${esc(correctChoice?.label || "")}</p>`}
+      </div>` : ""}
       <div class="actions">
         ${state.selected ? `<button type="button" class="button primary" data-next-question>Next question</button>` : ""}
-        <a class="button" href="#lesson/${question.sc.id}">Study this criterion</a>
+        <a class="button" href="${question.studyHref}">Study this topic</a>
       </div>
     </section>
   `);
@@ -2504,7 +3398,7 @@ function textIncludesQuery(query, values) {
 function globalSearchResults(term) {
   const query = term.trim().toLowerCase();
   if (!query) {
-    return { criteria: [], tutorials: [], docs: [], regulations: [], glossary: [], courses: [] };
+    return { criteria: [], tutorials: [], docs: [], regulations: [], casebook: [], glossary: [], courses: [] };
   }
 
   const criterionNumberQuery = /^\d+(?:\.\d+)*$/.test(query);
@@ -2538,13 +3432,28 @@ function globalSearchResults(term) {
     tutorial.teach
   ]));
 
-  const docs = [...OFFICIAL_DOCS, ...REGULATORY_SOURCES].filter((doc) => textIncludesQuery(query, [
+  const docs = [...LEGAL_DOCUMENTS, ...OFFICIAL_DOCS, ...REGULATORY_SOURCES].filter((doc) => textIncludesQuery(query, [
     doc.title,
     doc.url,
-    doc.use
+    doc.use,
+    doc.reference,
+    doc.force,
+    doc.question
   ]));
 
   const regulations = [
+    ...SECTION_508_CHAPTERS.map((item) => ({
+      title: item.chapter,
+      label: item.anchors,
+      body: item.focus,
+      details: [item.decisions, "Section 508 architecture"]
+    })),
+    ...SECTION_508_COMPONENT_MATRIX.map((item) => ({
+      title: item.component,
+      label: "Section 508 component",
+      body: item.baseline,
+      details: [item.watch]
+    })),
     ...REGULATORY_WCAG_DIFFERENCES.map((item) => ({
       title: item.axis,
       label: "WCAG comparison",
@@ -2571,6 +3480,18 @@ function globalSearchResults(term) {
     }))
   ].filter((item) => textIncludesQuery(query, [item.title, item.label, item.body, item.details]));
 
+  const casebook = CASEBOOK_CASES.map((item) => ({
+    title: item.title,
+    label: `${item.law} case file`,
+    body: item.brief,
+    details: [
+      item.task,
+      item.memo,
+      item.caution,
+      item.dimensions.flatMap((dimension) => [dimension.label, dimension.prompt, dimension.explanation])
+    ]
+  })).filter((item) => textIncludesQuery(query, [item.title, item.label, item.body, item.details]));
+
   const glossary = GLOSSARY
     .map(([termName, definition]) => ({ title: termName, body: definition }))
     .filter((item) => textIncludesQuery(query, [item.title, item.body]));
@@ -2590,7 +3511,7 @@ function globalSearchResults(term) {
     }))
   ].filter((item) => textIncludesQuery(query, [item.title, item.label, item.body, item.details]));
 
-  return { criteria: criteriaMatches, tutorials, docs, regulations, glossary, courses };
+  return { criteria: criteriaMatches, tutorials, docs, regulations, casebook, glossary, courses };
 }
 
 function globalSearchCount(results) {
@@ -2702,6 +3623,7 @@ function renderSearch(term) {
     ${renderSearchResultsSection("Mini tutorials", results.tutorials.length, results.tutorials.map(renderSearchTutorial).join(""))}
     ${renderSearchResultsSection("Official documentation", results.docs.length, results.docs.map(renderSearchDoc).join(""))}
     ${renderSearchResultsSection("Regulatory training", results.regulations.length, results.regulations.map((item) => renderSearchTextResult(item, "Regulations", "#regulations")).join(""))}
+    ${renderSearchResultsSection("Standards Casebook", results.casebook.length, results.casebook.map((item) => renderSearchTextResult(item, "Case file", "#casebook")).join(""))}
     ${renderSearchResultsSection("Glossary", results.glossary.length, results.glossary.map((item) => renderSearchTextResult(item, "Glossary", "#glossary")).join(""))}
     ${renderSearchResultsSection("Course material", results.courses.length, results.courses.map((item) => renderSearchTextResult(item, "Course", "#course")).join(""))}
   `);
@@ -2721,29 +3643,189 @@ function renderGlossary() {
   `);
 }
 
-function renderDocs() {
-  return layout(`
-    ${pageTitle("Documentation", "Official sources used by this trainer", "The trainer is original teaching material, but it points learners back to public standards for exact requirements and deeper examples.")}
-    <section class="panel">
-      <h2>How the documentation is used</h2>
-      <ol>
-        <li><strong>WCAG 2.2</strong> gives the exact requirement.</li>
-        <li><strong>Understanding WCAG</strong> explains the intent and examples.</li>
-        <li><strong>WAI cognitive accessibility guidance</strong> shapes the way lessons are chunked, repeated, and written in plain language.</li>
-        <li><strong>WAI-ARIA/APG</strong> guides custom-control semantics and keyboard behavior.</li>
-        <li><strong>Section508.gov</strong> anchors U.S. federal ICT scope, Revised 508 requirements, and WCAG 2.0 Level A/AA conformance expectations.</li>
-        <li><strong>European Commission, EUR-Lex, and Your Europe</strong> anchor the European Accessibility Act scope, 28 June 2025 applicability date, covered products and services, and conformity evidence expectations.</li>
+function renderAuthorityChain(chain) {
+  return `
+    <article class="authority-chain">
+      <p class="eyebrow">${esc(chain.jurisdiction)}</p>
+      <h2>${esc(chain.title)}</h2>
+      <p>${esc(chain.description)}</p>
+      <ol class="authority-steps">
+        ${chain.steps.map(([number, type, reference, purpose]) => `
+          <li class="authority-step">
+            <span class="authority-step-number" aria-hidden="true">${esc(number)}</span>
+            <div>
+              <span class="badge">${esc(type)}</span>
+              <h3>${esc(reference)}</h3>
+              <p>${esc(purpose)}</p>
+            </div>
+          </li>
+        `).join("")}
       </ol>
+    </article>
+  `;
+}
+
+function renderLegalDocument(doc) {
+  const jurisdiction = doc.jurisdiction === "us" ? "United States" : doc.jurisdiction === "eu" ? "European Union" : "Foundational standard";
+  return `
+    <article class="doc-source-card">
+      <div class="doc-meta">
+        <span class="badge">${esc(jurisdiction)}</span>
+        <span class="badge">${esc(doc.authority)}</span>
+      </div>
+      <h3>${esc(doc.title)}</h3>
+      <dl class="doc-facts">
+        <div><dt>Reference</dt><dd>${esc(doc.reference)}</dd></div>
+        <div><dt>Legal status</dt><dd>${esc(doc.force)}</dd></div>
+        <div><dt>Use it to answer</dt><dd>${esc(doc.question)}</dd></div>
+      </dl>
+      <p>${esc(doc.use)}</p>
+      <a class="button" href="${doc.url}" target="_blank" rel="noopener noreferrer">Open source</a>
+    </article>
+  `;
+}
+
+function casebookScore(caseFile) {
+  return caseFile.dimensions.reduce((score, dimension) => score + (state.casebook.answers[dimension.id] === dimension.answer ? 1 : 0), 0);
+}
+
+function renderCaseDimension(dimension) {
+  const selected = state.casebook.answers[dimension.id];
+  const submitted = state.casebook.submitted;
+  const correct = selected === dimension.answer;
+  return `
+    <fieldset class="case-dimension ${submitted ? (correct ? "is-correct" : "is-incorrect") : ""}">
+      <legend><span>${esc(dimension.label)}</span>${esc(dimension.prompt)}</legend>
+      <div class="case-choices">
+        ${dimension.choices.map(([id, label], choiceIndex) => {
+          const choiceCorrect = id === dimension.answer;
+          const choiceSelected = id === selected;
+          const stateClass = submitted && choiceCorrect ? "is-answer" : submitted && choiceSelected ? "is-wrong-answer" : "";
+          return `
+            <label class="case-choice ${stateClass}">
+              <input type="radio" name="${esc(dimension.id)}" value="${esc(id)}" ${choiceSelected ? "checked" : ""} ${submitted ? "disabled" : ""} ${choiceIndex === 0 ? "required" : ""} />
+              <span>${esc(label)}</span>
+            </label>
+          `;
+        }).join("")}
+      </div>
+      ${submitted ? `
+        <div class="case-feedback">
+          <strong>${correct ? "Sound conclusion" : "Reconsider this dimension"}</strong>
+          <p>${esc(dimension.explanation)}</p>
+        </div>
+      ` : ""}
+    </fieldset>
+  `;
+}
+
+function renderCasebook() {
+  const caseFile = CASEBOOK_CASES.find((item) => item.id === state.casebook.caseId) || CASEBOOK_CASES[0];
+  const score = state.casebook.submitted ? casebookScore(caseFile) : 0;
+  const sourceDocs = LEGAL_DOCUMENTS.filter((doc) => doc.jurisdiction === (caseFile.law === "Section 508" ? "us" : "eu"));
+  return layout(`
+    ${pageTitle("Standards Casebook", "Reason from facts to authority, evidence, and a defensible conclusion", "Four difficult case files test legal scope and documentation literacy. Each decision requires a source trail; no coding knowledge is needed.")}
+    <section class="casebook-intro panel">
+      <div>
+        <p class="eyebrow">Case method</p>
+        <h2>Four questions govern every file</h2>
+        <ol>
+          <li><strong>Scope:</strong> what facts trigger the law?</li>
+          <li><strong>Authority:</strong> which text controls?</li>
+          <li><strong>Evidence:</strong> what proves the conclusion?</li>
+          <li><strong>Escalation:</strong> what cannot be decided from the current record?</li>
+        </ol>
+      </div>
+      <div class="casebook-warning">
+        <strong>Documentation rule</strong>
+        <p>Name the provision before naming the test. A standard, checklist, scan, or supplier statement cannot decide legal scope by itself.</p>
+      </div>
     </section>
-    <section class="grid two">
-      ${OFFICIAL_DOCS.map((doc) => `
-        <article class="card">
-          <h2>${esc(doc.title)}</h2>
-          <p>${esc(doc.use)}</p>
-          <p><a href="${doc.url}" target="_blank" rel="noopener noreferrer">Open official documentation</a></p>
+    <section class="casebook-layout">
+      <aside class="case-selector panel" aria-labelledby="case-files-heading">
+        <p class="eyebrow">Choose a file</p>
+        <h2 id="case-files-heading">Case files</h2>
+        <div class="case-selector-list">
+          ${CASEBOOK_CASES.map((item, index) => `
+            <button type="button" class="case-select-button" data-case-select="${esc(item.id)}" aria-pressed="${item.id === caseFile.id}">
+              <span>Case ${index + 1}</span>
+              <strong>${esc(item.title)}</strong>
+              <small>${esc(item.law)} · ${esc(item.difficulty)}</small>
+            </button>
+          `).join("")}
+        </div>
+      </aside>
+      <div class="case-workspace">
+        <article class="case-brief panel">
+          <div class="doc-meta"><span class="badge">${esc(caseFile.law)}</span><span class="badge">${esc(caseFile.difficulty)}</span></div>
+          <p class="eyebrow">Case file ${CASEBOOK_CASES.indexOf(caseFile) + 1}</p>
+          <h2 tabindex="-1">${esc(caseFile.title)}</h2>
+          <p>${esc(caseFile.brief)}</p>
+          <div class="plain-box"><strong>Your assignment</strong><p>${esc(caseFile.task)}</p></div>
         </article>
-      `).join("")}
+        <form class="case-analysis" data-case-form>
+          ${caseFile.dimensions.map(renderCaseDimension).join("")}
+          <div class="actions">
+            ${state.casebook.submitted
+              ? `<button class="button primary" type="button" data-case-reset>Try this case again</button>`
+              : `<button class="button primary" type="submit">Submit legal analysis</button>`}
+            <a class="button" href="#docs">Open Documentation Navigator</a>
+          </div>
+        </form>
+        ${state.casebook.submitted ? `
+          <section class="case-score panel" id="casebook-score" tabindex="-1" aria-labelledby="case-score-heading">
+            <p class="eyebrow">Decision quality</p>
+            <h2 id="case-score-heading">${score} of ${caseFile.dimensions.length} dimensions supported</h2>
+            <p>${score === caseFile.dimensions.length ? "Your reasoning preserves the authority chain and the limits of the evidence." : "Review the rationale, then rebuild the memo from the controlling source outward."}</p>
+          </section>
+          <section class="model-memo panel" aria-labelledby="model-memo-heading">
+            <p class="eyebrow">Model decision memo</p>
+            <h2 id="model-memo-heading">A concise, source-grounded conclusion</h2>
+            <ol>${caseFile.memo.map((point) => `<li>${esc(point)}</li>`).join("")}</ol>
+            <div class="casebook-warning"><strong>Boundary to preserve</strong><p>${esc(caseFile.caution)}</p></div>
+            <h3>Primary source trail</h3>
+            <ul class="case-source-list">${sourceDocs.map((doc) => `<li><a href="${doc.url}" target="_blank" rel="noopener noreferrer">${esc(doc.reference)}</a> — ${esc(doc.question)}</li>`).join("")}</ul>
+          </section>
+        ` : ""}
+      </div>
     </section>
+  `);
+}
+
+function renderDocs() {
+  const query = state.docQuery.trim().toLowerCase();
+  const filtered = LEGAL_DOCUMENTS.filter((doc) => {
+    const jurisdictionMatch = state.docJurisdiction === "all" || doc.jurisdiction === state.docJurisdiction;
+    const authorityMatch = state.docAuthority === "all" || doc.authority === state.docAuthority;
+    const queryMatch = !query || textIncludesQuery(query, [doc.title, doc.reference, doc.force, doc.use, doc.question]);
+    return jurisdictionMatch && authorityMatch && queryMatch;
+  });
+  return layout(`
+    ${pageTitle("Documentation Navigator", "Know what each source can—and cannot—prove", "Trace Section 508 and EAA questions through legislation, regulation, incorporated standards, guidance, and test evidence without collapsing their authority.")}
+    <section class="authority-chain-grid" aria-label="Legal authority chains">
+      ${AUTHORITY_CHAINS.map(renderAuthorityChain).join("")}
+    </section>
+    <section class="doc-filter-panel panel" aria-labelledby="source-navigator-heading">
+      <div class="section-heading">
+        <div><p class="eyebrow">Source navigator</p><h2 id="source-navigator-heading">Find the right authority for the question</h2></div>
+        <p>Filter by jurisdiction and source type, then use the legal-status and decision-question fields before opening the source.</p>
+      </div>
+      <div class="doc-filter-grid">
+        <label for="doc-search">Search sources<input id="doc-search" type="search" value="${esc(state.docQuery)}" placeholder="Try exceptions, WCAG version, evidence..." /></label>
+        <label for="doc-jurisdiction">Jurisdiction<select id="doc-jurisdiction"><option value="all">All jurisdictions</option><option value="us" ${state.docJurisdiction === "us" ? "selected" : ""}>United States</option><option value="eu" ${state.docJurisdiction === "eu" ? "selected" : ""}>European Union</option><option value="foundation" ${state.docJurisdiction === "foundation" ? "selected" : ""}>Foundational standards</option></select></label>
+        <label for="doc-authority">Source type<select id="doc-authority"><option value="all">All source types</option><option value="legislation" ${state.docAuthority === "legislation" ? "selected" : ""}>Legislation</option><option value="regulation" ${state.docAuthority === "regulation" ? "selected" : ""}>Regulation / requirements</option><option value="standard" ${state.docAuthority === "standard" ? "selected" : ""}>Standard / incorporation</option><option value="guidance" ${state.docAuthority === "guidance" ? "selected" : ""}>Official guidance</option><option value="testing" ${state.docAuthority === "testing" ? "selected" : ""}>Test method</option></select></label>
+        <button class="button" type="button" data-clear-doc-filters>Reset filters</button>
+      </div>
+      <p class="result-summary" role="status" aria-live="polite"><strong>${filtered.length} source${filtered.length === 1 ? "" : "s"}</strong> match the current filters.</p>
+    </section>
+    ${filtered.length ? `<section class="doc-source-grid" aria-label="Filtered official sources">${filtered.map(renderLegalDocument).join("")}</section>` : `<section class="empty-state panel"><h2>No sources found</h2><p>Reset the filters or try a broader legal concept.</p></section>`}
+    <section class="panel doc-reading-method">
+      <p class="eyebrow">Reading method</p>
+      <h2>Write a five-line source note</h2>
+      <ol><li><strong>Issue:</strong> the legal question raised by the facts.</li><li><strong>Rule:</strong> the exact Article, section, or incorporated criterion.</li><li><strong>Application:</strong> the fact-to-rule reasoning.</li><li><strong>Evidence:</strong> the record that supports the conclusion.</li><li><strong>Boundary:</strong> exceptions, transitions, unresolved facts, and escalation owner.</li></ol>
+      <a class="button primary" href="#casebook">Apply this method in the Casebook</a>
+    </section>
+    <details class="panel further-sources"><summary>Further official technical and learning references</summary><div class="grid two">${OFFICIAL_DOCS.map((doc) => `<article class="card"><h3>${esc(doc.title)}</h3><p>${esc(doc.use)}</p><a href="${doc.url}" target="_blank" rel="noopener noreferrer">Open official documentation</a></article>`).join("")}</div></details>
   `);
 }
 
@@ -2766,6 +3848,7 @@ function render() {
   if (state.route === "guided") app.innerHTML = renderGuided();
   if (state.route === "lessons") app.innerHTML = renderLessons();
   if (state.route === "regulations") app.innerHTML = renderRegulations();
+  if (state.route === "casebook") app.innerHTML = renderCasebook();
   if (state.route === "search") app.innerHTML = renderSearch(state.globalSearchQuery);
   if (hashParts[0] === "lesson") app.innerHTML = renderLesson(id);
   if (state.route === "bank") app.innerHTML = renderBank();
@@ -2773,6 +3856,51 @@ function render() {
   if (state.route === "exam") app.innerHTML = renderQuiz(null, true);
   if (state.route === "glossary") app.innerHTML = renderGlossary();
   if (state.route === "docs") app.innerHTML = renderDocs();
+
+  document.querySelectorAll("[data-case-select]").forEach((button) => {
+    button.addEventListener("click", (event) => {
+      state.casebook = { caseId: event.currentTarget.dataset.caseSelect, answers: {}, submitted: false };
+      render();
+      document.querySelector(".case-brief h2")?.focus?.();
+    });
+  });
+  document.querySelector("[data-case-form]")?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const caseFile = CASEBOOK_CASES.find((item) => item.id === state.casebook.caseId) || CASEBOOK_CASES[0];
+    state.casebook.answers = Object.fromEntries(caseFile.dimensions.map((dimension) => [dimension.id, String(formData.get(dimension.id) || "")]));
+    state.casebook.submitted = true;
+    render();
+    document.querySelector("#casebook-score")?.focus();
+  });
+  document.querySelector("[data-case-reset]")?.addEventListener("click", () => {
+    state.casebook.answers = {};
+    state.casebook.submitted = false;
+    render();
+    document.querySelector(".case-dimension input")?.focus();
+  });
+  document.querySelector("#doc-search")?.addEventListener("input", (event) => {
+    state.docQuery = event.target.value;
+    render();
+    const input = document.querySelector("#doc-search");
+    input?.focus();
+    input?.setSelectionRange(state.docQuery.length, state.docQuery.length);
+  });
+  document.querySelector("#doc-jurisdiction")?.addEventListener("change", (event) => {
+    state.docJurisdiction = event.target.value;
+    render();
+  });
+  document.querySelector("#doc-authority")?.addEventListener("change", (event) => {
+    state.docAuthority = event.target.value;
+    render();
+  });
+  document.querySelector("[data-clear-doc-filters]")?.addEventListener("click", () => {
+    state.docQuery = "";
+    state.docJurisdiction = "all";
+    state.docAuthority = "all";
+    announce("Documentation filters reset.");
+    render();
+  });
 
   document.querySelector("#search")?.addEventListener("input", (event) => {
     state.query = event.target.value;
@@ -2850,8 +3978,8 @@ function render() {
     state.selected = null;
     render();
   });
-  document.querySelector("[data-restart]")?.addEventListener("click", (event) => {
-    startQuiz(null, event.currentTarget.dataset.restart === "exam" ? 25 : 10);
+  document.querySelector("[data-restart]")?.addEventListener("click", () => {
+    startQuiz(state.quiz.targetId, state.quiz.count, state.quiz.exam);
     render();
   });
   document.querySelector("[data-guided-next]")?.addEventListener("click", () => {
