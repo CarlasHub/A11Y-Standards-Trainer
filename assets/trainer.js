@@ -2596,6 +2596,8 @@ const state = {
   guidedExampleOpen: false
 };
 
+let navigationEventController;
+
 const progress = JSON.parse(localStorage.getItem("a11yTrainerProgress") || "{}");
 
 const routes = [
@@ -2957,9 +2959,9 @@ function layout(content) {
           <span class="brand-logo" aria-hidden="true"><span>A11Y</span></span>
           <span class="brand-name"><strong>Standards</strong><small>Trainer</small></span>
         </a>
-        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation">
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open main menu">
           <span class="nav-toggle-icon" aria-hidden="true"><span></span><span></span><span></span></span>
-          <span>Menu</span>
+          <span class="nav-toggle-text">Menu</span>
         </button>
         <nav id="primary-navigation" class="primary-nav" aria-label="Main navigation">
           <a class="nav-home" href="#home" ${route === "home" ? 'aria-current="page"' : ""}>Home</a>
@@ -2990,10 +2992,8 @@ function layout(content) {
           <ul>
             ${FOOTER_LINKS.map((link) => `
               <li>
-                <a href="${link.href}" target="_blank" rel="me noopener noreferrer">
+                <a href="${link.href}" target="_blank" rel="me noopener noreferrer" aria-label="${esc(link.label)} (opens in a new tab)" title="${esc(link.label)}">
                   ${renderIcon(link.icon)}
-                  <span>${esc(link.label)}</span>
-                  <span class="sr-only"> (opens in a new tab)</span>
                 </a>
               </li>
             `).join("")}
@@ -5097,6 +5097,10 @@ function renderDocs() {
 }
 
 function render(event) {
+  navigationEventController?.abort();
+  navigationEventController = new AbortController();
+  const navigationSignal = navigationEventController.signal;
+  document.body.classList.remove("nav-open");
   const routeChanged = event?.type === "hashchange";
   state.route = slugFromHash();
   const hashParts = window.location.hash.replace(/^#\/?/, "").split("/");
@@ -5136,19 +5140,71 @@ function render(event) {
 
   const siteHeader = document.querySelector("[data-site-header]");
   const navToggle = document.querySelector(".nav-toggle");
-  const setNavOpen = (open) => {
+  const primaryNavigation = document.querySelector("#primary-navigation");
+  const navToggleText = navToggle?.querySelector(".nav-toggle-text");
+  const pageMain = document.querySelector("#main");
+  const pageFooter = document.querySelector(".site-footer");
+  const navClusters = [...document.querySelectorAll(".nav-cluster")];
+  const mobileNavigation = window.matchMedia("(width <= 1040px)");
+  const setNavOpen = (open, { moveFocus = false } = {}) => {
     if (!siteHeader || !navToggle) return;
-    siteHeader.dataset.navOpen = String(open);
-    navToggle.setAttribute("aria-expanded", String(open));
+    const mobileOpen = Boolean(open && mobileNavigation.matches);
+    siteHeader.dataset.navOpen = String(mobileOpen);
+    navToggle.setAttribute("aria-expanded", String(mobileOpen));
+    navToggle.setAttribute("aria-label", mobileOpen ? "Close main menu" : "Open main menu");
+    if (navToggleText) navToggleText.textContent = mobileOpen ? "Close" : "Menu";
+    document.body.classList.toggle("nav-open", mobileOpen);
+    if (pageMain) pageMain.inert = mobileOpen;
+    if (pageFooter) pageFooter.inert = mobileOpen;
+    if (!mobileOpen) navClusters.forEach((cluster) => { cluster.open = false; });
+    if (mobileOpen && moveFocus) {
+      requestAnimationFrame(() => primaryNavigation?.querySelector("a, summary")?.focus());
+    }
   };
-  navToggle?.addEventListener("click", () => setNavOpen(navToggle.getAttribute("aria-expanded") !== "true"));
+  navToggle?.addEventListener("click", () => {
+    const willOpen = navToggle.getAttribute("aria-expanded") !== "true";
+    setNavOpen(willOpen, { moveFocus: willOpen });
+  }, { signal: navigationSignal });
+  navClusters.forEach((cluster) => {
+    cluster.querySelector("summary")?.addEventListener("click", () => {
+      if (!cluster.open) navClusters.filter((item) => item !== cluster).forEach((item) => { item.open = false; });
+    }, { signal: navigationSignal });
+  });
   siteHeader?.addEventListener("keydown", (navEvent) => {
+    if (navEvent.key === "Escape") {
+      const openCluster = navEvent.target.closest?.(".nav-cluster[open]");
+      if (openCluster) {
+        navEvent.preventDefault();
+        openCluster.open = false;
+        openCluster.querySelector("summary")?.focus();
+        return;
+      }
+    }
     if (navEvent.key === "Escape" && navToggle?.getAttribute("aria-expanded") === "true") {
+      navEvent.preventDefault();
       setNavOpen(false);
       navToggle.focus();
+      return;
     }
-  });
-  document.querySelectorAll("#primary-navigation a").forEach((link) => link.addEventListener("click", () => setNavOpen(false)));
+    if (navEvent.key === "Tab" && mobileNavigation.matches && navToggle?.getAttribute("aria-expanded") === "true") {
+      const focusable = [...siteHeader.querySelectorAll('a[href], button:not([disabled]), summary')]
+        .filter((element) => element.getClientRects().length > 0);
+      const first = focusable[0];
+      const last = focusable.at(-1);
+      if (navEvent.shiftKey && document.activeElement === first) {
+        navEvent.preventDefault();
+        last?.focus();
+      } else if (!navEvent.shiftKey && document.activeElement === last) {
+        navEvent.preventDefault();
+        first?.focus();
+      }
+    }
+  }, { signal: navigationSignal });
+  document.querySelectorAll("#primary-navigation a").forEach((link) => link.addEventListener("click", () => setNavOpen(false), { signal: navigationSignal }));
+  document.addEventListener("pointerdown", (navEvent) => {
+    if (!siteHeader?.contains(navEvent.target)) navClusters.forEach((cluster) => { cluster.open = false; });
+  }, { signal: navigationSignal });
+  mobileNavigation.addEventListener("change", () => setNavOpen(false), { signal: navigationSignal });
 
   document.querySelectorAll("[data-case-select]").forEach((button) => {
     button.addEventListener("click", (event) => {

@@ -125,16 +125,57 @@ if (!(await navToggle.isVisible())) {
   failed = true;
   console.log("Mobile navigation toggle is not visible at 320px.");
 } else {
+  const closedLabel = await navToggle.getAttribute("aria-label");
+  if (closedLabel !== "Open main menu") {
+    failed = true;
+    console.log(`Mobile navigation toggle has the wrong closed label: “${closedLabel}”.`);
+  }
   await navToggle.focus();
   await page.keyboard.press("Enter");
+  await page.locator("#primary-navigation a, #primary-navigation summary").first().waitFor();
+  await page.waitForFunction(() => document.activeElement?.matches("#primary-navigation a, #primary-navigation summary"));
   if (await navToggle.getAttribute("aria-expanded") !== "true") {
     failed = true;
     console.log("Mobile navigation did not expose its expanded state.");
   }
+  const openState = await page.evaluate(() => ({
+    label: document.querySelector(".nav-toggle")?.getAttribute("aria-label"),
+    navVisible: document.querySelector("#primary-navigation")?.getClientRects().length > 0,
+    mainInert: document.querySelector("#main")?.inert,
+    footerInert: document.querySelector(".site-footer")?.inert,
+    bodyLocked: document.body.classList.contains("nav-open")
+  }));
+  if (openState.label !== "Close main menu" || !openState.navVisible || !openState.mainInert || !openState.footerInert || !openState.bodyLocked) {
+    failed = true;
+    console.log(`Mobile navigation open state is incomplete: ${JSON.stringify(openState)}.`);
+  }
+
+  const navClusters = page.locator(".nav-cluster");
+  await navClusters.nth(0).locator("summary").focus();
+  await page.keyboard.press("Enter");
+  await navClusters.nth(1).locator("summary").focus();
+  await page.keyboard.press("Enter");
+  const onlyOneClusterOpen = await page.locator(".nav-cluster[open]").count() === 1;
+  if (!onlyOneClusterOpen) {
+    failed = true;
+    console.log("Mobile navigation left more than one submenu open.");
+  }
+  await page.keyboard.press("Escape");
+  const submenuClosed = await navClusters.nth(1).getAttribute("open") === null;
+  const submenuFocusReturned = await page.evaluate(() => document.activeElement === document.querySelectorAll(".nav-cluster summary")[1]);
+  if (!submenuClosed || !submenuFocusReturned) {
+    failed = true;
+    console.log("Escape did not close the active mobile submenu and return focus to its summary.");
+  }
   await page.keyboard.press("Escape");
   const navClosed = await navToggle.getAttribute("aria-expanded") === "false";
   const focusReturned = await page.evaluate(() => document.activeElement?.classList.contains("nav-toggle"));
-  if (!navClosed || !focusReturned) {
+  const closedState = await page.evaluate(() => ({
+    mainInert: document.querySelector("#main")?.inert,
+    footerInert: document.querySelector(".site-footer")?.inert,
+    bodyLocked: document.body.classList.contains("nav-open")
+  }));
+  if (!navClosed || !focusReturned || closedState.mainInert || closedState.footerInert || closedState.bodyLocked) {
     failed = true;
     console.log("Escape did not close mobile navigation and return focus to its toggle.");
   }
@@ -152,10 +193,18 @@ const expectedFooterLinks = new Map([
   ["Website", "https://carlashub.com/"]
 ]);
 for (const [label, href] of expectedFooterLinks) {
-  const link = page.locator(".footer-links a", { hasText: label });
+  const link = page.getByRole("link", { name: `${label} (opens in a new tab)`, exact: true });
   if ((await link.count()) !== 1 || (await link.getAttribute("href")) !== href) {
     failed = true;
     console.log(`Footer: ${label} link is missing or does not use the verified URL.`);
+  }
+  const dimensions = await link.evaluate((element) => {
+    const rect = element.getBoundingClientRect();
+    return { width: rect.width, height: rect.height };
+  });
+  if (dimensions.width < 44 || dimensions.height < 44) {
+    failed = true;
+    console.log(`Footer: ${label} target is smaller than 44 by 44 CSS pixels.`);
   }
 }
 
