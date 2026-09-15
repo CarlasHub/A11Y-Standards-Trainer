@@ -6,7 +6,9 @@
   "type": "module",
   "scripts": {
     "serve": "python3 -m http.server 4175",
-    "a11y": "node scripts/a11y-check.mjs"
+    "a11y": "node scripts/a11y-check.mjs",
+    "content:verify": "node scripts/content-accuracy-check.mjs",
+    "verify": "npm run content:verify && npm run a11y"
   },
   "repository": {
     "type": "git",

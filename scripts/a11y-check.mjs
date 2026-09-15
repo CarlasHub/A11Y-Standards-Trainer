@@ -6,12 +6,21 @@ const routes = [
   "#guided",
   "#tutorials",
   "#lesson/non-text-content",
-  "#regulations",
+  "#regulations/overview",
+  "#regulations/section-508",
+  "#regulations/title-ii",
+  "#regulations/eaa",
+  "#regulations/crosswalk",
+  "#title-ii-lab",
   "#casebook",
   "#search/1.2",
+  "#search/ADA%20Title%20II",
   "#bank",
   "#quiz/non-text-content",
+  "#quiz/mixed/20",
   "#quiz/section-508",
+  "#quiz/title-ii",
+  "#quiz/eaa",
   "#quiz/wcag-advanced",
   "#exam",
   "#glossary",
@@ -49,19 +58,111 @@ for (const route of routes) {
   }
 }
 
-await page.setViewportSize({ width: 390, height: 844 });
-for (const route of ["#casebook", "#docs"]) {
-  await page.goto(`http://localhost:4175/?v=mobile-check${route}`, { waitUntil: "domcontentloaded" });
-  const hasHorizontalOverflow = await page.evaluate(() => {
-    return document.documentElement.scrollWidth > document.documentElement.clientWidth;
-  });
-
-  if (hasHorizontalOverflow) {
-    failed = true;
-    console.log(`${route}: horizontal overflow at 390px viewport`);
-  } else {
-    console.log(`${route}: no horizontal overflow at 390px viewport`);
+await page.goto("http://localhost:4175/?v=completed-state-check#title-ii-lab", { waitUntil: "domcontentloaded" });
+const titleIIFieldsets = page.locator("[data-title-ii-form] .case-dimension");
+for (let index = 0; index < await titleIIFieldsets.count(); index += 1) {
+  await titleIIFieldsets.nth(index).locator("input[type='radio']").first().check();
+}
+await page.locator("#title-ii-rationale").fill("Issue: coverage. Rule: 28 CFR Part 35. Application: connect the entity, service, deadline, and baseline. Evidence: retain the source trail. Boundary: preserve other duties.");
+await page.locator("[data-title-ii-form] button[type='submit']").click();
+await page.locator("#title-ii-score").waitFor();
+await page.addScriptTag({ content: axe.source });
+const completedTitleIIResults = await page.evaluate(async () => axe.run(document, {
+  runOnly: {
+    type: "tag",
+    values: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa", "best-practice"]
   }
+}));
+const completedTitleIISerious = completedTitleIIResults.violations.filter((violation) => ["critical", "serious"].includes(violation.impact));
+if (completedTitleIISerious.length) {
+  failed = true;
+  console.log(`\n#title-ii-lab completed state: ${completedTitleIISerious.length} serious/critical violations`);
+  for (const violation of completedTitleIISerious) console.log(`- ${violation.id}: ${violation.help}`);
+} else {
+  console.log("#title-ii-lab completed state: no serious/critical axe violations");
+}
+
+const responsiveRoutes = ["#home", "#regulations/section-508", "#regulations/title-ii", "#regulations/eaa", "#quiz/title-ii", "#title-ii-lab", "#casebook", "#docs"];
+for (const viewport of [{ width: 320, height: 700 }, { width: 390, height: 844 }, { width: 768, height: 900 }]) {
+  await page.setViewportSize(viewport);
+  for (const route of responsiveRoutes) {
+    await page.goto(`http://localhost:4175/?v=responsive-check${route}`, { waitUntil: "domcontentloaded" });
+    const hasHorizontalOverflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
+
+    if (hasHorizontalOverflow) {
+      failed = true;
+      console.log(`${route}: horizontal overflow at ${viewport.width}px viewport`);
+    }
+
+    await page.addScriptTag({ content: axe.source });
+    const mobileResults = await page.evaluate(async () => axe.run(document, {
+      runOnly: {
+        type: "tag",
+        values: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa", "best-practice"]
+      }
+    }));
+    const mobileSerious = mobileResults.violations.filter((violation) => ["critical", "serious"].includes(violation.impact));
+    if (mobileSerious.length) {
+      failed = true;
+      console.log(`\n${route} at ${viewport.width}px: ${mobileSerious.length} serious/critical violations`);
+      for (const violation of mobileSerious) console.log(`- ${violation.id}: ${violation.help}`);
+    }
+  }
+  console.log(`Responsive and axe checks completed at ${viewport.width}px.`);
+}
+
+await page.setViewportSize({ width: 320, height: 700 });
+await page.goto("http://localhost:4175/?v=nav-check#home", { waitUntil: "domcontentloaded" });
+const navToggle = page.locator(".nav-toggle");
+if (!(await navToggle.isVisible())) {
+  failed = true;
+  console.log("Mobile navigation toggle is not visible at 320px.");
+} else {
+  await navToggle.focus();
+  await page.keyboard.press("Enter");
+  if (await navToggle.getAttribute("aria-expanded") !== "true") {
+    failed = true;
+    console.log("Mobile navigation did not expose its expanded state.");
+  }
+  await page.keyboard.press("Escape");
+  const navClosed = await navToggle.getAttribute("aria-expanded") === "false";
+  const focusReturned = await page.evaluate(() => document.activeElement?.classList.contains("nav-toggle"));
+  if (!navClosed || !focusReturned) {
+    failed = true;
+    console.log("Escape did not close mobile navigation and return focus to its toggle.");
+  }
+}
+
+const expectedAssessmentSizes = new Map([
+  ["#quiz/section-508", 14],
+  ["#quiz/title-ii", 14],
+  ["#quiz/eaa", 15],
+  ["#quiz/wcag-advanced", 10],
+  ["#quiz/mixed/40", 40],
+  ["#exam", 40]
+]);
+for (const [route, count] of expectedAssessmentSizes) {
+  await page.goto(`http://localhost:4175/?v=assessment-check${route}`, { waitUntil: "domcontentloaded" });
+  const progressText = await page.locator(".question-meta .badge").innerText();
+  if (!progressText.includes(`of ${count}`)) {
+    failed = true;
+    console.log(`${route}: expected ${count} assessment questions but found “${progressText}”.`);
+  }
+}
+
+await page.goto("http://localhost:4175/?v=quiz-interaction-check#quiz/title-ii", { waitUntil: "domcontentloaded" });
+await page.locator("[data-quiz-form] input[type='radio']").first().check();
+await page.locator("[data-quiz-form] button[type='submit']").click();
+const feedbackFocused = await page.evaluate(() => document.activeElement?.id === "quiz-feedback");
+if (!feedbackFocused) {
+  failed = true;
+  console.log("Quiz feedback did not receive focus after answer submission.");
+}
+await page.locator("[data-next-question]").click();
+const nextQuestionFocused = await page.evaluate(() => document.activeElement?.id === "quiz-question-heading");
+if (!nextQuestionFocused) {
+  failed = true;
+  console.log("The next quiz question heading did not receive focus.");
 }
 
 await browser.close();
