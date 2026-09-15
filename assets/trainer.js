@@ -580,7 +580,7 @@ const REGULATORY_CROSSWALK = [
     title: "EAA baseline",
     standard: "Directive (EU) 2019/882",
     details: "Start with covered product/service scope and the EAA accessibility outcomes. Use EN 301 549/WCAG mapping where appropriate, then confirm the Member State implementation and harmonized standard status.",
-    action: "#regulations"
+    action: "#standards"
   },
   {
     title: "Shared testing spine",
@@ -1545,10 +1545,10 @@ function withQuestionMetadata(questions, domain, sourceUrl, studyHref) {
   }));
 }
 
-const SECTION_508_ASSESSMENT_QUESTIONS = withQuestionMetadata(SECTION_508_QUESTIONS, "Section 508", OFFICIAL_SOURCE_URLS.section508, "#regulations/section-508");
-const WCAG_ASSESSMENT_QUESTIONS = withQuestionMetadata(ADVANCED_WCAG_QUESTIONS, "WCAG 2.2", OFFICIAL_SOURCE_URLS.wcag22);
-const TITLE_II_ASSESSMENT_QUESTIONS = withQuestionMetadata(TITLE_II_QUESTIONS, "ADA Title II", OFFICIAL_SOURCE_URLS.titleII);
-const EAA_ASSESSMENT_QUESTIONS = withQuestionMetadata(EAA_QUESTIONS, "European Accessibility Act", OFFICIAL_SOURCE_URLS.eaa);
+const SECTION_508_ASSESSMENT_QUESTIONS = withQuestionMetadata(SECTION_508_QUESTIONS, "Section 508", OFFICIAL_SOURCE_URLS.section508, "#section-508");
+const WCAG_ASSESSMENT_QUESTIONS = withQuestionMetadata(ADVANCED_WCAG_QUESTIONS, "WCAG 2.2", OFFICIAL_SOURCE_URLS.wcag22, "#wcag");
+const TITLE_II_ASSESSMENT_QUESTIONS = withQuestionMetadata(TITLE_II_QUESTIONS, "ADA Title II", OFFICIAL_SOURCE_URLS.titleII, "#ada-title-ii");
+const EAA_ASSESSMENT_QUESTIONS = withQuestionMetadata(EAA_QUESTIONS, "European Accessibility Act", OFFICIAL_SOURCE_URLS.eaa, "#eaa");
 const ADVANCED_QUESTION_BANK = [
   ...SECTION_508_ASSESSMENT_QUESTIONS,
   ...TITLE_II_ASSESSMENT_QUESTIONS,
@@ -2601,19 +2601,26 @@ const progress = JSON.parse(localStorage.getItem("a11yTrainerProgress") || "{}")
 const routes = [
   ["home", "Home"],
   ["course", "Course Map"],
-  ["library", "Reference Library"],
   ["tutorials", "Mini Tutorials"],
   ["guided", "Guided Mode"],
   ["lessons", "Lessons"],
-  ["regulations", "Section 508 + EAA"],
+  ["standards", "Standards & Laws"],
+  ["wcag", "WCAG 2.2"],
+  ["section-508", "Section 508"],
+  ["ada-title-ii", "ADA Title II"],
+  ["eaa", "European Accessibility Act"],
+  ["compare", "Compare Frameworks"],
+  ["assessments", "Quiz Centre"],
   ["title-ii-lab", "ADA Title II Lab"],
   ["casebook", "Standards Casebook"],
+  ["library", "Reference Library"],
   ["search", "Search"],
   ["bank", "Standards"],
   ["quiz", "Difficult Quiz"],
   ["exam", "Exam Practice"],
   ["glossary", "Glossary"],
-  ["docs", "Docs"]
+  ["docs", "Docs"],
+  ["regulations", "Regulations"]
 ];
 
 const navGroups = [
@@ -2622,12 +2629,12 @@ const navGroups = [
     routes: [["course", "Course map"], ["tutorials", "Mini tutorials"], ["guided", "Guided mode"], ["lessons", "WCAG lessons"]]
   },
   {
-    label: "Laws",
-    routes: [["regulations", "Section 508 + EAA"], ["title-ii-lab", "ADA Title II lab"], ["casebook", "Standards casebook"]]
+    label: "Standards & laws",
+    routes: [["standards", "All subjects"], ["wcag", "WCAG 2.2"], ["section-508", "Section 508"], ["ada-title-ii", "ADA Title II"], ["eaa", "European Accessibility Act"], ["compare", "Compare frameworks"]]
   },
   {
-    label: "Practice",
-    routes: [["quiz", "Difficult quiz"], ["exam", "Exam practice"]]
+    label: "Quizzes & cases",
+    routes: [["assessments", "Quiz centre"], ["exam", "Exam practice"], ["title-ii-lab", "ADA Title II lab"], ["casebook", "Standards casebook"]]
   },
   {
     label: "Reference",
@@ -2967,9 +2974,9 @@ function layout(content) {
               </details>
             `;
           }).join("")}
-          <a class="nav-study-link" href="#course">Study map</a>
+          <a class="nav-study-link" href="#standards">Browse subjects</a>
         </nav>
-        <a class="header-cta" href="#course">Open study map</a>
+        <a class="header-cta" href="#standards">Browse subjects</a>
       </div>
     </header>
     <main id="main" class="shell" tabindex="-1">${content}</main>
@@ -3026,10 +3033,10 @@ function renderHome() {
         </form>
         <div class="popular-links" aria-label="Popular topics">
           <span>Popular:</span>
-          <a href="#regulations">Section 508</a>
-          <a href="#title-ii-lab">ADA Title II</a>
-          <a href="#lessons">WCAG 2.2</a>
-          <a href="#regulations">EAA</a>
+          <a href="#section-508">Section 508</a>
+          <a href="#ada-title-ii">ADA Title II</a>
+          <a href="#wcag">WCAG 2.2</a>
+          <a href="#eaa">EAA</a>
         </div>
       </div>
     </section>
@@ -3039,23 +3046,23 @@ function renderHome() {
       <p>Start with the documentation, connect legal duties to technical standards, then test whether you can apply them when the answer is not obvious.</p>
     </section>
     <section class="learning-path-grid" aria-label="Learning paths">
-      <a class="learning-path-card" href="#tutorials">
+      <a class="learning-path-card" href="#standards">
         <span class="path-number" aria-hidden="true">01</span>
-        <h2>Learn the standards</h2>
-        <p>Build accurate mental models with tutorials, guided review, and criterion-level WCAG lessons.</p>
-        <span class="text-link">Start learning <span aria-hidden="true">→</span></span>
+        <h2>Choose a subject</h2>
+        <p>Open a dedicated learning page for WCAG 2.2, Section 508, ADA Title II, or the EAA.</p>
+        <span class="text-link">Browse standards and laws <span aria-hidden="true">→</span></span>
       </a>
-      <a class="learning-path-card" href="#regulations">
+      <a class="learning-path-card" href="#assessments">
         <span class="path-number" aria-hidden="true">02</span>
-        <h2>Understand the laws</h2>
-        <p>Trace Section 508, ADA Title II, and EAA obligations back to their authoritative sources.</p>
-        <span class="text-link">Explore legal coverage <span aria-hidden="true">→</span></span>
+        <h2>Choose an assessment</h2>
+        <p>Keep each subject quiz separate, or choose mixed practice when you are ready to compare frameworks.</p>
+        <span class="text-link">Open the quiz centre <span aria-hidden="true">→</span></span>
       </a>
-      <a class="learning-path-card" href="#quiz">
+      <a class="learning-path-card" href="#course">
         <span class="path-number" aria-hidden="true">03</span>
-        <h2>Test your judgement</h2>
-        <p>Work through difficult scenarios that require interpretation, evidence, and precise reasoning.</p>
-        <span class="text-link">Begin practice <span aria-hidden="true">→</span></span>
+        <h2>Follow the study map</h2>
+        <p>Use a structured sequence when you want guided progression through the learning material.</p>
+        <span class="text-link">Open the study map <span aria-hidden="true">→</span></span>
       </a>
     </section>
     <section class="home-progress panel">
@@ -3239,7 +3246,7 @@ function courseTopicHint(title) {
 function courseInternalAction(title) {
   const lower = title.toLowerCase();
   if (lower.includes("qa") || lower.includes("testing") || lower.includes("screen reader")) return { href: "#tutorials", label: "Study tester tutorials" };
-  if (lower.includes("conformance") || lower.includes("section 508") || lower.includes("301") || lower.includes("accessibility act")) return { href: "#regulations", label: "Study regulations" };
+  if (lower.includes("conformance") || lower.includes("section 508") || lower.includes("301") || lower.includes("accessibility act")) return { href: "#standards", label: "Study standards and laws" };
   if (lower.includes("cpacc") || lower.includes("fundamentals") || lower.includes("ux")) return { href: "#guided", label: "Start guided review" };
   if (lower.includes("form") || lower.includes("image") || lower.includes("visual") || lower.includes("input") || lower.includes("semantic")) return { href: "#tutorials", label: "Find related tutorials" };
   if (lower.includes("aria") || lower.includes("dynamic") || lower.includes("angular") || lower.includes("developer")) return { href: "#quiz", label: "Practise questions" };
@@ -3637,19 +3644,88 @@ function renderRegulationOverview() {
         <ol><li>Who and what are covered?</li><li>Which authority and version control?</li><li>What evidence proves the result?</li><li>What remains unknown or needs legal review?</li></ol>
       </div>
     </section>
-    <section class="regulation-grid" aria-label="Regulatory learning paths">
-      <article class="card regulation-module"><span class="badge">U.S. federal</span><h2>Section 508</h2><p>Learn the Revised 508 Standards as a component-based ICT framework: content, software, hardware, authoring tools, documentation, and support.</p><a class="button" href="#regulations/section-508">Study Section 508</a></article>
-      <article class="card regulation-module"><span class="badge">U.S. state and local</span><h2>ADA Title II</h2><p>Apply DOJ's web and mobile app rule, current deadlines, defined exceptions, and the ADA duties that remain even when an exception applies.</p><a class="button" href="#regulations/title-ii">Study ADA Title II</a></article>
-      <article class="card regulation-module"><span class="badge">European Union</span><h2>European Accessibility Act</h2><p>Trace Directive 2019/882 through covered products and services, Annex I, operator duties, limitations, standards, national law, and transitions.</p><a class="button" href="#regulations/eaa">Study the EAA</a></article>
-      <article class="card regulation-module"><span class="badge">Method</span><h2>Compare and apply</h2><p>Separate technical conformance from legal coverage and practise writing a reviewable authority-and-evidence trail.</p><a class="button" href="#regulations/crosswalk">Open the crosswalk</a></article>
+    <section class="subject-grid" aria-label="Standards and laws">
+      <article class="card subject-card"><span class="badge">Technical standard</span><h2>WCAG 2.2</h2><p>Study the active Level A and AA success criteria, their exact normative wording, and how to distinguish neighbouring requirements.</p><div class="actions"><a class="button primary" href="#wcag">Study WCAG 2.2</a><a class="button" href="#quiz/wcag-advanced">Open its quiz</a></div></article>
+      <article class="card subject-card"><span class="badge">U.S. federal</span><h2>Section 508</h2><p>Learn the Revised 508 Standards as a component-based ICT framework: content, software, hardware, authoring tools, documentation, and support.</p><div class="actions"><a class="button primary" href="#section-508">Study Section 508</a><a class="button" href="#quiz/section-508">Open its quiz</a></div></article>
+      <article class="card subject-card"><span class="badge">U.S. state and local</span><h2>ADA Title II</h2><p>Apply DOJ's web and mobile app rule, current deadlines, defined exceptions, and the ADA duties that remain even when an exception applies.</p><div class="actions"><a class="button primary" href="#ada-title-ii">Study ADA Title II</a><a class="button" href="#quiz/title-ii">Open its quiz</a></div></article>
+      <article class="card subject-card"><span class="badge">European Union</span><h2>European Accessibility Act</h2><p>Trace Directive 2019/882 through covered products and services, Annex I, operator duties, limitations, standards, national law, and transitions.</p><div class="actions"><a class="button primary" href="#eaa">Study the EAA</a><a class="button" href="#quiz/eaa">Open its quiz</a></div></article>
+      <article class="card subject-card subject-card-wide"><span class="badge">Comparison method</span><h2>Compare frameworks</h2><p>Separate technical conformance from legal coverage and practise writing a reviewable authority-and-evidence trail only after studying each subject independently.</p><div class="actions"><a class="button primary" href="#compare">Open the comparison</a><a class="button" href="#quiz/mixed/20">Try mixed practice</a></div></article>
     </section>
     <section class="panel">
       <p class="eyebrow">Assessment standard</p>
       <h2>Recall is only the first layer</h2>
       <p>Advanced questions require learners to distinguish scope, exceptions, versions, transition rules, evidence, and accountable decision owners. Every legal question links to a primary official source.</p>
-      <div class="actions"><a class="button primary" href="#quiz/mixed/20">Take a 20-question mixed assessment</a><a class="button" href="#exam">Run the 40-question exam</a></div>
+      <div class="actions"><a class="button primary" href="#assessments">Choose a separate quiz</a><a class="button" href="#docs">Open source documentation</a></div>
     </section>
   `;
+}
+
+function renderSubjectContext(label, quizHref = "", quizLabel = "") {
+  return `
+    <div class="subject-context">
+      <nav class="subject-breadcrumb" aria-label="You are here">
+        <ol><li><a href="#standards">Standards &amp; laws</a></li><li><span aria-current="page">${esc(label)}</span></li></ol>
+      </nav>
+      ${quizHref ? `<a class="button primary" href="${quizHref}">${esc(quizLabel)}</a>` : ""}
+    </div>
+  `;
+}
+
+function renderStandardsHub() {
+  return layout(`
+    ${pageTitle("Standards & laws", "Choose one subject at a time", "Each standard and law now has its own learning view, documentation path, and separate assessment.")}
+    ${renderRegulationOverview()}
+    ${renderRegulationSources()}
+  `);
+}
+
+function renderWcagStandard() {
+  return layout(`
+    ${pageTitle("Technical standard", "WCAG 2.2", `Study the current Level A and AA curriculum separately from legal coverage. Source facts last checked ${REGULATORY_LAST_REVIEWED}.`)}
+    ${renderSubjectContext("WCAG 2.2", "#quiz/wcag-advanced", "Take the WCAG quiz")}
+    <section class="regulation-hero panel">
+      <div><p class="eyebrow">Web Content Accessibility Guidelines</p><h2>Learn the exact requirement before applying it</h2><p>WCAG is a technical standard. Whether and how it becomes legally required depends on the controlling law, regulation, contract, or policy. This trainer covers ${ACTIVE_SUCCESS_CRITERIA.length} active WCAG 2.2 Level A and AA success criteria.</p></div>
+      <div class="regulation-callout"><strong>Recommended sequence</strong><ol><li>Learn the criterion wording</li><li>Compare related criteria</li><li>Test a realistic state</li><li>Record reproducible evidence</li></ol></div>
+    </section>
+    <section class="subject-resource-grid" aria-label="WCAG learning resources">
+      <article class="card subject-resource-card"><p class="eyebrow">Start here</p><h2>Mini tutorials</h2><p>Build the underlying concept before studying individual success criteria.</p><a class="button" href="#tutorials">Open tutorials</a></article>
+      <article class="card subject-resource-card"><p class="eyebrow">Criterion level</p><h2>WCAG lessons</h2><p>Study normative wording, intent, examples, common failures, and official links.</p><a class="button" href="#lessons">Browse lessons</a></article>
+      <article class="card subject-resource-card"><p class="eyebrow">Lookup</p><h2>Standards bank</h2><p>Filter and compare the active A and AA criteria in one reference view.</p><a class="button" href="#bank">Open standards bank</a></article>
+      <article class="card subject-resource-card"><p class="eyebrow">Primary source</p><h2>Official WCAG 2.2</h2><p>Verify exact normative text and conformance requirements at W3C.</p><a class="button" href="${OFFICIAL_SOURCE_URLS.wcag22}" target="_blank" rel="noopener noreferrer">Open W3C WCAG 2.2</a></article>
+    </section>
+  `);
+}
+
+function renderSection508Standard() {
+  return layout(`
+    ${pageTitle("U.S. federal", "Section 508", `Study federal ICT coverage, component scoping, technical chapters, and evidence. Source facts last checked ${REGULATORY_LAST_REVIEWED}.`)}
+    ${renderSubjectContext("Section 508", "#quiz/section-508", "Take the Section 508 quiz")}
+    ${renderSection508Training()}
+  `);
+}
+
+function renderTitleIIStandard() {
+  return layout(`
+    ${pageTitle("U.S. state and local government", "ADA Title II", `Study the web and mobile app rule, its scope, dates, exceptions, and continuing duties. Source facts last checked ${REGULATORY_LAST_REVIEWED}.`)}
+    ${renderSubjectContext("ADA Title II", "#quiz/title-ii", "Take the ADA Title II quiz")}
+    ${renderTitleIITraining()}
+  `);
+}
+
+function renderEaaStandard() {
+  return layout(`
+    ${pageTitle("European Union", "European Accessibility Act", `Study Directive (EU) 2019/882 through scope, requirements, operator duties, national implementation, and transitions. Source facts last checked ${REGULATORY_LAST_REVIEWED}.`)}
+    ${renderSubjectContext("European Accessibility Act", "#quiz/eaa", "Take the EAA quiz")}
+    ${renderEaaTraining()}
+  `);
+}
+
+function renderCompareStandard() {
+  return layout(`
+    ${pageTitle("Comparison", "Compare accessibility frameworks", `Connect technical evidence to the correct authority without treating WCAG as a universal legal rule. Source facts last checked ${REGULATORY_LAST_REVIEWED}.`)}
+    ${renderSubjectContext("Compare frameworks")}
+    ${renderRegulationCrosswalkTraining()}
+  `);
 }
 
 function renderSection508Training() {
@@ -3666,7 +3742,7 @@ function renderSection508Training() {
       <article class="panel"><p class="eyebrow">E205.3</p><h2>Nine nonpublic official-communication categories</h2><ol class="official-communications-list">${SECTION_508_OFFICIAL_COMMUNICATIONS.map((item) => `<li>${esc(item)}</li>`).join("")}</ol></article>
       <article class="panel"><p class="eyebrow">E205.4 and E207.2</p><h2>Non-web exclusions are narrow</h2><p>For non-web documents and non-web software, WCAG 2.0 Level A and AA apply except <strong>2.4.1, 2.4.5, 3.2.3, and 3.2.4</strong>. E207.2 also excludes WCAG Conformance Requirement 3 for non-web software.</p><div class="plain-box"><h3>Do not overgeneralise</h3><p>The exclusions do not remove requirements for structure, keyboard operation, names and roles, error identification, or contrast.</p></div></article>
     </section>
-    <section class="panel"><div class="section-heading"><div><p class="eyebrow">Component matrix</p><h2>Test the whole ICT package</h2></div><p>Use this routing aid, then verify exact provisions in the Revised 508 Standards.</p></div><div class="table-wrap section-508-table-wrap" tabindex="0" role="region" aria-label="Section 508 component matrix; scroll horizontally to view all columns"><table class="section-508-component-table"><thead><tr><th>ICT component</th><th>Primary baseline</th><th>Commonly missed</th></tr></thead><tbody>${SECTION_508_COMPONENT_MATRIX.map(renderSection508ComponentRow).join("")}</tbody></table></div><div class="actions section-508-challenge-actions"><a class="button primary" href="#quiz/section-508/20">Take the 20-question Section 508 assessment</a><a class="button" href="#casebook">Work the casebook</a></div></section>
+    <section class="panel"><div class="section-heading"><div><p class="eyebrow">Component matrix</p><h2>Test the whole ICT package</h2></div><p>Use this routing aid, then verify exact provisions in the Revised 508 Standards.</p></div><div class="table-wrap section-508-table-wrap" tabindex="0" role="region" aria-label="Section 508 component matrix; scroll horizontally to view all columns"><table class="section-508-component-table"><thead><tr><th>ICT component</th><th>Primary baseline</th><th>Commonly missed</th></tr></thead><tbody>${SECTION_508_COMPONENT_MATRIX.map(renderSection508ComponentRow).join("")}</tbody></table></div><div class="actions section-508-challenge-actions"><a class="button primary" href="#quiz/section-508">Take the 14-question Section 508 assessment</a><a class="button" href="#casebook">Work the casebook</a></div></section>
     ${renderRegulationSources(REGULATORY_SOURCES.slice(0, 3))}
   `;
 }
@@ -3684,7 +3760,7 @@ function renderTitleIITraining() {
     <section class="panel"><div class="section-heading"><div><p class="eyebrow">Coverage</p><h2>Ownership of the domain is not the test</h2></div><p>Inventory public websites, mobile apps, intranets, portals, course systems, documents, social media, and vendor-operated services that the public entity provides or makes available.</p></div><div class="grid two"><article><h3>Ask first</h3><ul><li>Is the organisation a state or local government or other public entity?</li><li>Is the content or app connected to a service, program, or activity?</li><li>Is a contractor or vendor providing it on the entity's behalf?</li><li>Which population measure and deadline apply?</li></ul></article><article><h3>Technical baseline</h3><p>The rule names WCAG 2.1 Level AA. A team's use of WCAG 2.2 can add useful product coverage, but does not silently change the version named by the regulation.</p><p>Small entities have a later deadline—not a general exemption.</p></article></div></section>
     <section class="panel"><div class="section-heading"><div><p class="eyebrow">Five content exceptions</p><h2>Apply conditions item by item</h2></div><p>An exception is not a site-wide waiver.</p></div><div class="regulation-grid">${exceptions.map(([title, detail]) => `<article class="card"><h3>${esc(title)}</h3><p>${esc(detail)}</p></article>`).join("")}</div></section>
     <section class="grid two"><article class="panel"><p class="eyebrow">Duties that remain</p><h2>Exceptions do not end the ADA analysis</h2><p>Public entities still must meet their existing Title II duties, including effective communication, reasonable modifications, and equal opportunity to participate in and benefit from services, programs, and activities.</p></article><article class="panel"><p class="eyebrow">Narrow alternatives</p><h2>Alternate versions and minimal impact</h2><p>A conforming alternate version is permitted only when a technical or legal limitation prevents direct accessibility. The minimal-impact provision is narrow and fact-specific; it is not a tolerance percentage or a reason to defer remediation.</p></article></section>
-    <section class="panel"><div class="actions"><a class="button primary" href="#quiz/title-ii/20">Take the 20-question Title II assessment</a><a class="button" href="#title-ii-lab">Work the Title II case lab</a></div></section>
+    <section class="panel"><div class="actions"><a class="button primary" href="#quiz/title-ii">Take the 14-question Title II assessment</a><a class="button" href="#title-ii-lab">Work the Title II case lab</a></div></section>
     ${renderRegulationSources(LEGAL_DOCUMENTS.filter((doc) => doc.topic === "title-ii").slice(0, 5).map((doc) => ({ title: doc.title, url: doc.url, use: doc.use })))}
   `;
 }
@@ -3695,7 +3771,7 @@ function renderEaaTraining() {
     <section class="grid two"><article class="panel"><p class="eyebrow">Article 2</p><h2>Covered categories</h2><p>Examples include consumer general-purpose computer hardware and operating systems, certain self-service terminals, consumer terminal equipment for electronic communications and audiovisual access, e-readers, electronic communications, audiovisual media access services, elements of passenger transport services, consumer banking, e-books, and e-commerce.</p><p>Classify the exact product, service, operator role, consumer use, market, and date.</p></article><article class="panel"><p class="eyebrow">Article 4 and Annex I</p><h2>Requirements are broader than page conformance</h2><p>Map common and category-specific requirements for information, user interface, functionality, support, and services. WCAG or EN 301 549 evidence can support the mapping, but does not replace the legal analysis.</p><p>Article 4(4) permits Member States to decide whether the built environment used by clients must meet Annex III; it is not a universal EU-wide built-environment rule.</p></article></section>
     <section class="panel"><div class="section-heading"><div><p class="eyebrow">Roles and limits</p><h2>Separate each legal question</h2></div><p>Do not turn a qualified exemption or limitation into a blanket claim.</p></div><div class="regulation-grid"><article class="card"><h3>Microenterprises</h3><p>Article 4(5) exempts microenterprises <em>providing services</em>. It is not a blanket exemption for a microenterprise that manufactures, imports, or distributes covered products.</p></article><article class="card"><h3>Article 14</h3><p>Fundamental alteration and disproportionate burden require an assessment using the relevant criteria. Keep the assessment for five years and reassess when required.</p></article><article class="card"><h3>Article 15</h3><p>Presumption of conformity applies only to the extent requirements are covered by harmonised standards or technical specifications whose references satisfy the Article's conditions.</p></article><article class="card"><h3>National law</h3><p>The Directive requires national implementation. Identify the Member State measure, authority, enforcement route, and penalties for the real service or product.</p></article></div></section>
     <section class="panel"><p class="eyebrow">Article 32 transitions</p><h2>The application date is not the whole timeline</h2><div class="grid two"><article><h3>Service contracts</h3><p>Service providers may continue providing services using products lawfully used before 28 June 2025 until 28 June 2030. Service contracts agreed before 28 June 2025 may continue unchanged until expiry, but not longer than five years from that date.</p></article><article><h3>Self-service terminals</h3><p>Member States may allow terminals lawfully used before 28 June 2025 to continue for their economically useful life, but no longer than 20 years after they entered use.</p></article></div></section>
-    <section class="panel"><div class="actions"><a class="button primary" href="#quiz/eaa/20">Take the 20-question EAA assessment</a><a class="button" href="#casebook">Work the regulatory casebook</a></div></section>
+    <section class="panel"><div class="actions"><a class="button primary" href="#quiz/eaa">Take the 15-question EAA assessment</a><a class="button" href="#casebook">Work the regulatory casebook</a></div></section>
     ${renderRegulationSources(REGULATORY_SOURCES.filter((source) => source.url.includes("europa.eu") || source.url.includes("eur-lex")))}
   `;
 }
@@ -3711,24 +3787,11 @@ function renderRegulationCrosswalkTraining() {
 }
 
 function renderRegulations(section = "overview") {
-  const activeSection = REGULATION_SECTIONS.some(([id]) => id === section) ? section : "overview";
-  const descriptions = {
-    overview: "Learn a repeatable method for distinguishing technical standards from legal coverage.",
-    "section-508": "Scope federal ICT component by component under the Revised 508 Standards.",
-    "title-ii": "Apply DOJ's web and mobile app rule with current dates, exceptions, and continuing duties.",
-    eaa: "Trace covered products and services through the EAA, national law, evidence, and transitions.",
-    crosswalk: "Compare the frameworks and practise writing defensible legal and technical findings."
-  };
-  const content = activeSection === "section-508" ? renderSection508Training()
-    : activeSection === "title-ii" ? renderTitleIITraining()
-      : activeSection === "eaa" ? renderEaaTraining()
-        : activeSection === "crosswalk" ? renderRegulationCrosswalkTraining()
-          : renderRegulationOverview();
-  return layout(`
-    ${pageTitle("Regulations", activeSection === "overview" ? "Accessibility law learning centre" : REGULATION_SECTIONS.find(([id]) => id === activeSection)[1], `${descriptions[activeSection]} Source facts last checked ${REGULATORY_LAST_REVIEWED}.`)}
-    ${renderRegulationNav(activeSection)}
-    ${content}
-  `);
+  if (section === "section-508") return renderSection508Standard();
+  if (section === "title-ii") return renderTitleIIStandard();
+  if (section === "eaa") return renderEaaStandard();
+  if (section === "crosswalk") return renderCompareStandard();
+  return renderStandardsHub();
 }
 
 function renderCourse() {
@@ -3795,7 +3858,7 @@ function renderCourse() {
         ${REGULATORY_CROSSWALK.map(renderRegulatoryCrosswalk).join("")}
       </div>
       <div class="actions">
-        <a class="button primary" href="#regulations">Open full regulatory training</a>
+        <a class="button primary" href="#standards">Browse standards and laws</a>
       </div>
     </section>
     <section class="toc-coverage" aria-label="Indexed course page coverage">
@@ -4221,6 +4284,59 @@ const QUIZ_BANKS = {
   "wcag-advanced": WCAG_ASSESSMENT_QUESTIONS
 };
 
+const QUIZ_STUDY_DESTINATIONS = {
+  "section-508": ["#section-508", "Study Section 508"],
+  "title-ii": ["#ada-title-ii", "Study ADA Title II"],
+  eaa: ["#eaa", "Study the EAA"],
+  "wcag-advanced": ["#wcag", "Study WCAG 2.2"],
+  mixed: ["#compare", "Compare the frameworks"]
+};
+
+function renderAssessmentHub() {
+  const cards = [
+    ["wcag-advanced", "Technical standard", "WCAG 2.2", "Distinguish closely related success criteria and apply exact normative requirements."],
+    ["section-508", "U.S. federal", "Section 508", "Scope ICT components, exceptions, technical chapters, documentation, and support."],
+    ["title-ii", "U.S. state and local", "ADA Title II", "Apply rule scope, compliance dates, content exceptions, and continuing duties."],
+    ["eaa", "European Union", "European Accessibility Act", "Analyse covered products and services, operator duties, limitations, and transitions."]
+  ];
+  return layout(`
+    ${pageTitle("Assessments", "Choose one quiz at a time", "Subject quizzes are separated from their learning pages and from mixed exam practice, so you always know what is being assessed.")}
+    <section class="assessment-intro panel">
+      <div><p class="eyebrow">Before you begin</p><h2>Pick the scope you intend to test</h2><p>Each subject assessment uses its complete verified question bank and reshuffles questions on every attempt. Mixed practice is best after the individual subjects.</p></div>
+      <a class="button" href="#standards">Review all subjects</a>
+    </section>
+    <section class="assessment-hub-grid" aria-label="Separate subject assessments">
+      ${cards.map(([id, scope, title, description]) => `
+        <article class="card assessment-hub-card">
+          <div><span class="badge">${esc(scope)}</span><h2>${esc(title)}</h2><p>${esc(description)}</p></div>
+          <div class="assessment-card-footer"><p><strong>${QUIZ_BANKS[id].length} questions</strong> in the complete subject bank</p><a class="button primary" href="#quiz/${id}">Start ${esc(title)} quiz</a></div>
+        </article>
+      `).join("")}
+      <article class="card assessment-hub-card">
+        <div><span class="badge">Cross-framework</span><h2>Mixed practice</h2><p>Switch between WCAG 2.2, Section 508, ADA Title II, and the EAA without being told which reasoning model comes next.</p></div>
+        <div class="assessment-card-footer"><p><strong>Choose a length</strong> for a balanced, shuffled set</p><div class="assessment-length-links"><a href="#quiz/mixed/10">10 questions</a><a href="#quiz/mixed/20">20 questions</a><a href="#quiz/mixed/40">40 questions</a></div></div>
+      </article>
+      <article class="card assessment-hub-card assessment-hub-card-featured">
+        <div><span class="badge">Exam conditions</span><h2>40-question exam</h2><p>Run the full cross-jurisdiction challenge with one fixed exam length and a domain breakdown at the end.</p></div>
+        <div class="assessment-card-footer"><p><strong>40 questions</strong> across all four domains</p><a class="button primary" href="#exam">Start exam practice</a></div>
+      </article>
+    </section>
+  `);
+}
+
+function renderAssessmentContext(targetId, exam = false) {
+  const presentation = quizPresentation(targetId, exam);
+  const studyDestination = QUIZ_STUDY_DESTINATIONS[targetId];
+  return `
+    <div class="subject-context assessment-context">
+      <nav class="subject-breadcrumb" aria-label="You are here">
+        <ol><li><a href="#assessments">Quiz centre</a></li><li><span aria-current="page">${esc(exam ? "Exam practice" : presentation[0])}</span></li></ol>
+      </nav>
+      ${studyDestination ? `<a class="button" href="${studyDestination[0]}">${esc(studyDestination[1])}</a>` : ""}
+    </div>
+  `;
+}
+
 function balancedQuestions(count) {
   const buckets = Object.values(QUIZ_BANKS).map((bank) => shuffled(bank));
   const selected = [];
@@ -4301,6 +4417,7 @@ function renderQuiz(targetId = "mixed", exam = false, requestedCount = null) {
     }, {});
     return layout(`
       ${pageTitle(exam ? "Exam result" : "Quiz result", `${percent}% score`, "Review missed questions, then go back to the lessons for weak criteria.")}
+      ${renderAssessmentContext(normalizedTarget, exam)}
       <section class="panel">
         <p>You scored <strong>${quiz.score}</strong> out of <strong>${quiz.questions.length}</strong>.</p>
         <div class="score-breakdown" aria-label="Score by domain">
@@ -4308,8 +4425,8 @@ function renderQuiz(targetId = "mixed", exam = false, requestedCount = null) {
         </div>
         <div class="actions">
           <button type="button" class="button primary" data-restart>Try again</button>
-          <a class="button" href="#regulations/overview">Review the law modules</a>
-          <a class="button" href="#lessons">Review WCAG</a>
+          <a class="button" href="#assessments">Choose another quiz</a>
+          <a class="button" href="#standards">Review standards and laws</a>
         </div>
       </section>
       <section class="grid">
@@ -4340,16 +4457,10 @@ function renderQuiz(targetId = "mixed", exam = false, requestedCount = null) {
   const [eyebrow, title, description] = quizPresentation(normalizedTarget, exam);
   return layout(`
     ${pageTitle(eyebrow, title, description)}
-    ${exam ? "" : `<nav class="quiz-mode-nav" aria-label="Challenge type">
-      <a class="button ${normalizedTarget === "mixed" ? "primary" : ""}" ${normalizedTarget === "mixed" ? 'aria-current="page"' : ""} href="#quiz/mixed/20">Mixed</a>
-      <a class="button ${normalizedTarget === "section-508" ? "primary" : ""}" ${normalizedTarget === "section-508" ? 'aria-current="page"' : ""} href="#quiz/section-508">Section 508</a>
-      <a class="button ${normalizedTarget === "title-ii" ? "primary" : ""}" ${normalizedTarget === "title-ii" ? 'aria-current="page"' : ""} href="#quiz/title-ii">ADA Title II</a>
-      <a class="button ${normalizedTarget === "eaa" ? "primary" : ""}" ${normalizedTarget === "eaa" ? 'aria-current="page"' : ""} href="#quiz/eaa">EAA</a>
-      <a class="button ${normalizedTarget === "wcag-advanced" ? "primary" : ""}" ${normalizedTarget === "wcag-advanced" ? 'aria-current="page"' : ""} href="#quiz/wcag-advanced">WCAG 2.2</a>
-    </nav>
-    ${normalizedTarget === "mixed" ? `<nav class="quiz-length-nav" aria-label="Mixed assessment length">
+    ${renderAssessmentContext(normalizedTarget, exam)}
+    ${!exam && normalizedTarget === "mixed" ? `<nav class="quiz-length-nav" aria-label="Mixed assessment length">
       ${[10, 20, 40].map((length) => `<a class="button" ${quiz.questions.length === length ? 'aria-current="page"' : ""} href="#quiz/mixed/${length}">${length} questions</a>`).join("")}
-    </nav>` : `<p class="question-bank-size"><strong>${quiz.questions.length}-question complete domain assessment.</strong> Questions are shuffled on every attempt.</p>`}`}
+    </nav>` : exam ? `<p class="question-bank-size"><strong>${quiz.questions.length}-question exam practice.</strong> Questions are shuffled on every attempt.</p>` : `<p class="question-bank-size"><strong>${quiz.questions.length}-question complete subject assessment.</strong> Questions are shuffled on every attempt.</p>`}
     <form class="question" data-quiz-form aria-labelledby="quiz-question-heading">
       <div class="question-meta">
         <span class="badge">Question ${quiz.index + 1} of ${quiz.questions.length}</span>
@@ -4631,7 +4742,7 @@ function renderSearch(term) {
     ${renderSearchResultsSection("WCAG criteria and references", results.criteria.length, results.criteria.map(renderSearchCriterion).join(""))}
     ${renderSearchResultsSection("Mini tutorials", results.tutorials.length, results.tutorials.map(renderSearchTutorial).join(""))}
     ${renderSearchResultsSection("Official documentation", results.docs.length, results.docs.map(renderSearchDoc).join(""))}
-    ${renderSearchResultsSection("Regulatory training", results.regulations.length, results.regulations.map((item) => renderSearchTextResult(item, "Regulations", "#regulations")).join(""))}
+    ${renderSearchResultsSection("Regulatory training", results.regulations.length, results.regulations.map((item) => renderSearchTextResult(item, "Regulations", "#standards")).join(""))}
     ${renderSearchResultsSection("ADA Title II Lab", results.titleII.length, results.titleII.map((item) => renderSearchTextResult(item, "ADA Title II case", "#title-ii-lab")).join(""))}
     ${renderSearchResultsSection("Standards Casebook", results.casebook.length, results.casebook.map((item) => renderSearchTextResult(item, "Case file", "#casebook")).join(""))}
     ${renderSearchResultsSection("Glossary", results.glossary.length, results.glossary.map((item) => renderSearchTextResult(item, "Glossary", "#glossary")).join(""))}
@@ -4997,6 +5108,13 @@ function render(event) {
   if (state.route === "tutorials") app.innerHTML = renderTutorials();
   if (state.route === "guided") app.innerHTML = renderGuided();
   if (state.route === "lessons") app.innerHTML = renderLessons();
+  if (state.route === "standards") app.innerHTML = renderStandardsHub();
+  if (state.route === "wcag") app.innerHTML = renderWcagStandard();
+  if (state.route === "section-508") app.innerHTML = renderSection508Standard();
+  if (state.route === "ada-title-ii") app.innerHTML = renderTitleIIStandard();
+  if (state.route === "eaa") app.innerHTML = renderEaaStandard();
+  if (state.route === "compare") app.innerHTML = renderCompareStandard();
+  if (state.route === "assessments") app.innerHTML = renderAssessmentHub();
   if (state.route === "regulations") app.innerHTML = renderRegulations(id || "overview");
   if (state.route === "title-ii-lab") app.innerHTML = renderTitleIILab();
   if (state.route === "casebook") app.innerHTML = renderCasebook();

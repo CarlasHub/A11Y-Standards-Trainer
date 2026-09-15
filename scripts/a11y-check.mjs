@@ -6,6 +6,13 @@ const routes = [
   "#guided",
   "#tutorials",
   "#lesson/non-text-content",
+  "#standards",
+  "#wcag",
+  "#section-508",
+  "#ada-title-ii",
+  "#eaa",
+  "#compare",
+  "#assessments",
   "#regulations/overview",
   "#regulations/section-508",
   "#regulations/title-ii",
@@ -82,7 +89,7 @@ if (completedTitleIISerious.length) {
   console.log("#title-ii-lab completed state: no serious/critical axe violations");
 }
 
-const responsiveRoutes = ["#home", "#regulations/section-508", "#regulations/title-ii", "#regulations/eaa", "#quiz/title-ii", "#title-ii-lab", "#casebook", "#docs"];
+const responsiveRoutes = ["#home", "#standards", "#wcag", "#section-508", "#ada-title-ii", "#eaa", "#assessments", "#quiz/title-ii", "#title-ii-lab", "#casebook", "#docs"];
 for (const viewport of [{ width: 320, height: 700 }, { width: 390, height: 844 }, { width: 768, height: 900 }]) {
   await page.setViewportSize(viewport);
   for (const route of responsiveRoutes) {
@@ -163,6 +170,30 @@ const nextQuestionFocused = await page.evaluate(() => document.activeElement?.id
 if (!nextQuestionFocused) {
   failed = true;
   console.log("The next quiz question heading did not receive focus.");
+}
+
+await page.goto("http://localhost:4175/?v=structure-check#standards", { waitUntil: "domcontentloaded" });
+const standardCards = await page.locator(".subject-grid .subject-card").count();
+if (standardCards !== 5) {
+  failed = true;
+  console.log(`#standards: expected 5 separate subject choices but found ${standardCards}.`);
+}
+
+await page.goto("http://localhost:4175/?v=structure-check#assessments", { waitUntil: "domcontentloaded" });
+const assessmentCards = await page.locator(".assessment-hub-grid .assessment-hub-card").count();
+if (assessmentCards !== 6) {
+  failed = true;
+  console.log(`#assessments: expected 6 separate assessment choices but found ${assessmentCards}.`);
+}
+
+await page.goto("http://localhost:4175/?v=structure-check#quiz/title-ii", { waitUntil: "domcontentloaded" });
+if (await page.locator(".quiz-mode-nav").count()) {
+  failed = true;
+  console.log("#quiz/title-ii: subject switching is still mixed into the active quiz view.");
+}
+if (!(await page.locator('.subject-breadcrumb a[href="#assessments"]').count())) {
+  failed = true;
+  console.log("#quiz/title-ii: missing the return path to the quiz centre.");
 }
 
 await browser.close();
